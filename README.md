@@ -1,2 +1,2 @@
 # NaBBODES
-**Not a Black Box ODE Solver**
+*Not a Black Box ODE Solver*
