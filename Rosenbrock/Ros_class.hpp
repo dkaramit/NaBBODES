@@ -75,6 +75,7 @@ public:
 
     /*-------------------it would be nice to have a way to define these sums more generaly-----------------*/
     void next_step();
+    void LU();
 
     void calc_k();
     void calc_Jk();

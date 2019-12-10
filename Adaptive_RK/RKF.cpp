@@ -72,12 +72,12 @@ void sys( Array &lhs, Array &y  , double t )
         };
 
 
-#define initial_step_size 1e-4 
-#define minimum_step_size 1e-11 
-#define maximum_step_size 1e-3
+#define initial_step_size 1e-3
+#define minimum_step_size 1e-15
+#define maximum_step_size 1e-2
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-15
-#define relative_tolerance 1e-15
+#define absolute_tolerance 1e-12
+#define relative_tolerance 1e-12
 #define beta 0.85
 #define fac_max 3
 
@@ -99,11 +99,11 @@ int main(int argc, const char** argv) {
 
 
     std::ofstream f1,f2,f3,t,err;
-    f1.open ("./test/y1.dat");
-    f2.open ("./test/y2.dat");
-    f3.open ("./test/y3.dat");
-    t.open ("./test/t.dat");
-    err.open ("./test/err.dat");
+    f1.open ("y1.dat");
+    f2.open ("y2.dat");
+    f3.open ("y3.dat");
+    t.open ("t.dat");
+    err.open ("err.dat");
     
 
    

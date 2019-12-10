@@ -11,6 +11,9 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
         //set h_stop=false, to start looking for stepsize
         h_stop=false;
 
+        //calculate the LU decomposition of (1-\gamma*h*J) before you enter the loop. 
+        LU();
+
         //calculate ynext and ynext_star until h_stop=true 
         while (true) 
         {

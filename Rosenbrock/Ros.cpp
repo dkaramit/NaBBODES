@@ -4,7 +4,8 @@
 #include<cmath>
 #include"Ros.hpp"
 #include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
-
+using std::cout;
+using std::endl;
 /*--------------------------------------------------------------------------------------------------------*/
 class ROS3w{
     public:
@@ -155,18 +156,19 @@ void sys( Array &lhs, Array &y  , double t )
 
         };
 
+
 #define initial_step_size 1e-3
-#define minimum_step_size 1e-15 
+#define minimum_step_size 1e-15
 #define maximum_step_size 1e-2
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-11
-#define relative_tolerance 1e-11
+#define absolute_tolerance 1e-12
+#define relative_tolerance 1e-12
 #define beta 0.85
 #define fac_max 3
 
-#define METHOD RODASPR2 
-// #define METHOD ROS34PW2
-// #define METHOD ROS3w // this is not very good...
+// #define METHOD ROS3w //2nd order
+// #define METHOD ROS34PW2 //3rd order
+#define METHOD RODASPR2  //4th order
 
 int main(int argc, const char** argv) {
     
@@ -212,11 +214,11 @@ int main(int argc, const char** argv) {
 
 
     std::ofstream f1,f2,f3,t,err;
-    f1.open ("./0-test/y1.dat");
-    f2.open ("./0-test/y2.dat");
-    f3.open ("./0-test/y3.dat");
-    t.open ("./0-test/t.dat");
-    err.open ("./0-test/err.dat");
+    f1.open ("y1.dat");
+    f2.open ("y2.dat");
+    f3.open ("y3.dat");
+    t.open ("t.dat");
+    err.open ("err.dat");
     
 
    
