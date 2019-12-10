@@ -2,12 +2,6 @@
 #define RKF_step_control
 #include "RKF_class.hpp"
 
-
-/*----------------------------------------------define a Print to have easy acces to some info--------------------------------------------*/
-static int x=0;
-#define Print(m1,m2,m3,m4,m5) std::cout<<"   "<<m1<<"   "<<m2<<"   "<<m3<<"   "<<m4<<"   "<<m5<<std::endl; std::cin.get()
-/*----------------------------------------------------------------------------------------------------------------------------------------*/
-
 #define max(a,b)  (a <= b) ? b : a
 #define min(a,b)  (a >= b) ? b : a
 
@@ -18,7 +12,7 @@ void RKF<diffeq, N_eqs, RKF_method>::step_control(){
     
     //calculate the absolute value of delta
     
-    #if 1
+
 
     double Delta=0.;
     double _sc;
@@ -33,7 +27,6 @@ void RKF<diffeq, N_eqs, RKF_method>::step_control(){
     Delta=pow(1./N_eqs*Delta,0.5);
 
 
-    // Print(Delta,_sc, ' ',' ',' ');
     if(Delta<1) { h_stop=true ; err[current_step]=Delta; }
     //step size cotrol from "Solving Ordinary Differential Equations I"
     fac=min(pow( 1/Delta , 1./(method.p+1) ) , fac_max );
@@ -42,15 +35,8 @@ void RKF<diffeq, N_eqs, RKF_method>::step_control(){
 
     if (h0>hmax ){ h0=hmax;  }
     if (h0<hmin ){ h0=hmin;  }
-        // Print(h0,Delta,tn);
 
     if (tn+h0>1. ){ h0=1-tn;  }
-        // Print(h0,Delta,tn);
-    
-    #else
-    h_stop=true;
-    if (tn+h0>1. ){ h0=1-tn;  }
-    #endif
     
     
 

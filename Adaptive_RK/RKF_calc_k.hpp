@@ -14,11 +14,11 @@ void RKF<diffeq, N_eqs, RKF_method>::calc_k(){
                 // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j *h
                 sum_ak(stage);
 
-                // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j} (so fill yn with this)
+                // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
                 for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=solution[eq][current_step-1]+ak[eq];}
                 
                 // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
-                dydt(fyn,  yn,tn+h0*(method.c)[stage] );
+                dydt(fyn, yn,tn+h0*(method.c)[stage] );
                 
                 // now we can fill \vec{k}[stage]
                 for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=fyn[eq]; }

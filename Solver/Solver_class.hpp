@@ -1,12 +1,12 @@
-#ifndef Ros_class
-#define Ros_class
+#ifndef Solver_class
+#define Solver_class
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,1].
 
 
 template<class diffeq, int N_eqs, class RK_method, class jacobian> //Note that you can use template to pass the method
-class Ros
+class Solver
 {
     /*      */
 private://There is no reason to make things private (if you break it it's not my fault)... 
@@ -34,17 +34,17 @@ public:
    
     //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
     double **k;
-    double ak[N_eqs],gk[N_eqs],Jk[N_eqs], bk[N_eqs],bstark[N_eqs];
-    double abs_delta[N_eqs];
+    double *ak,*gk,*Jk, *bk,*bstark;
+    double *abs_delta;
 
-    double ynext[N_eqs];//this is here to hold the prediction
-    double ynext_star[N_eqs];//this is here to hold the second prediction
+    double *ynext;//this is here to hold the prediction
+    double *ynext_star;//this is here to hold the second prediction
 
     
     double yn[N_eqs];//this is here to hold values I might need
     double dfdt[N_eqs];//this is here to hold values I might need
     
-    /*--These are specific to Rosenbrock methods*/
+    /*--These are specific to Solverenbrock methods*/
 
     //define the coefficient. This will become (I-\gamma*h*J)
     double _coeff[N_eqs][N_eqs];
@@ -67,11 +67,11 @@ public:
        
     double J[N_eqs][N_eqs];//this is here to hold values I might need
     /*----------------------------------------------------------------------------------------------------*/
-    Ros(diffeq dydt, double (&init_cond)[N_eqs], 
+    Solver(diffeq dydt, double (&init_cond)[N_eqs], 
         double initial_step_size=1e-5, double minimum_step_size=1e-11, double maximum_step_size=1e-3,int maximum_No_steps=1000000, 
         double absolute_tolerance=1e-15,double relative_tolerance=1e-15,double beta=0.85,double fac_max=3);
     
-    ~Ros();
+    ~Solver();
 
     /*-------------------it would be nice to have a way to define these sums more generaly-----------------*/
     void next_step();

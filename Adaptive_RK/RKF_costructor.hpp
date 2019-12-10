@@ -39,17 +39,7 @@ RKF<diffeq, N_eqs, RKF_method>:: RKF(diffeq dydt, double (&init_cond)[N_eqs] ,
                 this->k[i] = new double[ this->method.s];
                 } 
         
-        //temporary arrays for the sums ak, bk, bstark
-        this->ak=new double[N_eqs];
-        this->bk=new double[N_eqs];
-        this->bstark=new double[N_eqs];
-        this->ynext=new double[N_eqs];
-        this->ynext_star=new double[N_eqs];
-
-        //temporary arrays for the deltas
-        this->abs_delta=new double[N_eqs];
         
-
         //initialize tn, current_step, and End
         this->tn=0;
         this->current_step=0;
@@ -62,12 +52,8 @@ RKF<diffeq, N_eqs, RKF_method>::~RKF(){
         std::cout << "I'm done" << std::endl;
         delete[] this->steps;
         delete[] this->solution;
+        delete[] this->err;
         delete[] this->k;
-        delete[] this->ak;
-        delete[] this->bk;
-        delete[] this->bstark;
-        delete[] this->ynext_star;
-        delete[] this->ynext;
     };
 
 

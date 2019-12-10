@@ -34,20 +34,13 @@ void RKF<diffeq, N_eqs, RKF_method>::next_step(){
                 abs_delta[eq]= ynext[eq] - ynext_star[eq] ;
                 
             }
-            // std::cout<<h0<<std::endl;
-            // std::cin.get();
+
             // call step_control to see if the error is acceptable
-            
-            
-            
             step_control();
             if(h_stop){break;}
 
         }
             
-    
-
-        // std::cout<<current_step<<std::endl;
 }
 /*---------------------------------------------------End: Get next step-------------------------------------------------------------------------------*/
 
@@ -61,7 +54,7 @@ void RKF<diffeq, N_eqs, RKF_method>::solve(){
         while (true )
         {
             //increase current_step
-            (current_step)++;
+            current_step++;
 
             if( tn>=1.  or current_step == max_N  ) {break ;}
             

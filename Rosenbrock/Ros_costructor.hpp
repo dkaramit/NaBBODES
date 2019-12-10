@@ -41,15 +41,6 @@ Ros<diffeq, N_eqs , RK_method, jacobian>:: Ros(diffeq dydt, double (&init_cond)[
                 this->k[i] = new double[ this->method.s];
                 } 
         
-        //temporary arrays for the ak, gk, Jk, bk, bstark
-        this->ak=new double[N_eqs];
-        this->gk=new double[N_eqs];
-        this->Jk=new double[N_eqs];
-        this->bk=new double[N_eqs];
-        this->bstark=new double[N_eqs];
-        this->ynext=new double[N_eqs];
-        this->ynext_star=new double[N_eqs];
-
 
         // calculate sums over gamma for all stages 
         this->sum_gamma=new double[this->method.s];
@@ -57,11 +48,6 @@ Ros<diffeq, N_eqs , RK_method, jacobian>:: Ros(diffeq dydt, double (&init_cond)[
           for(int j =0 ; j<(this->method.s)-1; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
           }
 
-
-
-        //temporary arrays for the deltas
-        this->abs_delta=new double[N_eqs];
-        
 
         //initialize tn, current_step, and End
         this->tn=0;
@@ -76,13 +62,9 @@ Ros<diffeq, N_eqs, RK_method, jacobian>::~Ros(){
         delete[] this->steps;
         delete[] this->solution;
         delete[] this->k;
-        delete[] this->ak;
-        delete[] this->gk;
-        delete[] this->Jk;
-        delete[] this->bk;
-        delete[] this->bstark;
-        delete[] this->ynext_star;
-        delete[] this->ynext;
+        delete[] this->sum_gamma;
+        delete[] this->err;
+
     };
 
 

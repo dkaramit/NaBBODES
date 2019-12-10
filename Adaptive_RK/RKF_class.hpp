@@ -23,17 +23,17 @@ public:
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
     double tn;
     double *steps, *err;
-    double** solution;
+    double **solution;
 
 
    
     //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
     double **k;
-    double *ak, *bk,*bstark;
-    double *abs_delta;
+    double ak[N_eqs], bk[N_eqs],bstark[N_eqs];
+    double abs_delta[N_eqs];
 
-    double *ynext;//this is here to hold the prediction
-    double *ynext_star;//this is here to hold the second prediction
+    double ynext[N_eqs];//this is here to hold the prediction
+    double ynext_star[N_eqs];//this is here to hold the second prediction
 
     double yn[N_eqs];//thi i here to hold accepted ynext (redundant, I'll remove it later)
     double fyn[N_eqs];//this is here to get dydt in each step

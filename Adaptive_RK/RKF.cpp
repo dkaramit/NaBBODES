@@ -7,7 +7,7 @@
 
 class DormandPrince{
     public:
-        int s=7;
+        const int s=7;
         int p=4;
         double c[7]={0,1/5.,3/10.,4/5.,8/9.,1.,1.};
         double b[7]={5179/57600.,0,7571/16695.,393/640.,-92097/339200.,187/2100.,1/40.};
@@ -18,9 +18,6 @@ class DormandPrince{
         DormandPrince(){
             
             for (int i = 0; i < s; i++){ for (int j = 0; j < s; j++){a[i][j]=0;} }
-            
-            
-            
             
             a[1][0]=1/5.;
             
@@ -52,6 +49,10 @@ class DormandPrince{
             a[6][5]=11/84.;
         };
 };
+
+
+
+#define METHOD DormandPrince
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
 typedef double Array[n_eqs];//define an array type of length n_eqs
@@ -73,7 +74,7 @@ void sys( Array &lhs, Array &y  , double t )
 
 #define initial_step_size 1e-4 
 #define minimum_step_size 1e-11 
-#define maximum_step_size 1e-2
+#define maximum_step_size 1e-3
 #define maximum_No_steps 1000000
 #define absolute_tolerance 1e-15
 #define relative_tolerance 1e-15
@@ -90,36 +91,11 @@ int main(int argc, const char** argv) {
     diffeq dydt=sys;
 
 
-    RKF<diffeq,n_eqs,DormandPrince> System(dydt,y0, 
+    RKF<diffeq,n_eqs,METHOD> System(dydt,y0, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max);
     System.solve();
     // 
-    
-
-    #if 0
-    for (int i = 0; i < System.max_N; i++)
-    {
-       System.next_step();
-
-       std::cout<<System.tn<<"\n";
-
-       if(System.tn==1){break;} 
-    }
-    #endif
-
-    
-    #if 0
-    for (int i = 0; i < System.current_step; i++)
-    {
-
-        std::cout<<i<<"  "<<System.steps[i]<<"\t\t\t\t";
-        for(int eq =0; eq<n_eqs; eq++){ std::cout<< System.solution[eq][i]<< "\t\t\t"; }
-        std::cout<<"\n";
-        
-        if(System.steps[i]==1){break;}
-    }
-    #endif
 
 
     std::ofstream f1,f2,f3,t,err;
@@ -145,7 +121,7 @@ int main(int argc, const char** argv) {
         err << "\n";
         
         // std::cout<<System.steps[i]<<"\t"<< System.solution[0][i] << "\t"<< System.solution[1][i] << "\t"<< System.solution[2][i] <<"\n";
-        if(System.steps[i]==1){break;}
+        // if(System.steps[i]==1){break;}
     }
 
     f1.close();
@@ -153,7 +129,6 @@ int main(int argc, const char** argv) {
     f3.close();
     t.close();
 
-    // std::cout<<System.current_step<<std::endl;
 
     return 0;
  }
