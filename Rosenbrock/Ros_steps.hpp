@@ -77,9 +77,7 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::solve(){
             tn+= h0;
             // std::cout<< tn <<"  "<< current_step <<"\n";
                     
-            steps[current_step] = tn;
-
-            
+            steps[current_step] = tn;   
         }
 
     } 

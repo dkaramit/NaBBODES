@@ -52,7 +52,7 @@ class DormandPrince{
 
 
 
-#define METHOD DormandPrince
+// #define METHOD DormandPrince
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
 typedef double Array[n_eqs];//define an array type of length n_eqs
@@ -73,11 +73,11 @@ void sys( Array &lhs, Array &y  , double t )
 
 
 #define initial_step_size 1e-3
-#define minimum_step_size 1e-15
+#define minimum_step_size 1e-6
 #define maximum_step_size 1e-2
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-12
-#define relative_tolerance 1e-12
+#define absolute_tolerance 1e-15
+#define relative_tolerance 1e-15
 #define beta 0.85
 #define fac_max 3
 
