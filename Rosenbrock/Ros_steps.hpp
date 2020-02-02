@@ -14,6 +14,7 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
         //calculate the LU decomposition of (1-\gamma*h*J) before you enter the loop. 
         LU();
 
+
         //calculate ynext and ynext_star until h_stop=true 
         while (true) 
         {
@@ -44,7 +45,8 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
             
             
             step_control();
-            if(h_stop){break;}
+            
+            if(h_stop){break; }
 
         }
             
@@ -75,9 +77,7 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::solve(){
             tn+= h0;
             // std::cout<< tn <<"  "<< current_step <<"\n";
                     
-            steps[current_step] = tn;
-
-            
+            steps[current_step] = tn;   
         }
 
     } 

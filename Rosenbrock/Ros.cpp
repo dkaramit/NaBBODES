@@ -158,7 +158,7 @@ void sys( Array &lhs, Array &y  , double t )
 
 
 #define initial_step_size 1e-3
-#define minimum_step_size 1e-15
+#define minimum_step_size 1e-4
 #define maximum_step_size 1e-2
 #define maximum_No_steps 1000000
 #define absolute_tolerance 1e-12
@@ -166,9 +166,11 @@ void sys( Array &lhs, Array &y  , double t )
 #define beta 0.85
 #define fac_max 3
 
+
+//you can also define then using the -D flag ( as -DMETHOD=ROS34PW2 for example)
 // #define METHOD ROS3w //2nd order
 // #define METHOD ROS34PW2 //3rd order
-#define METHOD RODASPR2  //4th order
+// #define METHOD RODASPR2  //4th order
 
 int main(int argc, const char** argv) {
     

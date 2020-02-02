@@ -32,7 +32,10 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::step_control(){
     h0= beta*h0*fac ;
 
     if (h0>hmax ){ h0=hmax;  }
-    if (h0<hmin ){ h0=hmin;  }
+    if (h0<hmin ){ 
+        h0=hmin; h_stop=true ; err[current_step]=Delta; 
+        std::cout<<"minimum stepsize reached. Try increasing it to improve accuracy!\n"; 
+    }
 
     if (tn+h0>1. ){ h0=1-tn;  }
 
