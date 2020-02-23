@@ -1,85 +1,65 @@
 // This is how you run RK. 
 #include<iostream>
+#include<stdio.h>
+
 #include<fstream>
 #include<cmath>
 #include"RKF.hpp"
+#include"METHOD.hpp"
 
 
-class DormandPrince{
-    public:
-        const int s=7;
-        int p=4;
-        double c[7]={0,1/5.,3/10.,4/5.,8/9.,1.,1.};
-        double b[7]={5179/57600.,0,7571/16695.,393/640.,-92097/339200.,187/2100.,1/40.};
-        double bstar[7]={ 35/384.,0.,500/1113.,125/192.,-2187/6784.,11/84.,0 };
-        double a[7][7];
 
-        ~DormandPrince(){};
-        DormandPrince(){
-            
-            for (int i = 0; i < s; i++){ for (int j = 0; j < s; j++){a[i][j]=0;} }
-            
-            a[1][0]=1/5.;
-            
-            a[2][0]=3/40.;
-            a[2][1]=9/40.;
-            
-            a[3][0]=44/45.;
-            a[3][1]=-56/15.;
-            a[3][2]=32/9.;
-            
-            a[4][0]=19372/6561.;
-            a[4][1]=-25360/2187.;
-            a[4][2]=64448/6561.;
-            a[4][3]=-212/729. ;       
-            
 
-            a[5][0]=9017/3168.;
-            a[5][1]=-355/33.;
-            a[5][2]=46732/5247.;
-            a[5][3]=49/176.;
-            a[5][4]=-5103/18656.;
-            
-            
-            a[6][0]=35/384.;
-            a[6][1]=0;
-            a[6][2]=500/1113.;
-            a[6][3]=125/192.;
-            a[6][4]=-2187/6784.;
-            a[6][5]=11/84.;
-        };
-};
+
+#define LD long double
+// #define LD  double
+
+
+#define initial_step_size 1e-5
+#define minimum_step_size 1e-16
+#define maximum_step_size 1e-3
+#define maximum_No_steps 1000000
+#define absolute_tolerance 1e-15
+#define relative_tolerance 1e-15
+#define beta 0.85
+#define fac_max 10
+
+#define N_out 1000
 
 
 
 // #define METHOD DormandPrince
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
-typedef double Array[n_eqs];//define an array type of length n_eqs
-typedef void (*diffeq)(Array &lhs, Array &y  , double t );
+typedef LD Array[n_eqs];//define an array type of length n_eqs
+typedef void (*diffeq)(Array &lhs, Array &y  , LD t );
 //-------------------------------------------------------------------------//
 
-void sys( Array &lhs, Array &y  , double t )
+void sys( Array &lhs, Array &y  , LD t )
         {
             //lhs is an array that gets the return value (the left hand side of the equation)
             //y is an array with values of y
             //t is the value of the variable t
             
-            lhs[0]=-20*y[0]*pow(t,3.);
-            lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*t;
-            lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*t;
+            lhs[0]=-20*y[0]*pow(t,2) ;
+            lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
+            lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
 
         };
 
 
-#define initial_step_size 1e-3
-#define minimum_step_size 1e-6
-#define maximum_step_size 1e-2
-#define maximum_No_steps 1000000
-#define absolute_tolerance 1e-15
-#define relative_tolerance 1e-15
-#define beta 0.85
-#define fac_max 3
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, const char** argv) {
     
@@ -91,44 +71,26 @@ int main(int argc, const char** argv) {
     diffeq dydt=sys;
 
 
-    RKF<diffeq,n_eqs,METHOD> System(dydt,y0, 
+    RKF<diffeq,n_eqs,METHOD<LD>,N_out,LD> System(dydt,y0, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max);
     System.solve();
     // 
 
+    std::cout<<N_out<<"\n";
 
-    std::ofstream f1,f2,f3,t,err;
-    f1.open ("y1.dat");
-    f2.open ("y2.dat");
-    f3.open ("y3.dat");
-    t.open ("t.dat");
-    err.open ("err.dat");
+
+    for (int i = 0; i < N_out; i++){
+        printf("%e ",(double)System.time[i]);
+
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][i]) ; }
+        printf("%e\n" ,(double)System.hist[i]) ; 
+    }
     
 
-   
-    for (int i = 0; i < System.current_step; i++)
-    {
-        f1 << System.solution[0][i] ;
-        f1 << "\n";
-        f2 << System.solution[1][i] ;
-        f2 << "\n";
-        f3 << System.solution[2][i] ;
-        f3 << "\n";
-        t << System.steps[i] ;
-        t << "\n";
-        err << System.err[i] ;
-        err << "\n";
-        
-        // std::cout<<System.steps[i]<<"\t"<< System.solution[0][i] << "\t"<< System.solution[1][i] << "\t"<< System.solution[2][i] <<"\n";
-        // if(System.steps[i]==1){break;}
-    }
-
-    f1.close();
-    f2.close();
-    f3.close();
-    t.close();
-
+    for(int i=0; i< System.Deltas.size() ; ++i) {  printf("%e \n",(double)System.Deltas[i]) ; }
+    
 
     return 0;
  }
