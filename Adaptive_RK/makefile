@@ -14,12 +14,12 @@ CC=g++
 FLG=  -std=c++17  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
 
 
-all: RKF
+all: RKF.run
 
-RKF: METHOD.hpp  RKF_calc_k.hpp  RKF_class.hpp  RKF_costructor.hpp    RKF.hpp  RKF_step_control.hpp  RKF_steps.hpp  RKF_sums.hpp  RKF.cpp
-	$(CC) -o "$(Path)/RKF" "$(Path)/RKF.cpp" $(FLG) 
+RKF.run: METHOD.hpp  RKF_calc_k.hpp  RKF_class.hpp  RKF_costructor.hpp  RKF.hpp  RKF_step_control.hpp  RKF_steps.hpp  RKF_sums.hpp  RKF.cpp
+	$(CC) -o "$(Path)/RKF.run" "$(Path)/RKF.cpp" $(FLG) 
 
 
 clean:
-	@[ -f "$(Path)/RKF" ] && rm "$(Path)/RKF" || true
+	@[ -f "$(Path)/RKF.run" ] && rm "$(Path)/RKF.run" || true
 	
