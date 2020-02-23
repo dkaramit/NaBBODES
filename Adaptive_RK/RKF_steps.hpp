@@ -10,7 +10,7 @@ _RKF_Func_::next_step(){
 
         //set h_stop=false, to start looking for stepsize
         h_stop=false;
-
+    
         //calculate ynext and ynext_star until h_stop=true 
         while (true) 
         {

@@ -1,8 +1,6 @@
 // This is how you run RK. 
 #include<iostream>
 #include<stdio.h>
-
-#include<fstream>
 #include<cmath>
 #include"RKF.hpp"
 #include"METHOD.hpp"
@@ -10,9 +8,10 @@
 
 
 
+// if LONG is empty, then everything is defined as double. if LONG is long, then we use long doubles
+// #define LONG long 
 
-#define LD long double
-// #define LD  double
+#define LD LONG double
 
 
 #define initial_step_size 1e-5

@@ -24,7 +24,7 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
         // later, I'll make steps and tmp_sol std::vector
         
         //define tmp_sol[N_eqs]
-        this->tmp_sol = new LD[N_eqs];
+        this->tmp_sol = new LD[N_eqs]; 
         for(int i = 0; i < N_eqs ;++i) {this->tmp_sol[i]=init_cond[i];}
 
         this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
