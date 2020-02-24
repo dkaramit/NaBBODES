@@ -34,6 +34,7 @@ _RKF_Func_::next_step(){
                 abs_delta[eq]= ynext[eq] - ynext_star[eq] ;
                 
             }
+            
 
             // call step_control to see if the error is acceptable
             step_control();
@@ -47,7 +48,13 @@ _RKF_Func_::next_step(){
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 _RKF_template_
-_RKF_Func_::solve(){
+_RKF_Func_::solve(bool _full_){
+    // the default value of _full_ is false. So if you use solve() the full output will not be saved. To get the full output call solve(true)
+    if( _full_ ){
+        for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
+        time_full.push_back(tn);
+    }
+
         int tmp_step=1;
         
         int _hist_steps=0; 
@@ -72,8 +79,8 @@ _RKF_Func_::solve(){
 
                 
                 for (int eq = 0; eq < N_eqs; eq++){
-                    solution[eq][tmp_step] =  tmp_sol[eq] + bk[eq];
-                    error[eq][tmp_step]= bk[eq] - bstark[eq];
+                    solution[eq][tmp_step] =  ynext[eq];
+                    error[eq][tmp_step]= ynext[eq] - ynext_star[eq];
 
                     }                
 
@@ -82,7 +89,10 @@ _RKF_Func_::solve(){
 
             }
 
-                    
+            if( _full_ ){
+                for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
+                time_full.push_back(tn);
+            }
 
             
         }

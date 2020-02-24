@@ -32,7 +32,10 @@ public:
     int *hist;
 
     std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
+    
 
+    std::vector<LD> time_full;
+    std::vector<LD> solution_full[N_eqs];
     
 
    
@@ -65,7 +68,9 @@ public:
 
     
     void step_control();//adjust stepsize until error is acceptable
-    void solve();
+    
+    // the default value of _full_ is false. So if you use solve() the full output will not be saved. To get the full output call solve(true)
+    void solve(bool _full_=false);
 
 
 };

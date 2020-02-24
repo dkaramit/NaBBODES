@@ -73,11 +73,13 @@ int main(int argc, const char** argv) {
     RKF<diffeq,n_eqs,METHOD<LD>,N_out,LD> System(dydt,y0, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max);
-    System.solve();
+    System.solve(false);
     // 
 
     std::cout<<N_out<<"\n";
-
+    std::cout<<System.Deltas.size()<<"\n";
+    std::cout<<System.time_full.size()<<"\n";
+    
 
     for (int i = 0; i < N_out; i++){
         printf("%e ",(double)System.time[i]);
@@ -89,6 +91,13 @@ int main(int argc, const char** argv) {
     
 
     for(int i=0; i< System.Deltas.size() ; ++i) {  printf("%e \n",(double)System.Deltas[i]) ; }
+
+    for(int i=0; i< System.time_full.size() ; ++i) {  
+        printf("%e ",(double)System.time_full[i]) ; 
+        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution_full[eq][i]);    }
+        printf("%e\n", (double)System.solution_full[n_eqs-1][i]);
+        }
+        
     
 
     return 0;
