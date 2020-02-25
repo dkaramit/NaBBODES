@@ -6,8 +6,8 @@
 
 
 /*-----------------------Begin: calc_Jk---------------------------------*/
-template<class diffeq, int  N_eqs, class RK_method, class jacobian>
-void Ros<diffeq,  N_eqs, RK_method, jacobian>::calc_Jk(){
+_Ros_template_
+_Ros_Func_::calc_Jk(){
     /*
     Calculate product of matrix with vector. 
     We use it to get J*gk.
@@ -15,22 +15,26 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::calc_Jk(){
     for(int i=0; i<N_eqs ; i++){
         Jk[i]=0;
         for(int j=0; j<N_eqs ; j++){ Jk[i]+=J[i][j]*gk[j]; }
+
+        
     }         
 }
 /*-----------------------End: calc_Jk---------------------------------*/
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<class diffeq, int  N_eqs, class RK_method, class jacobian>
-void Ros<diffeq,  N_eqs, RK_method, jacobian>::calc_k(){
+_Ros_template_
+_Ros_Func_::calc_k(){
     // since LU decomposition is not updated as you try to find suitable step, put it ouside the step control loop (should be faster)!
     // LU();
     // calculate k for the other stages
     for(int stage = 0; stage < method.s; stage++){
+
+        
         sum_ak(stage);
         sum_gk(stage);
         
         // setup the argument for dydt (it is evaluated at y_n+\sum a*k )
-        for(int eq=0; eq<N_eqs ; eq++){yn[eq]=solution[eq][current_step-1] +ak[eq]  ; }
+        for(int eq=0; eq<N_eqs ; eq++){yn[eq]=tmp_sol[eq] +ak[eq]  ; }
         /*--- Get the rhs terms ---*/
         // first term
         dydt(rhs1, yn  , tn+method.c[stage]*h0 );

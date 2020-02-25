@@ -7,15 +7,16 @@
 
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<class diffeq, int  N_eqs, class RK_method, class jacobian>
-void Ros<diffeq,  N_eqs, RK_method, jacobian>::step_control(){
+_Ros_template_
+_Ros_Func_::step_control(){
     
     //calculate the absolute value of delta
     
 
-    double Delta=0.;
-    double _sc;
-    double fac;
+
+    LD Delta=0.;
+    LD _sc;
+    LD fac;
     
     for (int eq = 0; eq < N_eqs; eq++){
         _sc=max(fabs( ynext[eq] ), fabs( ynext_star[eq] ));
@@ -24,8 +25,9 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::step_control(){
         
     ;}
     Delta=pow(1./N_eqs*Delta,0.5);
-
-    if(Delta<1) { h_stop=true ; err[current_step]=Delta; }
+    
+    
+    if(Delta<1) { h_stop=true ; Deltas.push_back( Delta) ;}
     //step size cotrol from "Solving Ordinary Differential Equations I"
     fac=min(pow( 1/Delta , 1./(method.p+1) ) , fac_max );
     
@@ -33,11 +35,13 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::step_control(){
 
     if (h0>hmax ){ h0=hmax;  }
     if (h0<hmin ){ 
-        h0=hmin; h_stop=true ; err[current_step]=Delta; 
-        std::cout<<"minimum stepsize reached. Try increasing it to improve accuracy!\n"; 
+        h0=hmin; h_stop=true ;  Deltas.push_back( Delta) ;
+        std::cout<<"#minimum stepsize reached. Try increasing it to improve accuracy!\n"; 
     }
 
     if (tn+h0>1. ){ h0=1-tn;  }
+    
+    
 
 }
 /*-----------------------End: step_control---------------------------------*/

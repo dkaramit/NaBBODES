@@ -23,7 +23,7 @@
 #define beta 0.85
 #define fac_max 10
 
-#define N_out 1000
+#define N_out 500
 
 
 
@@ -45,17 +45,6 @@ void sys( Array &lhs, Array &y  , LD t )
             lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
 
         };
-
-
-
-
-
-
-
-
-
-
-
 
 
 

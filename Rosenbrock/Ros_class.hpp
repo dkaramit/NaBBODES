@@ -5,7 +5,7 @@
 // a system of differential equations in the interval [0,1].
 
 
-template<class diffeq, int N_eqs, class RK_method, class jacobian> //Note that you can use template to pass the method
+_Ros_template_//Note that you can use template to pass the method
 class Ros
 {
     /*      */
@@ -19,57 +19,68 @@ public:
     
 
 
-    double h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
+    LD h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
     int max_N;
     
     //things that we'll need
     int current_step;
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
-    double tn;
-    double *steps, *err;
-    double **solution;
+   
+    LD tn;
+    LD *tmp_sol;
+    
+    
+    LD **solution;
+    LD **error;
+    LD *time;
+    int *hist;
 
+    std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
+    
+
+    std::vector<LD> time_full;
+    std::vector<LD> solution_full[N_eqs];
 
 
    
     //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
-    double **k;
-    double ak[N_eqs],gk[N_eqs],Jk[N_eqs], bk[N_eqs],bstark[N_eqs];
-    double abs_delta[N_eqs];
+    LD **k;
+    LD ak[N_eqs],gk[N_eqs],Jk[N_eqs], bk[N_eqs],bstark[N_eqs];
+    LD abs_delta[N_eqs];
 
-    double ynext[N_eqs];//this is here to hold the prediction
-    double ynext_star[N_eqs];//this is here to hold the second prediction
+    LD ynext[N_eqs];//this is here to hold the prediction
+    LD ynext_star[N_eqs];//this is here to hold the second prediction
 
     
-    double yn[N_eqs];//this is here to hold values I might need
-    double dfdt[N_eqs];//this is here to hold values I might need
+    LD yn[N_eqs];//this is here to hold values I might need
+    LD dfdt[N_eqs];//this is here to hold values I might need
     
     /*--These are specific to Rosenbrock methods*/
 
     //define the coefficient. This will become (I-\gamma*h*J)
-    double _coeff[N_eqs][N_eqs];
+    LD _coeff[N_eqs][N_eqs];
     // There are for the LUP-decomposition of (I-\gamma*h*J) 
-    double L[N_eqs][N_eqs];
-    double U[N_eqs][N_eqs];
+    LD L[N_eqs][N_eqs];
+    LD U[N_eqs][N_eqs];
     int P[N_eqs];
 
     // fyn will be passed to dydt and get the result. rhs is the rhs side of the equation to be solved by LU.  
-    double fyn[N_eqs],rhs[N_eqs];
+    LD fyn[N_eqs],rhs[N_eqs];
 
     // to make it more clear, we are going to separate the rhs in three different parts
-    double rhs1[N_eqs],rhs2[N_eqs];
+    LD rhs1[N_eqs],rhs2[N_eqs];
 
     //lu_sol will capture the sulution of (I-\gamma*h*J)* k = rhs (it is basically k)
-    double lu_sol[N_eqs];
+    LD lu_sol[N_eqs];
 
     // need this to sore the sum over \gammas
-    double *sum_gamma;
+    LD *sum_gamma;
        
-    double J[N_eqs][N_eqs];//this is here to hold values I might need
+    LD J[N_eqs][N_eqs];//this is here to hold values I might need
     /*----------------------------------------------------------------------------------------------------*/
-    Ros(diffeq dydt, double (&init_cond)[N_eqs], 
-        double initial_step_size=1e-5, double minimum_step_size=1e-11, double maximum_step_size=1e-3,int maximum_No_steps=1000000, 
-        double absolute_tolerance=1e-15,double relative_tolerance=1e-15,double beta=0.85,double fac_max=3);
+    Ros(diffeq dydt, LD (&init_cond)[N_eqs], 
+        LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 
+        LD absolute_tolerance=1e-15,LD relative_tolerance=1e-15,LD beta=0.85,LD fac_max=3);
     
     ~Ros();
 
@@ -88,7 +99,7 @@ public:
 
     
     void step_control();//adjust stepsize until error is acceptable
-    void solve();
+    void solve(bool _full_=false);
 
 
 };

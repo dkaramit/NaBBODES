@@ -4,19 +4,19 @@
 // #define _class //run it with class with overloaded operator()
 #define _function //run it with function pointer
 
-
+#define LD double
 
 
 // this is how the diffeq should look like
 #define n_eqs 2 //number of equations
-typedef double Array[n_eqs];//define an array type of length n_eqs
+typedef LD Array[n_eqs];//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
 
 
 
 #ifdef _function
-typedef void (*diffeq)(Array &lhs, Array &y  , double t); // define function pointer
-void sys(Array &lhs, Array &y  , double t)
+typedef void (*diffeq)(Array &lhs, Array &y  , LD t); // define function pointer
+void sys(Array &lhs, Array &y  , LD t)
 {
 
     lhs[0]=y[1]*y[0]*t;
@@ -31,7 +31,7 @@ class Cdiffeq{
     public:
     Cdiffeq(){};
     ~Cdiffeq(){};
-    void operator()(Array &lhs, Array &y  , double t)
+    void operator()(Array &lhs, Array &y  , LD t)
     {
         lhs[0]=y[1]*y[0]*t;
         lhs[1]=y[0]*y[1]+t;
@@ -53,15 +53,15 @@ int main(){
     #endif
 
     #ifdef _function
-        Jacobian<diffeq,n_eqs> jac(sys);
+        Jacobian<diffeq,n_eqs,LD> jac(sys);
     #endif
 
     Array dfdt;
     // Matrix J={{0,0},{0,0}};
-    double J[n_eqs][n_eqs];
+    LD J[n_eqs][n_eqs];
 
     Array y={1,4.2};
-    double t=0.3;
+    LD t=0.3;
 
     jac(J,dfdt,y,t);
 

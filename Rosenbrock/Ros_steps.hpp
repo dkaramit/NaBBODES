@@ -5,8 +5,8 @@
 
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-template<class diffeq, int  N_eqs, class RK_method, class jacobian>
-void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
+_Ros_template_
+_Ros_Func_::next_step(){
 
         //set h_stop=false, to start looking for stepsize
         h_stop=false;
@@ -28,10 +28,10 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
             // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
             for (int eq = 0; eq < N_eqs; eq++)
             {   
-                ynext[eq] =  solution[eq][current_step-1] + bk[eq];
+                ynext[eq] =  tmp_sol[eq] + bk[eq];
                 //  std::cout<<bk[eq] << "  ";
-                
-                ynext_star[eq] =  solution[eq][current_step-1] + bstark[eq];       
+                  
+                ynext_star[eq] =  tmp_sol[eq] + bstark[eq];       
                 // std::cout<<ynext_star[eq]<< "  "<<ynext[eq]<< "  "<<ynext_star[eq]-ynext[eq]<<"\n";
                 
                 // calculate the error^2
@@ -60,25 +60,56 @@ void Ros<diffeq,  N_eqs, RK_method, jacobian>::next_step(){
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 
-template<class diffeq, int  N_eqs, class RK_method, class jacobian>
-void Ros<diffeq,  N_eqs, RK_method, jacobian>::solve(){
+_Ros_template_
+_Ros_Func_::solve(bool _full_){
 
+            if( _full_ ){
+        for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
+        time_full.push_back(tn);
+    }
+
+        int tmp_step=1;
+        
+        int _hist_steps=0; 
         while (true )
         {
             //increase current_step
-            (current_step)++;
+            current_step++;
 
             if( tn>=1.  or current_step == max_N  ) {break ;}
             
             next_step();
+            _hist_steps++;
 
             
-            for (int eq = 0; eq < N_eqs; eq++){solution[eq][current_step]=ynext[eq];}
+            for (int eq = 0; eq < N_eqs; eq++){tmp_sol[eq]=ynext[eq];}
             tn+= h0;
-            // std::cout<< tn <<"  "<< current_step <<"\n";
-                    
-            steps[current_step] = tn;   
+
+            if (  tn >=( (LD ) tmp_step)/( (LD )N_out-1.)   ){
+                
+                time[tmp_step]=tn;
+                hist[tmp_step]=_hist_steps;
+
+                
+                for (int eq = 0; eq < N_eqs; eq++){
+                    solution[eq][tmp_step] =  ynext[eq];
+                    error[eq][tmp_step]= ynext[eq] - ynext_star[eq];
+
+                    }                
+
+                tmp_step++;
+                _hist_steps=0;
+
+            }
+
+            if( _full_ ){
+                for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
+                time_full.push_back(tn);
+            }
+
+            
         }
+
 
     } 
 /*---------------------------------------------------End: solve-------------------------------------------------------------------------------*/

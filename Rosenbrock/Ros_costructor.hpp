@@ -5,10 +5,10 @@
 
 
 //The constructor. Remember that N has default value
-template<class diffeq, int N_eqs, class RK_method, class jacobian>
-Ros<diffeq, N_eqs , RK_method, jacobian>:: Ros(diffeq dydt, double (&init_cond)[N_eqs] , 
-        double initial_step_size, double minimum_step_size, double maximum_step_size,int maximum_No_steps, 
-        double absolute_tolerance,double relative_tolerance,double beta,double fac_max){
+_Ros_template_
+_Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] , 
+        LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
+        LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max){
         // Initialize inputs
         this->dydt=dydt;
         this->Jac=jacobian(dydt);
@@ -23,27 +23,33 @@ Ros<diffeq, N_eqs , RK_method, jacobian>:: Ros(diffeq dydt, double (&init_cond)[
         this->fac_max=fac_max;
 
         // ---------------------------------------------------------------------------------- //
-        // later, I'll make steps and solution std::vector
-        this->steps = new double[this->max_N];//make a list in which you'll put the steps 
-        this->err = new double[this->max_N];//make a list in which you'll put the errors 
+       //define tmp_sol[N_eqs]
+        this->tmp_sol = new LD[N_eqs]; 
+        for(int i = 0; i < N_eqs ;++i) {this->tmp_sol[i]=init_cond[i];}
 
-        //define solution[N_eqs][No_steps]
-        this->solution = new double*[N_eqs];
+        this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
+        this->time = new LD[N_out];//make a list in which you'll put the steps (these will be approximately at intervals of 1/(N_out-1))
+
+
+
+        this->solution = new LD*[N_eqs];
+        this->error = new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {
-                this->solution[i] = new double[ this->max_N ];
-                this->solution[i][0]=init_cond[i];//put the initial condition
+                this->solution[i] = new LD[ N_out ];
+                this->error[i] = new LD[ N_out ];
+                this->solution[i][0]=init_cond[i];
             } 
         // ---------------------------------------------------------------------------------- //
         
         // define k[N_eqs][method.s]
-        this->k=new double*[N_eqs];
+        this->k=new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {
-                this->k[i] = new double[ this->method.s];
+                this->k[i] = new LD[ this->method.s];
                 } 
         
 
         // calculate sums over gamma for all stages 
-        this->sum_gamma=new double[this->method.s];
+        this->sum_gamma=new LD[this->method.s];
         for(int stage = 0; stage < this->method.s; stage++){this->sum_gamma[stage]=0;
           for(int j =0 ; j<(this->method.s)-1; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
           }
@@ -56,14 +62,16 @@ Ros<diffeq, N_eqs , RK_method, jacobian>:: Ros(diffeq dydt, double (&init_cond)[
         };
 
 //The destructor
-template<class diffeq, int N_eqs, class RK_method, class jacobian>
-Ros<diffeq, N_eqs, RK_method, jacobian>::~Ros(){
-        std::cout << "I'm done" << std::endl;
-        delete[] this->steps;
+_Ros_template_
+_Ros_Cosnt_::~Ros(){
+        // std::cout << "I'm done" << std::endl;
         delete[] this->solution;
+        delete this->time;
+        delete this->error;
+        delete this->hist;
+
+        delete this->tmp_sol;
         delete[] this->k;
-        delete[] this->sum_gamma;
-        delete[] this->err;
 
     };
 

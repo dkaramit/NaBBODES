@@ -1,30 +1,30 @@
 #ifndef Jac_head
 #define Jac_head
 
-template<class diffeq, int n_eqs>
+template<class diffeq, int n_eqs, class LD>
 class Jacobian{
     public:
-    double h;
+    LD h;
     diffeq dydt;
 
-    double y0[n_eqs],y1[n_eqs],dydt0[n_eqs],dydt1[n_eqs];
+    LD y0[n_eqs],y1[n_eqs],dydt0[n_eqs],dydt1[n_eqs];
 
     Jacobian(){};
 
 
-    Jacobian(Jacobian<diffeq,n_eqs> &Jac){
+    Jacobian(Jacobian<diffeq,n_eqs,LD> &Jac){
         this->dydt=Jac.dydt;
         this->h=Jac.h;
 
     };
-    Jacobian(diffeq dydt, double h=1e-8){
+    Jacobian(diffeq dydt, LD h=1e-8){
         this->dydt=dydt;
         this->h=h;
 
     };
     ~Jacobian(){};
 
-    void operator()(double (&J)[n_eqs][n_eqs], double (&dfdt)[n_eqs], double (&y)[n_eqs]  , double t ){
+    void operator()(LD (&J)[n_eqs][n_eqs], LD (&dfdt)[n_eqs], LD (&y)[n_eqs]  , LD t ){
 
         dydt(dydt0,y,t-h);
         dydt(dydt1,y,t+h);
@@ -41,7 +41,6 @@ class Jacobian{
             dydt(dydt1,y1,t);
 
             J[i][j]=(dydt1[i]-dydt0[i])/(2*h);
-
 
         }}
 
