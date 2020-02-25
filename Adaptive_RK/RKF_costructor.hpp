@@ -29,7 +29,8 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
 
         this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
         this->time = new LD[N_out];//make a list in which you'll put the steps (these will be approximately at intervals of 1/(N_out-1))
-
+        this->time[0]=0;
+        this->hist[0]=0;
 
 
         this->solution = new LD*[N_eqs];
@@ -37,6 +38,7 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
         for(int i = 0; i < N_eqs ;++i) {
                 this->solution[i] = new LD[ N_out ];
                 this->error[i] = new LD[ N_out ];
+                this->error[i][0]=0;
                 this->solution[i][0]=init_cond[i];
             } 
         // ---------------------------------------------------------------------------------- //
