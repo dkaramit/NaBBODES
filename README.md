@@ -1,5 +1,9 @@
+
+
 # NaBBODES
 *Not a Black Box ODE Solver*
+![language stats bar](https://github.com/dkaramit/NaBBODES)
+
 
 A package for ODE solvers that anyone should be able to take, hack, and use for specific problems they might be interested in solving. The plan is to be able to use the skeleton of RK methods, and be able to pass as arguments everything from just the Butcher tableau to specific step control, and optimizing every step for a chosen RK method. 
 
