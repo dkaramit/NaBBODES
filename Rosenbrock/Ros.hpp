@@ -8,7 +8,7 @@
 /*
 diffeq is a class of the system of  equations to be solved 
 N_eqs is ten number of equations to be solved
-RK_method is the method (the DormandPrince seems to be the standard here)
+RK_method is the method (I trust ROS34PW2)
 N_out number of output points (to be taken in intervals of approximately  1/(N_out-1) )
 */
 
