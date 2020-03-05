@@ -23,9 +23,12 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->fac_max=fac_max;
 
         // ---------------------------------------------------------------------------------- //
-       //define tmp_sol[N_eqs]
+       //define tmp_sol[N_eqs]. It is also good to initialize ynext.
         this->tmp_sol = new LD[N_eqs]; 
-        for(int i = 0; i < N_eqs ;++i) {this->tmp_sol[i]=init_cond[i];}
+        for(int i = 0; i < N_eqs ;++i) {
+                this->tmp_sol[i]=init_cond[i];
+                this->ynext[i]=init_cond[i];
+        }
 
         this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
         this->time = new LD[N_out];//make a list in which you'll put the steps (these will be approximately at intervals of 1/(N_out-1))
@@ -43,10 +46,11 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
             } 
         // ---------------------------------------------------------------------------------- //
         
-        // define k[N_eqs][method.s]
+        // define k[N_eqs][method.s]. Initialize also k=0.
         this->k=new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {
                 this->k[i] = new LD[ this->method.s];
+                or(int j =0 ; j<(this->method.s)-1; j++ ){this->k[i][j] =0;  }
                 } 
         
 
