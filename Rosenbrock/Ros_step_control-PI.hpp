@@ -23,7 +23,7 @@ _Ros_Func_::step_control(){
         
     ;}
     Delta=pow(1./N_eqs*Delta,0.5);
-    
+    if(Delta==0){Delta=abs_tol;}
     
     
     if(Delta<1) { h_stop=true ; Deltas.push_back( Delta);  } 
