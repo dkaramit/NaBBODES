@@ -25,7 +25,9 @@ public:
     //things that we'll need
     int current_step;
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
-   
+    //For the PI step control
+    LD err_previous;
+
     LD tn;
     LD *tmp_sol;
     

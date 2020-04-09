@@ -50,7 +50,7 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->k=new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {
                 this->k[i] = new LD[ this->method.s];
-                or(int j =0 ; j<(this->method.s)-1; j++ ){this->k[i][j] =0;  }
+                for(int j =0 ; j<(this->method.s)-1; j++ ){this->k[i][j] =0;  }
                 } 
         
 
@@ -64,6 +64,9 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         //initialize tn, current_step, and End
         this->tn=0;
         this->current_step=0;
+
+        //initialize this to 1 for the PI step control
+        this->Deltas.push_back(1);
         
         };
 

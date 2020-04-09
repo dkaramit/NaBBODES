@@ -63,7 +63,7 @@ _Ros_Func_::next_step(){
 _Ros_template_
 _Ros_Func_::solve(bool _full_){
 
-            if( _full_ ){
+        if( _full_ ){
         for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
         time_full.push_back(tn);
     }
