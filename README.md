@@ -16,7 +16,8 @@ NaBBODES started from [*ASAP*](https://dkaramit.github.io/ASAP/), but it evolved
 
 ## To-do:
 - [ ] Better step control.
-- [ ] Optimize Rosenbrock by finding the inverse of  $(1- \gamma \, h \, J)$.
+- [ ] Optimize Rosenbrock by finding the inverse of  ${1- \gamma  h  J}$.
+
 
 That's it for now.
 
