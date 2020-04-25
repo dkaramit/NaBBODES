@@ -13,6 +13,8 @@ _Ros_Func_::next_step(){
 
         //calculate the LU decomposition of (1-\gamma*h*J) before you enter the loop. 
         LU();
+        /* +++===Here you can find the inverse, in order to use it in calc_k()===+++ */
+        
 
 
         //calculate ynext and ynext_star until h_stop=true 

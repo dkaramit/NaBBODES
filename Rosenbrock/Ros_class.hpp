@@ -59,8 +59,8 @@ public:
     
     /*--These are specific to Rosenbrock methods*/
 
-    //define the coefficient. This will become (I-\gamma*h*J)
-    LD _coeff[N_eqs][N_eqs];
+    //define the coefficient. This will become (I-\gamma*h*J). _inv is its inverse
+    LD _coeff[N_eqs][N_eqs], _inv[N_eqs][N_eqs] ;
     // There are for the LUP-decomposition of (I-\gamma*h*J) 
     LD L[N_eqs][N_eqs];
     LD U[N_eqs][N_eqs];

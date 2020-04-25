@@ -46,7 +46,10 @@ _Ros_Func_::calc_k(){
         for(int eq=0; eq<N_eqs ; eq++) { rhs[eq]= rhs1[eq]*h0 + rhs2[eq] + Jk[eq]*h0  ;  }
         /*------------------------*/
 
-        Solve_LU<N_eqs>(L,U,P,rhs, lu_sol);
+
+        /*Instead of solving , try using the inverse and just take lu_sol = (1-gam*h*J)^(-1) * rhs*/
+        // Solve_LU<N_eqs>(L,U,P,rhs, lu_sol);
+        dot<N_eqs,LD>(_inv,rhs, lu_sol);
         for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
     }
 
