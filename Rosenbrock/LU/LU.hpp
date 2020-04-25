@@ -180,3 +180,83 @@ void Solve_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD (&b)[N] , LD (&x)[N]
 
 }
 /*-------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+/*------------------------------------------------Solve-LU----------------------------------------------------------*/
+template<const int N, class LD>
+void Inverse_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N] , LD (&invM)[N][N] ){
+    /*
+    Finds the Inverse matrix given its LU decomposition.
+    Basically this solves M*M^{-1}=1
+
+    Input:
+    L,U,P= LUP decomposition of M, which is the output of the function LUP.
+
+    N=dimension of the matrix (N*N)
+
+    invM=an array to store the solution inverse matrix.
+    */    
+
+    //     
+    LD e[N];
+    for(int i=0 ; i< N ; ++i){ e[i]=0; } 
+    LD x[N];
+
+    for(int i=0 ; i< N ; ++i){
+        e[i]=1;
+        Solve_LU(L,U,P,e,x);
+
+        for(int j=0 ; j<N ; ++j){
+            invM[j][i]=x[j];
+        }
+
+        e[i]=0;
+    }
+}
+/*-------------------------------------------------------------------------------------------------------------------*/
+ 
+/*------------------------------------------------Product of two matrices----------------------------------------------------------*/
+template<const int N, class LD>
+void dot(LD (&A)[N][N] ,LD (&B)[N][N], LD (&R)[N][N] ){
+    /*
+    Calculates the product of two matrices.
+    R=A*B
+    */
+
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<N; ++j){
+            R[i][j]=0;
+            for(int l=0; l<N; ++l){
+                R[i][j] += A[i][l]*B[l][j];
+            }
+        }
+    }
+}
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+
+/*------------------------------------------------Product of matrix with vector----------------------------------------------------------*/
+template<const int N, class LD>
+void dot(LD (&A)[N][N] ,LD (&x)[N], LD (&b)[N] ){
+    /*
+    Calculates the product of  matrix with vector.
+    b=A*x
+    */
+
+    for(int i=0; i<N; ++i){
+        b[i]=0;
+        for(int j=0; j<N; ++j){
+            b[i] += A[i][j]*x[j];
+        }
+    }
+}
+/*-------------------------------------------------------------------------------------------------------------------*/
