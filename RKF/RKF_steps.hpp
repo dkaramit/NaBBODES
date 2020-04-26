@@ -74,13 +74,13 @@ _RKF_Func_::solve(bool _full_){
 
             if (  tn >=( (double ) tmp_step)/( (double )N_out-1.)   ){
                 
-                time[tmp_step]=tn;
-                hist[tmp_step]=_hist_steps;
+                time.push_back(tn);
+                hist.push_back(_hist_steps);
 
                 
                 for (int eq = 0; eq < N_eqs; eq++){
-                    solution[eq][tmp_step] =  ynext[eq];
-                    error[eq][tmp_step]= ynext[eq] - ynext_star[eq];
+                    solution[eq].push_back(ynext[eq]);
+                    error[eq].push_back(ynext[eq] - ynext_star[eq]);
 
                     }                
 

@@ -23,13 +23,13 @@ public:
     int current_step;
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
     LD tn;
-    LD *tmp_sol;
+    LD tmp_sol[N_eqs];
     
     
-    LD **solution;
-    LD **error;
-    LD *time;
-    int *hist;
+    std::vector<LD> solution[N_eqs];
+    std::vector<LD> error[N_eqs];
+    std::vector<LD> time;
+    std::vector<int> hist;
 
     std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
     

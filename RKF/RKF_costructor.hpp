@@ -24,25 +24,13 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
         // later, I'll make steps and tmp_sol std::vector
         
         //define tmp_sol[N_eqs]. It would be good to initialize ynext.
-        this->tmp_sol = new LD[N_eqs]; 
         for(int i = 0; i < N_eqs ;++i) {
                 this->tmp_sol[i]=init_cond[i];
                 this->ynext[i]=init_cond[i];
+                (this->solution[i]).push_back(init_cond[i]);
         }
-        this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
-        this->time = new LD[N_out];//make a list in which you'll put the steps (these will be approximately at intervals of 1/(N_out-1))
-        this->time[0]=0;
-        this->hist[0]=0;
+        (this->time).push_back(0);
 
-
-        this->solution = new LD*[N_eqs];
-        this->error = new LD*[N_eqs];
-        for(int i = 0; i < N_eqs ;++i) {
-                this->solution[i] = new LD[ N_out ];
-                this->error[i] = new LD[ N_out ];
-                this->error[i][0]=0;
-                this->solution[i][0]=init_cond[i];
-            } 
         // ---------------------------------------------------------------------------------- //
         
         // define k[N_eqs][method.s]. Also put k=0 for definiteness.
@@ -63,12 +51,6 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
 _RKF_template_
 _RKF_Cosnt_::~RKF(){
         // std::cout << "I'm done" << std::endl;
-        delete[] this->solution;
-        delete this->time;
-        delete this->error;
-        delete this->hist;
-
-        delete this->tmp_sol;
         delete[] this->k;
     };
 
