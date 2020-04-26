@@ -14,6 +14,8 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->Jac=jacobian(dydt);
 
         this->h0=initial_step_size;
+        this->h1=initial_step_size;
+
         this->hmin=minimum_step_size;
         this->hmax=maximum_step_size;
         this->max_N=maximum_No_steps;
@@ -22,28 +24,16 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->beta=beta;
         this->fac_max=fac_max;
 
+
         // ---------------------------------------------------------------------------------- //
        //define tmp_sol[N_eqs]. It is also good to initialize ynext.
-        this->tmp_sol = new LD[N_eqs]; 
         for(int i = 0; i < N_eqs ;++i) {
                 this->tmp_sol[i]=init_cond[i];
                 this->ynext[i]=init_cond[i];
+                (this->solution)[i].push_back( init_cond[i]);
         }
+        (this->time).push_back(0);
 
-        this->hist = new int[N_out];//make a list in which you'll put the steps it took between time[i] and time[i+1] in order to make a histogram
-        this->time = new LD[N_out];//make a list in which you'll put the steps (these will be approximately at intervals of 1/(N_out-1))
-        this->time[0]=0;
-        this->hist[0]=0;
-
-
-        this->solution = new LD*[N_eqs];
-        this->error = new LD*[N_eqs];
-        for(int i = 0; i < N_eqs ;++i) {
-                this->solution[i] = new LD[ N_out ];
-                this->error[i] = new LD[ N_out ];
-                this->error[i][0]=0;
-                this->solution[i][0]=init_cond[i];
-            } 
         // ---------------------------------------------------------------------------------- //
         
         // define k[N_eqs][method.s]. Initialize also k=0.
@@ -74,12 +64,6 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
 _Ros_template_
 _Ros_Cosnt_::~Ros(){
         // std::cout << "I'm done" << std::endl;
-        delete[] this->solution;
-        delete this->time;
-        delete this->error;
-        delete this->hist;
-
-        delete this->tmp_sol;
         delete[] this->k;
 
     };

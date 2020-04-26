@@ -11,11 +11,8 @@ _Ros_Func_::next_step(){
         //set h_stop=false, to start looking for stepsize
         h_stop=false;
 
-        //calculate the LU decomposition of (1-\gamma*h*J) before you enter the loop. 
+        //calculate the LU decomposition of (1-\gamma*h*J) and find its inverse before you enter the loop. 
         LU();
-        /* +++===Here you can find the inverse, in order to use it in calc_k()===+++ */
-        
-
 
         //calculate ynext and ynext_star until h_stop=true 
         while (true) 
@@ -40,8 +37,6 @@ _Ros_Func_::next_step(){
                 abs_delta[eq]= ynext[eq] - ynext_star[eq] ;
                 
             }
-            // std::cout<<h0<<std::endl;
-            // std::cin.get();
             // call step_control to see if the error is acceptable
             
             
@@ -65,13 +60,17 @@ _Ros_Func_::next_step(){
 _Ros_template_
 _Ros_Func_::solve(bool _full_){
 
-        if( _full_ ){
-        for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
-        time_full.push_back(tn);
-    }
+        if( _full_ )
+        {
+            for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
+            time_full.push_back(tn);
+        }
+    
 
         int tmp_step=1;
         
+        // Use this to count how many steps you take between entries in time and solution. 
+        // This basically makes a histogram os number of steps, which is stored in the vector hist.
         int _hist_steps=0; 
         while (true )
         {
@@ -89,22 +88,23 @@ _Ros_Func_::solve(bool _full_){
 
             if (  tn >=( (LD ) tmp_step)/( (LD )N_out-1.)   ){
                 
-                time[tmp_step]=tn;
-                hist[tmp_step]=_hist_steps;
+                time.push_back(tn);
+                hist.push_back(_hist_steps);
 
                 
-                for (int eq = 0; eq < N_eqs; eq++){
-                    solution[eq][tmp_step] =  ynext[eq];
-                    error[eq][tmp_step]= ynext[eq] - ynext_star[eq];
-
-                    }                
+                for (int eq = 0; eq < N_eqs; eq++)
+                {
+                    solution[eq].push_back(ynext[eq]);
+                    error[eq].push_back(ynext[eq] - ynext_star[eq]);
+                }                
 
                 tmp_step++;
                 _hist_steps=0;
 
             }
 
-            if( _full_ ){
+            if( _full_ )
+            {
                 for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
                 time_full.push_back(tn);
             }

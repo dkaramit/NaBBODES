@@ -1,8 +1,8 @@
 #set PATH variable to working directory
 
 
-# METHOD=ROS34PW2
-METHOD=RODASPR2
+METHOD=ROS34PW2
+# METHOD=RODASPR2
 # METHOD=ROS3w
 
 

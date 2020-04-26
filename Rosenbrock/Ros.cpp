@@ -35,16 +35,16 @@ void sys( Array &lhs, Array &y  , LD t )
         };
 
 
-#define initial_step_size 1e-5
+#define initial_step_size 1e-3
 #define minimum_step_size 1e-15
 #define maximum_step_size 1e-3
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-10
-#define relative_tolerance 1e-10
+#define absolute_tolerance 1e-15
+#define relative_tolerance 1e-15
 #define beta 0.9
-#define fac_max 100
+#define fac_max 10
 
-#define N_out 500
+#define N_out 1000
 
 //you can also define then using the -D flag ( as -DMETHOD=ROS34PW2 for example)
 // #define METHOD ROS3w //2nd order
@@ -65,15 +65,15 @@ int main(int argc, const char** argv) {
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max);
     // System.next_step();
-System.solve(true);
+    System.solve(true);
     // 
 
-    std::cout<<N_out<<"\n";
+    std::cout<<System.time.size()<<"\n";
     std::cout<<System.Deltas.size()<<"\n";
     std::cout<<System.current_step<<"\n";
     
 
-    for (int i = 0; i < N_out; i++){
+    for (int i = 0; i < System.time.size() ; i++){
         printf("%e ",(double)System.time[i]);
 
         for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
@@ -83,7 +83,6 @@ System.solve(true);
     
 
     for(int i=0; i< System.Deltas.size() ; ++i) {  printf("%e \n",(double)System.Deltas[i]) ; }
-
     for(int i=0; i< System.time_full.size() ; ++i) {  
         printf("%e ",(double)System.time_full[i]) ; 
         for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution_full[eq][i]);    }

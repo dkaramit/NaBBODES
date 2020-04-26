@@ -19,27 +19,29 @@ public:
     
 
 
-    LD h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
+    // h0 is the current stepsize (used to update the stepsize)
+    // h1 the previous accepted stepsize.
+    LD h0,h1, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
     int max_N;
     
     //things that we'll need
     int current_step;
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
-    //For the PI step control
-    LD err_previous;
 
     LD tn;
-    LD *tmp_sol;
+    LD tmp_sol[N_eqs];
     
     
-    LD **solution;
-    LD **error;
-    LD *time;
-    int *hist;
+
+
+
+    std::vector<LD> solution[N_eqs];
+    std::vector<LD> error[N_eqs];
+    std::vector<LD> time;
+    std::vector<int> hist;
+    
 
     std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
-    
-
     std::vector<LD> time_full;
     std::vector<LD> solution_full[N_eqs];
 
@@ -48,7 +50,11 @@ public:
     //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
     LD **k;
     LD ak[N_eqs],gk[N_eqs],Jk[N_eqs], bk[N_eqs],bstark[N_eqs];
+    
+    // abs_delta=fabs(ynext-ynext_star)
     LD abs_delta[N_eqs];
+    // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
+    LD regulated_delta[N_eqs];
 
     LD ynext[N_eqs];//this is here to hold the prediction
     LD ynext_star[N_eqs];//this is here to hold the second prediction
