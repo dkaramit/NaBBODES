@@ -20,19 +20,21 @@ _RKF_Cosnt_:: RKF(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->beta=beta;
         this->fac_max=fac_max;
 
+
         // ---------------------------------------------------------------------------------- //
-        // later, I'll make steps and tmp_sol std::vector
-        
-        //define tmp_sol[N_eqs]. It would be good to initialize ynext.
+       //define tmp_sol[N_eqs]. It is also good to initialize ynext.
         for(int i = 0; i < N_eqs ;++i) {
                 this->tmp_sol[i]=init_cond[i];
                 this->ynext[i]=init_cond[i];
-                (this->solution[i]).push_back(init_cond[i]);
+                (this->solution)[i].push_back( init_cond[i]);
+                (this->error)[i].push_back(0);
+                
         }
         (this->time).push_back(0);
+        (this->hist).push_back(0);
 
         // ---------------------------------------------------------------------------------- //
-        
+               
         // define k[N_eqs][method.s]. Also put k=0 for definiteness.
         this->k=new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {

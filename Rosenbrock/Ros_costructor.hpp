@@ -31,8 +31,11 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
                 this->tmp_sol[i]=init_cond[i];
                 this->ynext[i]=init_cond[i];
                 (this->solution)[i].push_back( init_cond[i]);
+                (this->error)[i].push_back(0);
+                
         }
         (this->time).push_back(0);
+        (this->hist).push_back(0);
 
         // ---------------------------------------------------------------------------------- //
         
