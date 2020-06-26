@@ -1,6 +1,3 @@
-#set PATH variable to working directory
-
-
 # METHOD=ROS34PW2
 METHOD=RODASPR2
 # METHOD=ROS3w
@@ -12,15 +9,15 @@ LONG=long #set to long , in order to use long doubles
  
 
 Path=$(PWD)
-
+PathRos=`bash -c "dirname $(Path)"`
 
 CC=g++
-FLG=  -std=c++17  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
+FLG=  -std=c++17  -I "$(PathRos)/Rosenbrock/Jacobian"  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
 
 
 all: TwoState.run
 
-TwoState.run: makefile TwoState.cpp 
+TwoState.run: makefile TwoState.cpp
 	$(CC) -o "$(Path)/TwoState.run" "$(Path)/TwoState.cpp" $(FLG) 
 
 
