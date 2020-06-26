@@ -13,7 +13,12 @@ LONG=long #set to long , in order to use long doubles
 
 Path=$(PWD)
 CC=g++
-FLG=  -std=c++17  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
+
+# path to Jacobian.hpp
+JACPATH="$(Path)/Jacobian"
+
+
+FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
 
 
 all: Ros.run

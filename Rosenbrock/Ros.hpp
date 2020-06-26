@@ -1,6 +1,7 @@
 #ifndef Ros_headers
 #define Ros_headers
 #include <vector>
+#include "LU/LU.hpp"
 
 
 
@@ -22,6 +23,7 @@ N_out number of output points (to be taken in intervals of approximately  1/(N_o
 
 
 #include "Ros_costructor.hpp"
+#include "Jacobian.hpp"
 #include "Ros_LU.hpp"
 #include "Ros_calc_k.hpp"
 #include "Ros_sums.hpp"
