@@ -1,7 +1,9 @@
 #set PATH variable to working directory
 
 
-METHOD=DormandPrince
+# METHOD=DormandPrince #higher rel_tol and abs_tol
+METHOD=RKF45  #low rel_tol and abs_tol, but the result seems better than DormandPrince
+# METHOD=CashKarp #similar to RKF45
 
 
 # LONG= #leave empty to use doubles
@@ -16,7 +18,8 @@ FLG=  -std=c++17  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
 
 all: RKF.run
 
-RKF.run: METHOD.hpp  RKF_calc_k.hpp  RKF_class.hpp  RKF_costructor.hpp  RKF.hpp  RKF_step_control.hpp  RKF_steps.hpp  RKF_sums.hpp  RKF.cpp
+RKF.run: METHOD.hpp  RKF_calc_k.hpp  RKF_class.hpp  RKF_costructor.hpp\
+		RKF.hpp  RKF_step_control-simple.hpp RKF_step_control-PI.hpp  RKF_steps.hpp  RKF_sums.hpp  RKF.cpp
 	$(CC) -o "$(Path)/RKF.run" "$(Path)/RKF.cpp" $(FLG) 
 
 

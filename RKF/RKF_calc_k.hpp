@@ -3,8 +3,8 @@
 #include "RKF_class.hpp"
 
 /*-----------------------Begin: calc_k---------------------------------*/
-_RKF_template_
-_RKF_Func_::calc_k(){
+RKF_Template
+void RKF_Namespace::calc_k(){
             // You can first calculate the first stage and then the rest of them, since the first one does not need ak. 
 
             // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).
