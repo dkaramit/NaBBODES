@@ -1,5 +1,7 @@
 #ifndef Jac_head
 #define Jac_head
+// This is an example Jacobian class.
+
 
 template<class diffeq, int n_eqs, class LD>
 class Jacobian{
@@ -11,13 +13,14 @@ class Jacobian{
 
     Jacobian(){};
 
-
+    // It is good to have a copy contructor is needed here, in case you need it. 
+    // Rosenbrock works without it, but may be useful in the future.
     Jacobian(Jacobian<diffeq,n_eqs,LD> &Jac){
         this->dydt=Jac.dydt;
         this->h=Jac.h;
-
     };
-    Jacobian(diffeq dydt, LD h=1e-8){
+
+    Jacobian(diffeq dydt, LD h=1e-10){
         this->dydt=dydt;
         this->h=h;
 
@@ -25,24 +28,29 @@ class Jacobian{
     ~Jacobian(){};
 
     void operator()(LD (&J)[n_eqs][n_eqs], LD (&dfdt)[n_eqs], LD (&y)[n_eqs]  , LD t ){
+        // you can use something like this to scale the stepsize according to the scale of t
+        LD a=this->h+this->h*t;
+        // take the time derivative
+        dydt(dydt0,y,t-a);
+        dydt(dydt1,y,t+a);
+        for (int i = 0; i < n_eqs; i++){ dfdt[i]=(dydt1[i]-dydt0[i])/(2*a); }
 
-        dydt(dydt0,y,t-h);
-        dydt(dydt1,y,t+h);
+        // take the derivatives over y
+        for (int i = 0; i < n_eqs; i++){
+            for (int j = 0; j < n_eqs; j++){
+                for(int _d = 0; _d < n_eqs; _d++){y0[_d]=y[_d]; y1[_d]=y[_d]; }
+                // you can use something like this to scale the stepsize according to the scale of y[j]
+                a=this->h+this->h*std::abs(y0[j]);
+                
+                y0[j]=y0[j]-a;
+                y1[j]=y1[j]+a;
+                dydt(dydt0,y0,t);
+                dydt(dydt1,y1,t);
 
-        for (int i = 0; i < n_eqs; i++){ dfdt[i]=(dydt1[i]-dydt0[i])/(2*h); }
-        
-        
-        for (int i = 0; i < n_eqs; i++){for (int j = 0; j < n_eqs; j++){
-            for(int _d = 0; _d < n_eqs; _d++){y0[_d]=y[_d]; y1[_d]=y[_d]; }
+                J[i][j]=(dydt1[i]-dydt0[i])/(2*a);
 
-            y0[j]=y0[j]-h;
-            y1[j]=y1[j]+h;
-            dydt(dydt0,y0,t);
-            dydt(dydt1,y1,t);
-
-            J[i][j]=(dydt1[i]-dydt0[i])/(2*h);
-
-        }}
+            }
+        }
 
 
 

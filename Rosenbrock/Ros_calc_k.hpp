@@ -6,8 +6,8 @@
 
 
 /*-----------------------Begin: calc_Jk---------------------------------*/
-_Ros_template_
-_Ros_Func_::calc_Jk(){
+Ros_Template
+void Ros_Namespace::calc_Jk(){
     /*
     Calculate product of matrix with vector. 
     We use it to get J*gk.
@@ -15,24 +15,19 @@ _Ros_Func_::calc_Jk(){
     for(int i=0; i<N_eqs ; i++){
         Jk[i]=0;
         for(int j=0; j<N_eqs ; j++){ Jk[i]+=J[i][j]*gk[j]; }
-
-        
     }         
 }
 /*-----------------------End: calc_Jk---------------------------------*/
 
 /*-----------------------Begin: calc_k---------------------------------*/
-_Ros_template_
-_Ros_Func_::calc_k(){
+Ros_Template
+void Ros_Namespace::calc_k(){
     // since LU decomposition is not updated as you try to find suitable step, put it ouside the step control loop (should be faster)!
     // LU();
     // calculate k for the other stages
     for(int stage = 0; stage < method.s; stage++){
-
-        
         sum_ak(stage);
         sum_gk(stage);
-        
         // setup the argument for dydt (it is evaluated at y_n+\sum a*k )
         for(int eq=0; eq<N_eqs ; eq++){yn[eq]=tmp_sol[eq] +ak[eq]  ; }
         /*--- Get the rhs terms ---*/
@@ -53,15 +48,6 @@ _Ros_Func_::calc_k(){
         dot<N_eqs,LD>(_inv,rhs, lu_sol);
         for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
     }
-
-
-
-
-
-
-
-    
-          
 }
 /*-----------------------End: calc_k---------------------------------*/
 #endif

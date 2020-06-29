@@ -26,11 +26,11 @@ void RKF_Namespace::step_control(){
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
     if(Delta<=1) { 
         if(h_stop==false){fac*=h0/h1;}
-        fac*=std::pow(Delta, -0.65/( method.p) );   
-        fac*=std::pow( Deltas[current_step-1]/Delta, 0.3/ ( method.p ) );   
+        fac*=std::pow(Delta, -0.65/( (LD) method.p + 1.) );   
+        fac*=std::pow( Deltas[current_step-1]/Delta, 0.3/ ( (LD) method.p + 1. ) );   
         h_stop=true ;
     }else{
-        fac*=std::pow( Delta , -1./(method.p) );
+        fac*=std::pow( Delta , -1./((LD) method.p + 1.) );
     }
     
     if(fac>fac_max){fac=fac_max;}

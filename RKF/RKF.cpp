@@ -33,14 +33,13 @@
 #define N_out 500
 
 
-// #define METHOD DormandPrince
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
 using Array =  LD[n_eqs];//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
 
-
 using std::pow;
+
 // you can use a function, but with a class you can also hold data that can be useful.
 class diffeq{
     public:
@@ -54,10 +53,6 @@ class diffeq{
     }
 
 };
-
-
-
-
 
 
 using SOLVER = RKF<diffeq,n_eqs,METHOD<LD>,N_out,LD>;

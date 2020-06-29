@@ -1,8 +1,5 @@
-#set PATH variable to working directory
-
-
-METHOD=ROS34PW2
-# METHOD=RODASPR2
+METHOD=RODASPR2
+# METHOD=ROS34PW2
 # METHOD=ROS3w
 
 
@@ -23,7 +20,10 @@ FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(L
 
 all: Ros.run
 
-Ros.run: makefile METHOD.hpp  Ros_calc_k.hpp  Ros_class.hpp  Ros_costructor.hpp  Ros.hpp  Ros_step_control-PI.hpp Ros_step_control-simple.hpp  Ros_steps.hpp  Ros_LU.hpp Ros_sums.hpp  Ros.cpp LU/LU.hpp Jacobian/Jacobian.hpp
+Ros.run: METHOD.hpp  Ros_calc_k.hpp  Ros_class.hpp\
+	Ros_costructor.hpp  Ros.hpp  Ros_step_control-PI.hpp\
+	Ros_step_control-simple.hpp  Ros_steps.hpp  Ros_LU.hpp\
+	Ros_sums.hpp Ros.cpp LU/LU.hpp Jacobian/Jacobian.hpp makefile
 	$(CC) -o "$(Path)/Ros.run" "$(Path)/Ros.cpp" $(FLG) 
 
 

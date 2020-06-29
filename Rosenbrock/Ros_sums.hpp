@@ -3,8 +3,8 @@
 #include "Ros_class.hpp"
 
 /*-----------------------Begin: sum_ak---------------------------------*/
-_Ros_template_
-_Ros_Func_::sum_ak(int stage){
+Ros_Template
+void Ros_Namespace::sum_ak(int stage){
     // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.; 
@@ -16,8 +16,8 @@ _Ros_Func_::sum_ak(int stage){
 
 
 /*-----------------------Begin: sum_gk---------------------------------*/
-_Ros_template_
-_Ros_Func_::sum_gk(int stage){
+Ros_Template
+void Ros_Namespace::sum_gk(int stage){
     // this function stores sum_{j}^{stage-1}g_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (int eq = 0; eq <N_eqs ; eq++){
         gk[eq]=0.;  
@@ -28,8 +28,8 @@ _Ros_Func_::sum_gk(int stage){
 /*-----------------------End: sum_ak---------------------------------*/
 
 /*-----------------------Begin: sum_bk---------------------------------*/
-_Ros_template_
-_Ros_Func_::sum_bk(){
+Ros_Template
+void Ros_Namespace::sum_bk(){
     // this function stores sum_{i}^{s}b_{i}\vec{k}_i*h in bk and sum_{i}^{s}b_{i}^{\star}\vec{k}_i*h in bstark  
     for (int eq = 0; eq <N_eqs ; eq++){
         bk[eq]=0.;

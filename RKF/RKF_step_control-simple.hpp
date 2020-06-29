@@ -29,7 +29,7 @@ void RKF_Namespace::step_control(){
     if(Delta==0){Delta=abs_tol;}
 
     //step size cotrol from "Solving Ordinary Differential Equations I"
-    fac=min(std::pow( 1/Delta , 1./(method.p) ) , fac_max );
+    fac=min(std::pow( 1/Delta , 1./((LD) method.p + 1.) ) , fac_max );
 
     h0= beta*h0*fac ;
 

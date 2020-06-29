@@ -5,17 +5,15 @@
 
 
 //The constructor. Remember that N has default value
-_Ros_template_
-_Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] , 
+Ros_Template
+Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
         LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max){
         // Initialize inputs
         this->dydt=dydt;
+        this->tmax=tmax;
         this->Jac=jacobian(dydt);
-
         this->h0=initial_step_size;
-        this->h1=initial_step_size;
-
         this->hmin=minimum_step_size;
         this->hmax=maximum_step_size;
         this->max_N=maximum_No_steps;
@@ -23,7 +21,6 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->rel_tol=relative_tolerance;
         this->beta=beta;
         this->fac_max=fac_max;
-
 
         // ---------------------------------------------------------------------------------- //
        //define tmp_sol[N_eqs]. It is also good to initialize ynext.
@@ -36,6 +33,8 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         }
         (this->time).push_back(0);
         (this->hist).push_back(0);
+        this->Deltas.push_back(1);
+        
 
         // ---------------------------------------------------------------------------------- //
         
@@ -58,19 +57,13 @@ _Ros_Cosnt_:: Ros(diffeq dydt, LD (&init_cond)[N_eqs] ,
         this->tn=0;
         this->current_step=0;
 
-        //initialize this to 1 for the PI step control
-        this->Deltas.push_back(1);
-        
         };
 
 //The destructor
-_Ros_template_
-_Ros_Cosnt_::~Ros(){
+Ros_Template
+Ros_Namespace::~Ros(){
         // std::cout << "I'm done" << std::endl;
         delete[] this->k;
-
     };
-
-
 
 #endif

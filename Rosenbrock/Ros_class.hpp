@@ -2,10 +2,12 @@
 #define Ros_class
 
 //This is a general implementation of explicit embedded RK solver of
-// a system of differential equations in the interval [0,1].
+// a system of differential equations in the interval [0,tmax].
+#define Ros_Template template<class diffeq, int N_eqs, class RK_method, class jacobian, int N_out, class LD> 
+#define Ros_Namespace Ros<diffeq, N_eqs, RK_method,  jacobian, N_out, LD>
 
 
-_Ros_template_//Note that you can use template to pass the method
+Ros_Template//Note that you can use template to pass the method
 class Ros
 {
     /*      */
@@ -16,13 +18,10 @@ public:
     diffeq dydt;
     RK_method method;
     jacobian Jac;
-    
-
-
-    // h0 is the current stepsize (used to update the stepsize)
-    // h1 the previous accepted stepsize.
-    LD h0,h1, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
+    LD tmax, h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
     int max_N;
+    LD h1;//this will be initialized at the beginning of next_step
+
     
     //things that we'll need
     int current_step;
@@ -86,7 +85,7 @@ public:
        
     LD J[N_eqs][N_eqs];//this is here to hold values I might need
     /*----------------------------------------------------------------------------------------------------*/
-    Ros(diffeq dydt, LD (&init_cond)[N_eqs], 
+    Ros(diffeq dydt, LD (&init_cond)[N_eqs], LD tmax,
         LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 
         LD absolute_tolerance=1e-15,LD relative_tolerance=1e-15,LD beta=0.85,LD fac_max=3);
     

@@ -3,43 +3,38 @@
 #include "Ros_class.hpp"
 
 #define max(a,b)  (a <= b) ? b : a
-#define min(a,b)  (a >= b) ? b : a
 
 
 /*-----------------------Begin: step_control---------------------------------*/
-_Ros_template_
-_Ros_Func_::step_control(){
-    
-    //calculate the absolute value of delta
-    
-
-
+Ros_Template
+void Ros_Namespace::step_control(){
     LD Delta=0.;
     LD _sc;
-    LD fac;
+    LD fac=beta;
     
     for (int eq = 0; eq < N_eqs; eq++){
-        _sc=max(fabs( ynext[eq] ), fabs( ynext_star[eq] ));
+        _sc=max(std::abs( ynext[eq] ), std::abs( ynext_star[eq] ));
         _sc=abs_tol+rel_tol*_sc;
-        Delta+= pow((abs_delta[eq]/_sc),2.);
+        Delta+= std::pow((abs_delta[eq]/_sc),2.);
         
     ;}
-    Delta=pow(1./N_eqs*Delta,0.5);
-    
-    
-    if(Delta<1) { h_stop=true ; Deltas.push_back( Delta) ;}
+    Delta=std::sqrt(1./N_eqs*Delta);
+    if(Delta<1) { h_stop=true ; }
     //step size cotrol from "Solving Ordinary Differential Equations I"
-    fac=min(pow( 1/Delta , 1./(method.p+1) ) , fac_max );
+    fac*=std::pow( 1/Delta , 1./( (LD)method.p ) );
+    if(fac > fac_max){fac=fac_max;}
     
     h0= beta*h0*fac ;
 
-    if (h0>hmax ){ h0=hmax;  }
+    if (h0>hmax ){ h0=hmax; h_stop=true ; }
     if (h0<hmin ){ 
-        h0=hmin; h_stop=true ;  Deltas.push_back( Delta) ;
-        std::cout<<"#minimum stepsize reached. Try increasing it to improve accuracy!\n"; 
+        h0=hmin; h_stop=true;
+        // std::cout<<"#minimum stepsize reached. Try increasing it to improve accuracy!\n"; 
     }
 
-    if (tn+h0>1. ){ h0=1-tn;  }
+
+    if(h_stop){Deltas.push_back( Delta);}
+    if (tn+h0>tmax ){ h0=tmax-tn;  }
     
     
 

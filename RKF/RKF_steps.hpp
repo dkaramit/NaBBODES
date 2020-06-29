@@ -54,49 +54,37 @@ void RKF_Namespace::solve(bool _full_){
         time_full.push_back(tn);
     }
 
-        int tmp_step=1;
+    int tmp_step=1;
+    
+    int _hist_steps=0; 
+    while (true ){
+        //increase current_step
+        current_step++;
+        if( tn>=tmax  or current_step == max_N  ) {break ;}
         
-        int _hist_steps=0; 
-        while (true )
-        {
-            //increase current_step
-            current_step++;
+        next_step();
+        _hist_steps++;
 
-            if( tn>=tmax  or current_step == max_N  ) {break ;}
-            
-            next_step();
-            _hist_steps++;
+        for (int eq = 0; eq < N_eqs; eq++){tmp_sol[eq]=ynext[eq];}
+        tn+= h0;
 
-            
-            for (int eq = 0; eq < N_eqs; eq++){tmp_sol[eq]=ynext[eq];}
-            tn+= h0;
+        if (  tn >=( (LD) tmp_step)/( (LD)N_out-1.)*tmax   ){
+            time.push_back(tn);
+            hist.push_back(_hist_steps);
 
-            if (  tn >=( (double ) tmp_step)/( (double )N_out-1.)*tmax   ){
-                
-                time.push_back(tn);
-                hist.push_back(_hist_steps);
-
-                
-                for (int eq = 0; eq < N_eqs; eq++){
-                    solution[eq].push_back(ynext[eq]);
-                    error[eq].push_back(ynext[eq] - ynext_star[eq]);
-
-                    }                
-
-                tmp_step++;
-                _hist_steps=0;
-
-            }
-
-            if( _full_ ){
-                for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
-                time_full.push_back(tn);
-            }
-
-            
+            for (int eq = 0; eq < N_eqs; eq++){
+                solution[eq].push_back(ynext[eq]);
+                error[eq].push_back(ynext[eq] - ynext_star[eq]);
+                }                
+            tmp_step++;
+            _hist_steps=0;
         }
-
-    } 
+        if( _full_ ){
+            for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
+            time_full.push_back(tn);
+        }
+    }
+} 
 /*---------------------------------------------------End: solve-------------------------------------------------------------------------------*/
 
 
