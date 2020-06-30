@@ -11,7 +11,7 @@ void RKF_Namespace::next_step(){
     h_stop=false;
     h1=h0;//for the PI controller
     delta_last=Deltas.back();//for the PI controller
-
+    delta_rej=delta_last;
     //calculate ynext and ynext_star until h_stop=true 
     while (true) 
     {
