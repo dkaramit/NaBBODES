@@ -11,7 +11,7 @@ void Ros_Namespace::next_step(){
     h_stop=false;
     h1=h0;//for the PI controller
     delta_last=Deltas.back();//for the PI controller
-    
+    delta_rej=delta_last;
     //calculate the LU decomposition of (1-\gamma*h*J) and find its inverse before you enter the loop. 
     LU();
     //calculate ynext and ynext_star until h_stop=true 
