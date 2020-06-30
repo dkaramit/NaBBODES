@@ -6,7 +6,7 @@
 RKF_Template
 RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
-        LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max){
+        LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max, LD fac_min){
         // Initialize inputs
         this->dydt=dydt;
         this->tmax=tmax;
@@ -18,6 +18,7 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         this->rel_tol=relative_tolerance;
         this->beta=beta;
         this->fac_max=fac_max;
+        this->fac_min=fac_min;
 
 // ---------------------------------------------------------------------------------- //
 //define tmp_sol[N_eqs]. It is also good to initialize ynext.

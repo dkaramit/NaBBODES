@@ -10,6 +10,7 @@ void RKF_Namespace::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     h1=h0;//for the PI controller
+    delta_last=Deltas.back();//for the PI controller
 
     //calculate ynext and ynext_star until h_stop=true 
     while (true) 

@@ -18,9 +18,9 @@ public:
     diffeq dydt;
     RK_method method;
     jacobian Jac;
-    LD tmax, h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max;
+    LD tmax, h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
     int max_N;
-    LD h1;//this will be initialized at the beginning of next_step
+    LD h1,delta_last;//these will be initialized at the beginning of next_step
 
     
     //things that we'll need
@@ -50,7 +50,7 @@ public:
     LD **k;
     LD ak[N_eqs],gk[N_eqs],Jk[N_eqs], bk[N_eqs],bstark[N_eqs];
     
-    // abs_delta=fabs(ynext-ynext_star)
+    // abs_delta=abs(ynext-ynext_star)
     LD abs_delta[N_eqs];
     // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
     LD regulated_delta[N_eqs];
@@ -87,7 +87,7 @@ public:
     /*----------------------------------------------------------------------------------------------------*/
     Ros(diffeq dydt, LD (&init_cond)[N_eqs], LD tmax,
         LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 
-        LD absolute_tolerance=1e-15,LD relative_tolerance=1e-15,LD beta=0.85,LD fac_max=3);
+        LD absolute_tolerance=1e-8,LD relative_tolerance=1e-8,LD beta=0.85,LD fac_max=3, LD fac_min=0.3);
     
     ~Ros();
 

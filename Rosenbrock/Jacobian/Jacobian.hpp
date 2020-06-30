@@ -48,7 +48,7 @@ class Jacobian{
                 dydt(dydt1,y1,t);
 
                 J[i][j]=(dydt1[i]-dydt0[i])/(2*a);
-
+                // if(isnan(J[i][j])){J[i][j]=0;}
             }
         }
 

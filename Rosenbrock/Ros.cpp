@@ -24,14 +24,15 @@ using std::endl;
 #endif
 
 
-#define initial_step_size 1e-5
+#define initial_step_size 1e-3
 #define minimum_step_size 1e-8
-#define maximum_step_size 1e8
+#define maximum_step_size 1e3
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-8
-#define relative_tolerance 1e-8
-#define beta 1-5e-2
-#define fac_max 5
+#define absolute_tolerance 1e-7
+#define relative_tolerance 1e-7
+#define beta 0.8
+#define fac_max 3
+#define fac_min 0.3
 
 #define N_out 500
 // this is how the diffeq should look like
@@ -62,18 +63,17 @@ using SOLVER = Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, N_out , 
 
 int main(int argc, const char** argv) {
     
-    Array y0 = {5,-1,30};
+    Array y0 = {8,12,4};
     diffeq dydt;
 
     Jacobian<diffeq,n_eqs,LD> jac(dydt);
 
-
-    SOLVER System(dydt,y0, 1e6,
+    SOLVER System(dydt,y0, 1e2,
     initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
-    absolute_tolerance, relative_tolerance, beta, fac_max);
+    absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
     
     System.solve(true);
-    
+
     std::cout<<System.time.size()<<"\n";
     // std::cout<<System.Deltas.size()<<"\n"; // this it the same as time_full
     std::cout<<System.time_full.size()<<"\n";
