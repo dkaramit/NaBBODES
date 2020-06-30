@@ -27,7 +27,7 @@ public:
     RKF_method method;
     LD tmax, h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
     int max_N;
-    LD h1,delta_last;//these will be initialized at the beginning of next_step
+    LD h1,delta_last, delta_rej;//these will be initialized at the beginning of next_step
     
     //things that we'll need
     int current_step;
