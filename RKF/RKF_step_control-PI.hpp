@@ -25,7 +25,7 @@ void RKF_Namespace::step_control(){
     // I use the step control from 
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
     if(Delta<=1) { 
-        if(delta_last<=1){fac*=h0/h1; }
+        if(delta_rej<=1){fac*=h0/h1; }
         fac*=std::pow(Delta, -0.65/( (LD) method.p + 1.) );   
         fac*=std::pow( delta_last/Delta, 0.3/ ( (LD) method.p + 1. ) );   
         // fac*=std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) method.p+1.) ) ;
@@ -44,7 +44,7 @@ void RKF_Namespace::step_control(){
     if(Delta<=1){h_stop=true;}
     if (h0>hmax ){ h0=hmax; h_stop=true;}
     if (h0<hmin ){ h0=hmin; h_stop=true;}
-    
+    delta_rej=Delta;
 
     if(h_stop){Deltas.push_back(Delta);}
     if (tn+h0>tmax ){ h0=tmax-tn;  }
