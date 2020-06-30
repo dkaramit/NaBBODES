@@ -14,15 +14,16 @@
 
 /*--------------------------------------------------------------------------------------------------------*/
 
-#define LD LONG double
+
+#ifndef METHOD
+    #define METHOD ROS34PW2
+#endif
 
 #ifndef LONG
     #define LONG
 #endif
 
-#ifndef METHOD
-    #define METHOD ROS34PW2
-#endif
+#define LD LONG double
 
 
 // this is how the diffeq should look like
@@ -67,7 +68,7 @@ TwoStateSystem::TwoStateSystem(std::complex<LD> H[2][2], LD tmax){
 };
 
 std::complex<LD> TwoStateSystem::Hamiltonian(int i, int j, LD t ){
-    t*=tmax;
+
     if (i!=j){
         return (std::complex<LD>)( 10*exp(- 5.*pow(t-tmax/2.,2.) ) )*H[i][j];
     }
@@ -99,21 +100,19 @@ void TwoStateSystem::operator()( Array &lhs, Array &c  , LD t )
             lhs[2]=HC[1].real() ;
             lhs[3]=HC[1].imag() ;
 
-            for(int i=0;i<4;++i){
-                lhs[i]*=this->tmax;
-            }
 
         };
 
 
-#define initial_step_size 1e-3
-#define minimum_step_size 1e-15
-#define maximum_step_size 1e-4
+#define initial_step_size 1e-2
+#define minimum_step_size 1e-8
+#define maximum_step_size 1e-1
 #define maximum_No_steps 1000000
 #define absolute_tolerance 1e-8
 #define relative_tolerance 1e-8
-#define beta 0.9
-#define fac_max 10
+#define beta 0.95
+#define fac_max 5
+#define fac_min 0.25
 
 #define N_out 1000
 
@@ -143,9 +142,9 @@ int main(int argc, const char** argv) {
     diffeq   schrodinger =[&] (Array &lhs, Array &y  , LD t){sys(lhs, y,t );};
     
     Jacobian<diffeq,n_eqs,LD> jac(schrodinger);
-    Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, N_out , LD > System(schrodinger,c0, 
+    Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, N_out , LD > System(schrodinger,c0,tmax, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
-     absolute_tolerance, relative_tolerance, beta, fac_max);
+     absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
     System.solve(true);
 
     LD P1,P2;
@@ -154,7 +153,7 @@ int main(int argc, const char** argv) {
     for(int i=0; i< System.time_full.size() ; ++i) {  
         P1=pow(System.solution_full[0][i],2 )+pow(System.solution_full[1][i],2 );
         P2=pow(System.solution_full[2][i],2 )+pow(System.solution_full[3][i],2 );
-        t=tmax*System.time_full[i];
+        t=System.time_full[i];
         printf("%e ",(double)(t) ) ;
         printf("%e ", (double)P1);
         printf("%e ",(double)P2); 
@@ -164,10 +163,10 @@ int main(int argc, const char** argv) {
         C[1].real(System.solution_full[2][i]);
         C[1].imag(System.solution_full[3][i]);
         
-        Emean=conj(C[0])*sys.Hamiltonian(0,0,t/tmax)*C[0]; 
-        Emean+=conj(C[0])*sys.Hamiltonian(0,1,t/tmax)*C[1]; 
-        Emean+=conj(C[1])*sys.Hamiltonian(1,0,t/tmax)*C[0];
-        Emean+=conj(C[1])*sys.Hamiltonian(1,1,t/tmax)*C[1];
+        Emean=conj(C[0])*sys.Hamiltonian(0,0,t)*C[0]; 
+        Emean+=conj(C[0])*sys.Hamiltonian(0,1,t)*C[1]; 
+        Emean+=conj(C[1])*sys.Hamiltonian(1,0,t)*C[0];
+        Emean+=conj(C[1])*sys.Hamiltonian(1,1,t)*C[1];
 
         printf("%e ",(double)Emean.real()); 
         printf("%e ",(double)Emean.imag()); 
