@@ -34,7 +34,7 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         }
         (this->time).push_back(0);
         (this->hist).push_back(0);
-        this->Deltas.push_back(1);
+        (this->Deltas).push_back(1);
         
 
         // ---------------------------------------------------------------------------------- //
@@ -43,14 +43,14 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         this->k=new LD*[N_eqs];
         for(int i = 0; i < N_eqs ;++i) {
                 this->k[i] = new LD[ this->method.s];
-                for(int j =0 ; j<(this->method.s)-1; j++ ){this->k[i][j] =0;  }
+                for(int j =0 ; j<this->method.s; j++ ){this->k[i][j] =0;  }
                 } 
         
 
         // calculate sums over gamma for all stages 
         this->sum_gamma=new LD[this->method.s];
         for(int stage = 0; stage < this->method.s; stage++){this->sum_gamma[stage]=0;
-          for(int j =0 ; j<(this->method.s)-1; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
+          for(int j =0 ; j<this->method.s; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
           }
 
 
