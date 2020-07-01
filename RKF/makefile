@@ -1,8 +1,8 @@
 #set PATH variable to working directory
 
 
-# METHOD=DormandPrince #higher rel_tol and abs_tol
-METHOD=RKF45  #low rel_tol and abs_tol, but the result seems better than DormandPrince
+METHOD=DormandPrince #higher rel_tol and abs_tol
+# METHOD=RKF45  #low rel_tol and abs_tol, but the result seems better than DormandPrince
 # METHOD=CashKarp #similar to RKF45
 
 

@@ -20,15 +20,15 @@
 
 
 
-#define initial_step_size 1e-3
+#define initial_step_size 1e-2
 #define minimum_step_size 1e-8
 #define maximum_step_size 1e2
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-8
-#define relative_tolerance 1e-3
-#define beta 0.99
-#define fac_max 5
-#define fac_min 0.25
+#define absolute_tolerance 1e-9
+#define relative_tolerance 1e-9
+#define beta 0.8
+#define fac_max 1.5
+#define fac_min 0.5
 #define N_out 500
 
 
