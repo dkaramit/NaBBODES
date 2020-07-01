@@ -32,13 +32,13 @@ void Ros_Namespace::calc_k(){
         for(int eq=0; eq<N_eqs ; eq++){yn[eq]=tmp_sol[eq] +ak[eq]  ; }
         /*--- Get the rhs terms ---*/
         // first term
-        dydt(rhs1, yn  , tn+method.c[stage]*h0 );
+        dydt(rhs1, yn  , tn+method.c[stage]*h );
         // second term
-        for(int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (h0*h0)*(method.gamma+sum_gamma[stage])*dfdt[eq]   ;  }
+        for(int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (h*h)*(method.gamma+sum_gamma[stage])*dfdt[eq]   ;  }
         // third term
         calc_Jk();
         // then the rhs becomes
-        for(int eq=0; eq<N_eqs ; eq++) { rhs[eq]= rhs1[eq]*h0 + rhs2[eq] + Jk[eq]*h0  ;  }
+        for(int eq=0; eq<N_eqs ; eq++) { rhs[eq]= rhs1[eq]*h + rhs2[eq] + Jk[eq]*h  ;  }
         /*------------------------*/
 
 

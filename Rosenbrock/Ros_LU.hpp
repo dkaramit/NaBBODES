@@ -14,7 +14,7 @@ void Ros_Namespace::LU(){
     Jac(J,dfdt,yn,tn);
     for(int i=0; i<N_eqs ; i++){
         for(int j=0; j<N_eqs ; j++){
-            _coeff[i][j]+=-h0*method.gamma*J[i][j];
+            _coeff[i][j]+=-h*method.gamma*J[i][j];
         }
     }
     LUP<N_eqs,LD>(_coeff,L,U,P); 

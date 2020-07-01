@@ -39,7 +39,7 @@ void Ros_Namespace::sum_bk(){
             bk[eq]+=(method).b[i]*k[eq][i];  
             bstark[eq]+=(method).bstar[i]*k[eq][i];  
             }
-        // std::cout<<bk[eq]<<"   "<<bstark[eq]<<"   "<< h0<<"\n";std::cin.get();
+        // std::cout<<bk[eq]<<"   "<<bstark[eq]<<"   "<< h<<"\n";std::cin.get();
     }
 
 }

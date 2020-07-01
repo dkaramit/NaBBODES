@@ -24,15 +24,15 @@ using std::endl;
 #endif
 
 
-#define initial_step_size 1e-3
+#define initial_step_size 1e-2
 #define minimum_step_size 1e-8
-#define maximum_step_size 1e3
+#define maximum_step_size 1e5
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-7
-#define relative_tolerance 1e-7
-#define beta 0.8
-#define fac_max 3
-#define fac_min 0.3
+#define absolute_tolerance 1e-8
+#define relative_tolerance 1e-8
+#define beta 0.99
+#define fac_max 2
+#define fac_min 0.5
 
 #define N_out 500
 // this is how the diffeq should look like
@@ -50,9 +50,9 @@ class diffeq{
     ~diffeq(){};
 
     void operator()(Array &lhs, Array &y  , LD t){
-        lhs[0]=-20*y[0]*pow(t,2) ;
-        lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
-        lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
+        lhs[0]=-2*y[0]*pow(t,2) ;
+        lhs[1]=2*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
+        lhs[2]=4*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
     }
 
 };
@@ -68,7 +68,7 @@ int main(int argc, const char** argv) {
 
     Jacobian<diffeq,n_eqs,LD> jac(dydt);
 
-    SOLVER System(dydt,y0, 1e2,
+    SOLVER System(dydt,y0, 1e4,
     initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
     absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
     

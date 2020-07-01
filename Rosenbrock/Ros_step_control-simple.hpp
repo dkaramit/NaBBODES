@@ -26,13 +26,13 @@ void Ros_Namespace::step_control(){
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
     
-    h0= h0*fac ;
+    h= h*fac ;
 
-    if (h0>hmax ){ h0=hmax; h_stop=true;}
-    if (h0<hmin ){ h0=hmin; h_stop=true;}
+    if (h>hmax ){ h=hmax; h_stop=true;}
+    if (h<hmin ){ h=hmin; h_stop=true;}
 
     if(h_stop){Deltas.push_back(Delta);}
-    if (tn+h0>tmax ){ h0=tmax-tn;}
+    if (tn+h>tmax ){ h=tmax-tn;}
 }
 /*-----------------------End: step_control---------------------------------*/
 
