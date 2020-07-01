@@ -25,9 +25,9 @@ void RKF_Namespace::step_control(){
     // I use the step control from 
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
     if(Delta<=1) { 
-        if(delta_rej<=1){fac*=h0/h1; }
+        if(delta_rej<=1){fac*=h/h_old; }
         fac*=std::pow(Delta, -0.65/( (LD) method.p + 1.) );   
-        fac*=std::pow( delta_last/Delta, 0.3/ ( (LD) method.p + 1. ) );   
+        fac*=std::pow( delta_acc/Delta, 0.3/ ( (LD) method.p + 1. ) );   
         // fac*=std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) method.p+1.) ) ;
         h_stop=true ;
     }else{
@@ -35,19 +35,19 @@ void RKF_Namespace::step_control(){
     }
     
     //this is an alternative. Not very good for some reason. 
-    // fac*=h0/h1*std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) method.p+1.) ) ;
+    // fac*=h/h_old*std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) method.p+1.) ) ;
     
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
-    h0= h0*fac ;
+    h= h*fac ;
 
     if(Delta<=1){h_stop=true;}
-    if (h0>hmax ){ h0=hmax; h_stop=true;}
-    if (h0<hmin ){ h0=hmin; h_stop=true;}
+    if (h>hmax ){ h=hmax; h_stop=true;}
+    if (h<hmin ){ h=hmin; h_stop=true;}
     delta_rej=Delta;
 
     if(h_stop){Deltas.push_back(Delta);}
-    if (tn+h0>tmax ){ h0=tmax-tn;  }
+    if (tn+h>tmax ){ h=tmax-tn;  }
 }
 /*-----------------------End: step_control---------------------------------*/
 

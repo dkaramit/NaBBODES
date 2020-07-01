@@ -25,9 +25,9 @@ public:
     //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
     diffeq dydt;
     RKF_method method;
-    LD tmax, h0, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
+    LD tmax, h, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
     int max_N;
-    LD h1,delta_last, delta_rej;//these will be initialized at the beginning of next_step
+    LD h_old,delta_acc, delta_rej;//these will be initialized at the beginning of next_step
     
     //things that we'll need
     int current_step;

@@ -9,9 +9,9 @@ RKF_Template
 void RKF_Namespace::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
-    h1=h0;//for the PI controller
-    delta_last=Deltas.back();//for the PI controller
-    delta_rej=delta_last;
+    h_old=h;//for the PI controller
+    delta_acc=Deltas.back();//for the PI controller
+    delta_rej=delta_acc;
     //calculate ynext and ynext_star until h_stop=true 
     while (true) 
     {
@@ -67,7 +67,7 @@ void RKF_Namespace::solve(bool _full_){
         _hist_steps++;
 
         for (int eq = 0; eq < N_eqs; eq++){tmp_sol[eq]=ynext[eq];}
-        tn+= h0;
+        tn+= h;
 
         if (  tn >=( (LD) tmp_step)/( (LD)N_out-1.)*tmax   ){
             time.push_back(tn);

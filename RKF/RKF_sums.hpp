@@ -9,7 +9,7 @@ void RKF_Namespace::sum_ak(int stage){
     // for (int eq = 0; eq <N_eqs ; eq++){ak[eq]=0.;  }//again redundant but it is more clear this way
     for (int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.;  //you cloud initialize it here for example.
-        for (int j = 0; j < stage; j++){ ak[eq]+=method.a[stage][j]*k[eq][j]*h0;  }
+        for (int j = 0; j < stage; j++){ ak[eq]+=method.a[stage][j]*k[eq][j]*h;  }
         // std::cout<<stage<<"   "<<eq<<"    "<<ak[eq]<<"\n";std::cin.get();
     }
     
@@ -25,10 +25,10 @@ void RKF_Namespace::sum_bk(){
         bstark[eq]=0.; 
         
         for (int i = 0; i < (method).s; i++){ 
-            bk[eq]+=(method).b[i]*k[eq][i]*h0;  
-            bstark[eq]+=(method).bstar[i]*k[eq][i]*h0;  
+            bk[eq]+=(method).b[i]*k[eq][i]*h;  
+            bstark[eq]+=(method).bstar[i]*k[eq][i]*h;  
             }
-        // std::cout<<bk[eq]<<"   "<<bstark[eq]<<"   "<< h0<<"\n";std::cin.get();
+        // std::cout<<bk[eq]<<"   "<<bstark[eq]<<"   "<< h<<"\n";std::cin.get();
     }
 
 }

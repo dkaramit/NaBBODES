@@ -18,7 +18,7 @@ void RKF_Namespace::calc_k(){
                 for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=tmp_sol[eq]+ak[eq];}
                 
                 // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
-                dydt(fyn, yn,tn+h0*(method.c)[stage] );
+                dydt(fyn, yn,tn+h*(method.c)[stage] );
                 
                 // now we can fill \vec{k}[stage]
                 for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=fyn[eq]; }

@@ -10,7 +10,7 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         // Initialize inputs
         this->dydt=dydt;
         this->tmax=tmax;
-        this->h0=initial_step_size;
+        this->h=initial_step_size;
         this->hmin=minimum_step_size;
         this->hmax=maximum_step_size;
         this->max_N=maximum_No_steps;
