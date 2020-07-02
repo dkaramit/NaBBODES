@@ -50,7 +50,7 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         // calculate sums over gamma for all stages 
         this->sum_gamma=new LD[this->method.s];
         for(int stage = 0; stage < this->method.s; stage++){this->sum_gamma[stage]=0;
-          for(int j =0 ; j<this->method.s; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
+          for(int j =0 ; j<=this->method.s-1; j++ ) {  this->sum_gamma[stage]+=this->method.g[stage][j]; }
           }
 
 

@@ -5,10 +5,11 @@
 /*-----------------------Begin: sum_ak---------------------------------*/
 Ros_Template
 void Ros_Namespace::sum_ak(int stage){
-    // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
+    // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, 
+    // and then take the sum for each component
     for (int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.; 
-        for (int j = 0; j < stage; j++){ ak[eq]+=method.a[stage][j]*k[eq][j];  }
+        for (int j = 0; j <= stage-1; j++){ ak[eq]+=method.a[stage][j]*k[eq][j];  }
     }
     
 }
@@ -21,7 +22,7 @@ void Ros_Namespace::sum_gk(int stage){
     // this function stores sum_{j}^{stage-1}g_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (int eq = 0; eq <N_eqs ; eq++){
         gk[eq]=0.;  
-        for (int j = 0; j < stage; j++){ gk[eq]+=method.g[stage][j]*k[eq][j];  }
+        for (int j = 0; j <= stage-1; j++){ gk[eq]+=method.g[stage][j]*k[eq][j];  }
     }
     
 }
