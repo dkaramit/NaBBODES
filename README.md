@@ -15,8 +15,8 @@ ODE solvers that anyone should be able to take, hack, and use for specific probl
 NaBBODES started from [*ASAP*](https://dkaramit.github.io/ASAP/), but it evolved to an independet thing. Here we will be able to further improve it without keeping things as simple as possible.  That said, things should still be kept simple to allow the user to understand the code.
 
 ## To-do:
-- [] Stepsize control works, but still need a better one.
-- [] Unify the solvers.
+- [ ] Stepsize control works, but still need a better one.
+- [ ] Unify the solvers.
 
 
 That's it for now.
