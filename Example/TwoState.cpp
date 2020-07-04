@@ -114,8 +114,6 @@ void TwoStateSystem::operator()( Array &lhs, Array &c  , LD t )
 #define fac_max 5
 #define fac_min 0.25
 
-#define N_out 1000
-
 //you can also define then using the -D flag ( as -DMETHOD=ROS34PW2 for example)
 // #define METHOD ROS3w //2nd order
 // #define METHOD ROS34PW2 //3rd order
@@ -142,26 +140,26 @@ int main(int argc, const char** argv) {
     diffeq   schrodinger =[&] (Array &lhs, Array &y  , LD t){sys(lhs, y,t );};
     
     Jacobian<diffeq,n_eqs,LD> jac(schrodinger);
-    Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, N_out , LD > System(schrodinger,c0,tmax, 
+    Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, LD > System(schrodinger,c0,tmax, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
-    System.solve(true);
+    System.solve();
 
     LD P1,P2;
     LD t;
     std::complex<LD> Emean,C[2];
-    for(int i=0; i< System.time_full.size() ; ++i) {  
-        P1=pow(System.solution_full[0][i],2 )+pow(System.solution_full[1][i],2 );
-        P2=pow(System.solution_full[2][i],2 )+pow(System.solution_full[3][i],2 );
-        t=System.time_full[i];
+    for(int i=0; i< System.time.size() ; ++i) {  
+        P1=pow(System.solution[0][i],2 )+pow(System.solution[1][i],2 );
+        P2=pow(System.solution[2][i],2 )+pow(System.solution[3][i],2 );
+        t=System.time[i];
         printf("%e ",(double)(t) ) ;
         printf("%e ", (double)P1);
         printf("%e ",(double)P2); 
         
-        C[0].real(System.solution_full[0][i]);
-        C[0].imag(System.solution_full[1][i]);
-        C[1].real(System.solution_full[2][i]);
-        C[1].imag(System.solution_full[3][i]);
+        C[0].real(System.solution[0][i]);
+        C[0].imag(System.solution[1][i]);
+        C[1].real(System.solution[2][i]);
+        C[1].imag(System.solution[3][i]);
         
         Emean=conj(C[0])*sys.Hamiltonian(0,0,t)*C[0]; 
         Emean+=conj(C[0])*sys.Hamiltonian(0,1,t)*C[1]; 
@@ -171,8 +169,8 @@ int main(int argc, const char** argv) {
         printf("%e ",(double)Emean.real()); 
         printf("%e ",(double)Emean.imag()); 
         
-        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution_full[eq][i]);    }
-        printf("%e\n", (double)System.solution_full[n_eqs-1][i]);
+        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
+        printf("%e\n", (double)System.solution[n_eqs-1][i]);
         
 
         }
