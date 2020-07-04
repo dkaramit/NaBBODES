@@ -68,7 +68,6 @@ int main(int argc, const char** argv) {
     System.solve();
     // return 0;
 
-    // this prints only N_out even if one runs System.solve(true)
     int step=0;
     for (auto _t: System.time){
         printf("%e ",(double)_t);
