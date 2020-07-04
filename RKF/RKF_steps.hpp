@@ -42,6 +42,7 @@ void RKF_Namespace::next_step(){
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 RKF_Template
 void RKF_Namespace::solve(){
+    int current_step=0;
     while (true){
         //increase current_step
         current_step++;
