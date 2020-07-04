@@ -90,14 +90,11 @@ int main(int argc, const char** argv) {
     // print the full solution
     for(auto _t: System.time_full ) {  
         printf("%e ",(double)_t) ; 
-        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution_full[eq][step]);    }
-        printf("%e\n", (double)System.solution_full[n_eqs-1][step]);
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution_full[eq][step]);    }
+        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.error_full[eq][step]);}
+        printf("%e\n", (double)System.error_full[n_eqs-1][step]);
         ++step;
     }
-
-
-
-
 
     return 0;
  }

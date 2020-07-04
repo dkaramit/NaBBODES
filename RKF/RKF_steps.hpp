@@ -51,10 +51,13 @@ RKF_Template
 void RKF_Namespace::solve(bool _full_){
     // the default value of _full_ is false. So if you use solve() the full output will not be saved. To get the full output call solve(true)
     if( _full_ ){
-        for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
-        time_full.push_back(tn);
+        //the initial values are not set in the contructor because one may not want the full solution
+        for (int eq = 0; eq < N_eqs; eq++){ 
+            solution_full[eq].push_back( tmp_sol[eq] ); 
+            error_full[eq].push_back(0);
+            }
+        time_full.push_back(0);//tn=0 here
     }
-
     int tmp_step=1;
     
     int _hist_steps=0; 
@@ -81,7 +84,10 @@ void RKF_Namespace::solve(bool _full_){
             _hist_steps=0;
         }
         if( _full_ ){
-            for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
+            for (int eq = 0; eq < N_eqs; eq++){ 
+                solution_full[eq].push_back( ynext[eq] ); 
+                error_full[eq].push_back(ynext[eq] - ynext_star[eq]);
+            }
             time_full.push_back(tn);
         }
     }

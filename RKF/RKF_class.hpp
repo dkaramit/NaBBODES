@@ -46,6 +46,7 @@ public:
 
     std::vector<LD> time_full;
     std::vector<LD> solution_full[N_eqs];
+    std::vector<LD> error_full[N_eqs];
     
 
    
