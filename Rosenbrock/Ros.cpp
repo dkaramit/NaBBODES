@@ -26,13 +26,13 @@ using std::endl;
 
 #define initial_step_size 1e-2
 #define minimum_step_size 1e-8
-#define maximum_step_size 1e5
+#define maximum_step_size 1e4
 #define maximum_No_steps 1000000
 #define absolute_tolerance 1e-8
 #define relative_tolerance 1e-8
-#define beta 0.99
-#define fac_max 2
-#define fac_min 0.5
+#define beta 0.95
+#define fac_max 1.1
+#define fac_min 0.7
 
 #define N_out 500
 // this is how the diffeq should look like
@@ -82,8 +82,8 @@ int main(int argc, const char** argv) {
     int step=0;
     for (auto _t: System.time){
         printf("%e ",(double)_t);
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);    }
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]) ; }
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);}
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]);}
         printf("%e\n" ,(double)System.hist[step]) ; 
         step++;
     }
@@ -95,8 +95,9 @@ int main(int argc, const char** argv) {
     // print the full solution
     for(auto _t: System.time_full ) {  
         printf("%e ",(double)_t) ; 
-        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution_full[eq][step]);    }
-        printf("%e\n", (double)System.solution_full[n_eqs-1][step]);
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution_full[eq][step]);    }
+        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.error_full[eq][step]);}
+        printf("%e\n", (double)System.error_full[n_eqs-1][step]);
         ++step;
     }
     

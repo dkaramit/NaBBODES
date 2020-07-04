@@ -25,7 +25,7 @@ void Ros_Namespace::next_step(){
         for (int eq = 0; eq < N_eqs; eq++){   
             ynext[eq] =  tmp_sol[eq] + bk[eq];
             ynext_star[eq] =  tmp_sol[eq] + bstark[eq];       
-            // calculate the error^2
+            // calculate the error
             abs_delta[eq]= ynext[eq] - ynext_star[eq] ;
         }
         // call step_control to see if the error is acceptable
@@ -42,9 +42,14 @@ void Ros_Namespace::next_step(){
 Ros_Template
 void Ros_Namespace::solve(bool _full_){
     if( _full_ ){
-        for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( tmp_sol[eq] ); }
-        time_full.push_back(tn);
+        //the initial values are not set in the contructor because one may not want the full solution
+        for (int eq = 0; eq < N_eqs; eq++){ 
+            solution_full[eq].push_back( tmp_sol[eq] ); 
+            error_full[eq].push_back(0);
+            }
+        time_full.push_back(0);//tn=0 here
     }
+
     int tmp_step=1;
     // Use this to count how many steps you take between entries in time and solution. 
     // This basically makes a histogram os number of steps, which is stored in the vector hist.
@@ -52,11 +57,17 @@ void Ros_Namespace::solve(bool _full_){
     while (true ){
         //increase current_step
         current_step++;
+        
         if( tn>=tmax  or current_step == max_N  ) {break ;}
+        
         next_step();
-        _hist_steps++;
+        
+        //set tmp_sol = ynext, since ynext changes until h_stop=false in the next step
         for (int eq = 0; eq < N_eqs; eq++){tmp_sol[eq]=ynext[eq];}
+        
         tn+= h;
+        
+        _hist_steps++;
         if (  tn >=( (LD) tmp_step)/( (LD)N_out-1.)*tmax   ){
             time.push_back(tn);
             hist.push_back(_hist_steps);
@@ -67,8 +78,12 @@ void Ros_Namespace::solve(bool _full_){
             tmp_step++;
             _hist_steps=0;
         }
+
         if( _full_ ){
-            for (int eq = 0; eq < N_eqs; eq++){ solution_full[eq].push_back( ynext[eq] ); }
+            for (int eq = 0; eq < N_eqs; eq++){ 
+                solution_full[eq].push_back( ynext[eq] ); 
+                error_full[eq].push_back(ynext[eq] - ynext_star[eq]);
+            }
             time_full.push_back(tn);
         }
     }

@@ -18,7 +18,7 @@ void Ros_Namespace::step_control(){
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
     for (int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( ynext_star[eq] ));
+        _sc=max(std::abs( ynext[eq] ), std::abs( tmp_sol[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= std::pow((regulated_delta[eq]/_sc),2.);
     }

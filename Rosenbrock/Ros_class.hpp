@@ -29,20 +29,18 @@ public:
 
     LD tn;
     LD tmp_sol[N_eqs];
-    
-    
-
 
 
     std::vector<LD> solution[N_eqs];
     std::vector<LD> error[N_eqs];
     std::vector<LD> time;
-    std::vector<int> hist;
+    std::vector<int> hist;// a histogram to keep track of how many steps we take between two time steps
     
 
     std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
-    std::vector<LD> time_full;
-    std::vector<LD> solution_full[N_eqs];
+    std::vector<LD> time_full;//time steps
+    std::vector<LD> solution_full[N_eqs];//solution
+    std::vector<LD> error_full[N_eqs];//error
 
 
    
@@ -59,8 +57,6 @@ public:
     LD ynext_star[N_eqs];//this is here to hold the second prediction
 
     
-    LD yn[N_eqs];//this is here to hold values I might need
-    LD dfdt[N_eqs];//this is here to hold values I might need
     
     /*--These are specific to Rosenbrock methods*/
 
@@ -71,19 +67,21 @@ public:
     LD U[N_eqs][N_eqs];
     int P[N_eqs];
 
+    LD dfdt[N_eqs]; //the time component of the Jacobian
+    
     // fyn will be passed to dydt and get the result. rhs is the rhs side of the equation to be solved by LU.  
     LD fyn[N_eqs],rhs[N_eqs];
 
     // to make it more clear, we are going to separate the rhs in three different parts
     LD rhs1[N_eqs],rhs2[N_eqs];
 
-    //lu_sol will capture the sulution of (I-\gamma*h*J)* k = rhs (it is basically k)
+    //lu_sol will capture the sulution of (I-\gamma*h*J)* k = rhs (i.e. k = (I-\gamma*h*J)^{-1} rhs)
     LD lu_sol[N_eqs];
 
-    // need this to sore the sum over \gammas
+    // need this to store the sum over \gammas (see the contructor)
     LD *sum_gamma;
        
-    LD J[N_eqs][N_eqs];//this is here to hold values I might need
+    LD J[N_eqs][N_eqs];//this is here to hold values of the Jacobian
     /*----------------------------------------------------------------------------------------------------*/
     Ros(diffeq dydt, LD (&init_cond)[N_eqs], LD tmax,
         LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 

@@ -25,6 +25,7 @@ void Ros_Namespace::calc_k(){
     // since LU decomposition is not updated as you try to find suitable step, put it ouside the step control loop (should be faster)!
     // LU();
     // calculate k for the other stages
+    LD yn[N_eqs];
     for(int stage = 0; stage < method.s; stage++){
         sum_ak(stage);
         sum_gk(stage);
