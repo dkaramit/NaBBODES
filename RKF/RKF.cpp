@@ -29,7 +29,6 @@
 #define beta 0.8
 #define fac_max 1.5
 #define fac_min 0.5
-#define N_out 500
 
 
 // this is how the diffeq should look like
@@ -54,7 +53,7 @@ class diffeq{
 };
 
 
-using SOLVER = RKF<diffeq,n_eqs,METHOD<LD>,N_out,LD>;
+using SOLVER = RKF<diffeq,n_eqs,METHOD<LD>,LD>;
 
 int main(int argc, const char** argv) {
     Array y0 = {8,12,4};
@@ -66,35 +65,21 @@ int main(int argc, const char** argv) {
     initial_step_size,  minimum_step_size,  maximum_step_size, 
     maximum_No_steps, absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
     
-    System.solve(true);
+    System.solve();
+    // return 0;
 
-
-    std::cout<<System.time.size()<<"\n";
-    // std::cout<<System.Deltas.size()<<"\n"; // this it the same as time_full
-    std::cout<<System.time_full.size()<<"\n";
-   
     // this prints only N_out even if one runs System.solve(true)
     int step=0;
     for (auto _t: System.time){
         printf("%e ",(double)_t);
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);    }
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]) ; }
-        printf("%e\n" ,(double)System.hist[step]) ; 
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);}
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]);}
+        printf("\n");
         step++;
     }
-    // print the deltas. Should be <~ 1
-    for(auto _del : System.Deltas) {  printf("%e \n",(double)_del ) ; }
 
 
-    step=0;
-    // print the full solution
-    for(auto _t: System.time_full ) {  
-        printf("%e ",(double)_t) ; 
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution_full[eq][step]);    }
-        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.error_full[eq][step]);}
-        printf("%e\n", (double)System.error_full[n_eqs-1][step]);
-        ++step;
-    }
+
 
     return 0;
  }

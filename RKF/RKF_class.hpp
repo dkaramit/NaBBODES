@@ -11,8 +11,8 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 N_out number of output points (to be taken in intervals of approximately  1/(N_out-1) )
 */
 
-#define RKF_Template template<class diffeq, int N_eqs, class RKF_method, int N_out, class LD> 
-#define RKF_Namespace RKF<diffeq, N_eqs, RKF_method, N_out, LD>
+#define RKF_Template template<class diffeq, int N_eqs, class RKF_method, class LD> 
+#define RKF_Namespace RKF<diffeq, N_eqs, RKF_method, LD>
 
 
 RKF_Template
@@ -33,21 +33,12 @@ public:
     int current_step;
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
     LD tn;
-    LD tmp_sol[N_eqs];
+    LD yprev[N_eqs];
     
     
+    std::vector<LD> time;
     std::vector<LD> solution[N_eqs];
     std::vector<LD> error[N_eqs];
-    std::vector<LD> time;
-    std::vector<int> hist;
-
-    std::vector<LD> Deltas;//this will hold the Dy/scale (this is what we try to send to 1 by adjusting the stepsize )
-    
-
-    std::vector<LD> time_full;
-    std::vector<LD> solution_full[N_eqs];
-    std::vector<LD> error_full[N_eqs];
-    
 
    
     //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
@@ -58,12 +49,12 @@ public:
     LD ynext[N_eqs];//this is here to hold the prediction
     LD ynext_star[N_eqs];//this is here to hold the second prediction
 
-    LD yn[N_eqs];//thi i here to hold accepted ynext (redundant, I'll remove it later)
-    LD fyn[N_eqs];//this is here to get dydt in each step
     
-    RKF(diffeq  dydt, LD (&init_cond)[N_eqs], LD tmax,
-LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 
-        LD absolute_tolerance=1e-8,LD relative_tolerance=1e-8,LD beta=0.85,LD fac_max=3, LD fac_min=0.3);
+    
+    RKF(diffeq  dydt, LD (&init_cond)[N_eqs], LD tmax, 
+        LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,
+        int maximum_No_steps=1000000, LD absolute_tolerance=1e-8,LD relative_tolerance=1e-8,
+        LD beta=0.85,LD fac_max=3, LD fac_min=0.3);
     
     ~RKF();
 
@@ -76,12 +67,9 @@ LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3
     void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
     void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
     
-
-    
     void step_control();//adjust stepsize until error is acceptable
     
-    // the default value of _full_ is false. So if you use solve() the full output will not be saved. To get the full output call solve(true)
-    void solve(bool _full_=false);
+    void solve();
 
 
 };

@@ -21,16 +21,14 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
         this->fac_min=fac_min;
 
 // ---------------------------------------------------------------------------------- //
-//define tmp_sol[N_eqs]. It is also good to initialize ynext.
+        (this->time).push_back(0);
+        //define yprev[N_eqs]. It is also good to initialize ynext.
         for(int i = 0; i < N_eqs ;++i) {
-                this->tmp_sol[i]=init_cond[i];
+                this->yprev[i]=init_cond[i];
                 this->ynext[i]=init_cond[i];
                 (this->solution)[i].push_back( init_cond[i]);
                 (this->error)[i].push_back(0);
         }
-        (this->time).push_back(0);
-        (this->hist).push_back(0);
-        (this->Deltas).push_back(1);
 
         // ---------------------------------------------------------------------------------- //
         

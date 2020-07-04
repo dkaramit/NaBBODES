@@ -5,24 +5,22 @@
 /*-----------------------Begin: calc_k---------------------------------*/
 RKF_Template
 void RKF_Namespace::calc_k(){
-            // You can first calculate the first stage and then the rest of them, since the first one does not need ak. 
+    LD yn[N_eqs];//thi i here to hold ynext + sum a*k
+    LD fyn[N_eqs];//this is here to get dydt in each step
 
-            // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).
-            // claculate the \vec{k}_i
-            for (int stage = 0; stage < method.s; stage++){
-                
-                // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j *h
-                sum_ak(stage);
 
-                // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
-                for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=tmp_sol[eq]+ak[eq];}
-                
-                // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
-                dydt(fyn, yn,tn+h*(method.c)[stage] );
-                
-                // now we can fill \vec{k}[stage]
-                for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=fyn[eq]; }
-            }
+    // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).
+    // claculate the \vec{k}_i
+    for (int stage = 0; stage < method.s; stage++){
+        // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j *h
+        sum_ak(stage);
+        // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
+        for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
+        // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
+        dydt(fyn, yn,tn+h*(method.c)[stage] );
+        // now we can fill \vec{k}[stage]
+        for( int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=fyn[eq]; }
+    }
 }
 /*-----------------------End: calc_k---------------------------------*/
 #endif
