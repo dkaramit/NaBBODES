@@ -6,7 +6,6 @@ METHOD=RODASPR2
 # LONG=  #leave empty to use doubles
 LONG=long #set to long , in order to use long doubles
 
- 
 
 Path=$(PWD)
 CC=g++
@@ -15,7 +14,7 @@ CC=g++
 JACPATH="$(Path)/Jacobian"
 
 
-FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 
+FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 #-Wall
 
 
 all: Ros.run

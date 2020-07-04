@@ -14,13 +14,15 @@ void Ros_Namespace::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
+    // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
+    LD regulated_delta[N_eqs];
     //PI step size cotrol from "Solving Ordinary Differential Equations II"
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
     for (int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( tmp_sol[eq] ));
+        _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
-        Delta+= std::pow((regulated_delta[eq]/_sc),2.);
+        Delta+= (regulated_delta[eq]/_sc)*(regulated_delta[eq]/_sc);
     }
     Delta=std::sqrt(1./N_eqs*Delta);
     if(Delta==0){Delta=abs_tol+rel_tol;}
@@ -50,7 +52,7 @@ void Ros_Namespace::step_control(){
     
     
     delta_rej=Delta;
-    if(h_stop){Deltas.push_back(Delta);}
+    if(h_stop){delta_acc=Delta;}
     if (tn+h>tmax ){ h=tmax-tn;  }
 
 }

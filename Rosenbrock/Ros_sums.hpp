@@ -31,7 +31,7 @@ void Ros_Namespace::sum_gk(int stage){
 /*-----------------------Begin: sum_bk---------------------------------*/
 Ros_Template
 void Ros_Namespace::sum_bk(){
-    // this function stores sum_{i}^{s}b_{i}\vec{k}_i*h in bk and sum_{i}^{s}b_{i}^{\star}\vec{k}_i*h in bstark  
+    // this function stores sum_{i}^{s}b_{i}\vec{k}_i in bk and sum_{i}^{s}b_{i}^{\star}\vec{k}_i in bstark  
     for (int eq = 0; eq <N_eqs ; eq++){
         bk[eq]=0.;
         bstark[eq]=0.; 
