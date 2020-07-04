@@ -28,7 +28,7 @@ public:
     bool h_stop;//h_stop becomes true when suitable stepsize is found.    
 
     LD tn;
-    LD tmp_sol[N_eqs];
+    LD tmp_sol[N_eqs];// previously accepted step. maybe the name is not good.
 
 
     std::vector<LD> solution[N_eqs];
