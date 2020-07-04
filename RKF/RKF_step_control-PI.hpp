@@ -14,7 +14,7 @@ void RKF_Namespace::step_control(){
     LD fac=beta;
     
     for (int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( ynext_star[eq] ));
+        _sc=max(std::abs( ynext[eq] ), std::abs( tmp_sol[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= std::pow((abs_delta[eq]/_sc),2.);
         
