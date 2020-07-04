@@ -12,10 +12,10 @@ void RKF_Namespace::calc_k(){
     // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).
     // claculate the \vec{k}_i
     for (int stage = 0; stage < method.s; stage++){
-        // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j *h
+        // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j
         sum_ak(stage);
         // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
-        for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
+        for (int eq = 0; eq < N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq]*h;}
         // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
         dydt(fyn, yn,tn+h*(method.c)[stage] );
         // now we can fill \vec{k}[stage]

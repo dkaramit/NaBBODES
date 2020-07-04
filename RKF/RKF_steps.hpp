@@ -24,8 +24,8 @@ void RKF_Namespace::next_step(){
         
         // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
         for (int eq = 0; eq < N_eqs; eq++){   
-            ynext[eq] =  yprev[eq] + bk[eq];
-            ynext_star[eq] =  yprev[eq] + bstark[eq];       
+            ynext[eq] =  yprev[eq] + bk[eq]*h;
+            ynext_star[eq] =  yprev[eq] + bstark[eq]*h;       
             // calculate the error
             abs_delta[eq]= ynext[eq] - ynext_star[eq] ;   
         }
