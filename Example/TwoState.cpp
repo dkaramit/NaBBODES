@@ -30,7 +30,7 @@
 #define n_eqs 4 //number of equations
 typedef LD Array[n_eqs];//define an array type of length n_eqs
 
-typedef    std::function<void(Array &, Array &  , LD )> diffeq;
+typedef std::function<void(Array &, Array &  , LD )> diffeq;
 
 //-------------------------------------------------------------------------//
 
@@ -104,15 +104,15 @@ void TwoStateSystem::operator()( Array &lhs, Array &c  , LD t )
         };
 
 
-#define initial_step_size 1e-2
+#define initial_step_size 1e-4
 #define minimum_step_size 1e-8
-#define maximum_step_size 1e-1
+#define maximum_step_size 1e0
 #define maximum_No_steps 1000000
-#define absolute_tolerance 1e-8
-#define relative_tolerance 1e-8
-#define beta 0.95
-#define fac_max 5
-#define fac_min 0.25
+#define absolute_tolerance 1e-9
+#define relative_tolerance 1e-9
+#define beta 0.85
+#define fac_max 5.
+#define fac_min 1/6.
 
 //you can also define then using the -D flag ( as -DMETHOD=ROS34PW2 for example)
 // #define METHOD ROS3w //2nd order
@@ -169,10 +169,9 @@ int main(int argc, const char** argv) {
         printf("%e ",(double)Emean.real()); 
         printf("%e ",(double)Emean.imag()); 
         
-        for( int eq = 0; eq < n_eqs-1; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
-        printf("%e\n", (double)System.solution[n_eqs-1][i]);
-        
-
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.error[eq][i]);    }
+        printf("\n");
         }
 
 
