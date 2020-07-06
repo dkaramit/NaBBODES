@@ -41,6 +41,9 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
     //initialize tn, current_step, and End
     this->tn=0;
+    //initialize delta_acc
+    delta_acc=1.;
+
 };
 
 //The destructor

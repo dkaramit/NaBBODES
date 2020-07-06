@@ -54,6 +54,8 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
     //initialize tn
     this->tn=0;
+    //initialize delta_acc
+    delta_acc=1.;
 };
 
 //The destructor
