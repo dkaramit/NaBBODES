@@ -12,7 +12,7 @@ ODE solvers that anyone should be able to take, hack, and use for specific probl
 
 
 ---
-NaBBODES started in [*ASAP*](https://dkaramit.github.io/ASAP/), but it evolved to an independet thing. Here we will be able to further improve it without keeping things as simple as possible.  That said, the code should still be kept somewhat simple to allow the user to understand and modify it.
+NaBBODES started as part of [*ASAP*](https://dkaramit.github.io/ASAP/), but it evolved to an independet thing. Here we will be able to further improve it without keeping things as simple as possible.  That said, the code should still be kept somewhat simple to allow the user to understand and modify it.
 
 ## To-do:
 - [ ] Stepsize control works, but still need a better one.
