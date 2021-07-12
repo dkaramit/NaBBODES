@@ -5,8 +5,8 @@
 template<class LD>
 class ROS3w{
     public:
-        const int s=3;
-        const int p=2;
+        static constexpr int s=3;
+        static constexpr int p=2;
         LD c[3]={0,2/3.,4/3.};
         LD b[3]={0.25,0.25,0.5 };
         LD bstar[3]={ 0.746704703274 , 0.1144064078371 , 0.1388888888888 };
@@ -32,8 +32,8 @@ class ROS3w{
 template<class LD>
 class ROS34PW2{
     public:
-        const int s=4;
-        const int p=3;
+        static constexpr int s=4;
+        static constexpr int p=3;
         LD c[4];// c[i]=sum_{j} a[i][j]
         LD b[4]={2.4212380706095346e-1 , -1.2232505839045147 , 1.5452602553351020 , 4.3586652150845900e-1};
         LD bstar[4]={ 3.7810903145819369e-1 , -9.6042292212423178e-2 , 0.5 , 2.1793326075422950e-1};
@@ -71,8 +71,8 @@ class ROS34PW2{
 template<class LD>
 class RODASPR2{
     public:
-        const int s=6;
-        const int p=4;
+        static constexpr int s=6;
+        static constexpr int p=4;
         LD c[6];// c[i]=sum_{j} a[i][j]
         LD b[6]={5.1944159827788361e-1,3.9955867781540699e-2,-4.7356407303732290e-1,9.4907420451383284e-1,-3.4740759753593431e-1,3.125e-1  };
         LD bstar[6]={-1.7746585073632790e-1,-5.8241418952602364e-1,6.8180612588238165e-1,7.6557391437996980e-1,3.125e-1,0 };
