@@ -11,11 +11,11 @@ class Jacobian{
 
     LD y0[n_eqs],y1[n_eqs],dydt0[n_eqs],dydt1[n_eqs];
 
-    Jacobian(){};
+    Jacobian()=default;
 
     // It is good to have a copy contructor is needed here, in case you need it. 
     // Rosenbrock works without it, but may be useful in the future.
-    Jacobian(Jacobian<diffeq,n_eqs,LD> &Jac){
+    Jacobian(Jacobian &Jac){
         this->dydt=Jac.dydt;
         this->h=Jac.h;
     };
@@ -25,7 +25,12 @@ class Jacobian{
         this->h=h;
 
     };
-    ~Jacobian(){};
+
+    Jacobian& operator=(const Jacobian &Jac){
+        this->dydt=Jac.dydt;
+        this->h=Jac.h;
+        return *this;
+    }
 
     void operator()(LD (&J)[n_eqs][n_eqs], LD (&dfdt)[n_eqs], LD (&y)[n_eqs]  , LD t ){
         // you can use something like this to scale the stepsize according to the scale of t
