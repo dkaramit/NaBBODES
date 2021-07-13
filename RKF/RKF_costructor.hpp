@@ -35,8 +35,8 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
     // define k[N_eqs][method.s]. Also put k=0 for definiteness.
     this->k=new LD*[N_eqs];
     for(int i = 0; i < N_eqs ;++i) {
-        this->k[i] = new LD[ this->method.s];
-        for(int j =0 ; j<(this->method.s)-1; j++ ){ this->k[i][j]=0; }
+        this->k[i] = new LD[ RK_method::s];
+        for(int j =0 ; j<(RK_method::s)-1; j++ ){ this->k[i][j]=0; }
     } 
 
     //initialize tn, current_step, and End

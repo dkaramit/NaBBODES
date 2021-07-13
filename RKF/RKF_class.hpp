@@ -11,8 +11,8 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 N_out number of output points (to be taken in intervals of approximately  1/(N_out-1) )
 */
 
-#define RKF_Template template<class diffeq, int N_eqs, class RKF_method, class LD> 
-#define RKF_Namespace RKF<diffeq, N_eqs, RKF_method, LD>
+#define RKF_Template template<class diffeq, int N_eqs, class RK_method, class LD> 
+#define RKF_Namespace RKF<diffeq, N_eqs, RK_method, LD>
 
 
 RKF_Template
@@ -22,7 +22,6 @@ class RKF{
     public:
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
         diffeq dydt;
-        RKF_method method;
         LD tmax, h, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         int max_N;
         LD h_old,delta_acc, delta_rej;//these will be initialized at the beginning of next_step
