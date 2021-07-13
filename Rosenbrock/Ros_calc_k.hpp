@@ -31,16 +31,16 @@ void Ros_Namespace::calc_k(){
     // to make it more clear, we are going to separate the rhs in three different parts
     LD rhs1[N_eqs],rhs2[N_eqs];
 
-    for(int stage = 0; stage < method.s; stage++){
+    for(int stage = 0; stage < RK_method::s; stage++){
         sum_ak(stage);
         sum_gk(stage);
         // setup the argument for dydt (it is evaluated at y_n+\sum a*k )
         for(int eq=0; eq<N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
         /*--- Get the rhs terms ---*/
         // first term
-        dydt(rhs1, yn, tn+method.c[stage]*h);
+        dydt(rhs1, yn, tn+RK_method::c[stage]*h);
         // second term
-        for(int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (method.gamma+sum_gamma[stage])*dfdt[eq];}
+        for(int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (RK_method::gamma+sum_gamma[stage])*dfdt[eq];}
         // third term
         calc_Jk();
         // then the rhs becomes

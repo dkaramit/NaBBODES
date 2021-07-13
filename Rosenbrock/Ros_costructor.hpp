@@ -36,19 +36,19 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
     // ---------------------------------------------------------------------------------- //
 
-    // define k[N_eqs][method.s]. Initialize also k=0.
+    // define k[N_eqs][RK_method::s]. Initialize also k=0.
     this->k=new LD*[N_eqs];
     for(int i = 0; i < N_eqs ;++i) {
-        this->k[i] = new LD[ this->method.s];
-        for(int j =0 ; j<this->method.s; j++ ){this->k[i][j] =0;  }
+        this->k[i] = new LD[ RK_method::s];
+        for(int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;  }
     } 
 
 
     // calculate sums over gamma for all stages 
-    this->sum_gamma=new LD[this->method.s];
-    for(int stage = 0; stage < this->method.s; stage++){
+    this->sum_gamma=new LD[RK_method::s];
+    for(int stage = 0; stage < RK_method::s; stage++){
         this->sum_gamma[stage]=0;
-        for(int j =0 ; j<=this->method.s-1; j++ ){ this->sum_gamma[stage]+=this->method.g[stage][j];}
+        for(int j =0 ; j<=RK_method::s-1; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
     }
 
 

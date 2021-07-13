@@ -20,7 +20,6 @@ class Ros{
     public:
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
         diffeq dydt;
-        RK_method method;
         jacobian Jac;
         LD tmax, h, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         int max_N;

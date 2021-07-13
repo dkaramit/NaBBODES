@@ -31,16 +31,16 @@ void Ros_Namespace::step_control(){
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
     if(Delta<=1) { 
         if(delta_rej<=1){fac*=h/h_old; }
-        fac*=std::pow(Delta, -0.65/( (LD) method.p + 1.) );   
-        fac*=std::pow( delta_acc/Delta, 0.3/ ( (LD) method.p + 1. ) );   
-        // fac*=std::pow(delta_acc/Delta/Delta, 1/((LD) method.p+1.) ) ;
+        fac*=std::pow(Delta, -0.65/( (LD) RK_method::p + 1.) );   
+        fac*=std::pow( delta_acc/Delta, 0.3/ ( (LD) RK_method::p + 1. ) );   
+        // fac*=std::pow(delta_acc/Delta/Delta, 1/((LD) RK_method::p+1.) ) ;
         h_stop=true ;
     }else{
-        fac*=std::pow( Delta , -1./((LD) method.p +1. ) );
+        fac*=std::pow( Delta , -1./((LD) RK_method::p +1. ) );
     }
     
     //this is an alternative. Not very good for some reason. 
-    // fac*=h/h_old*std::pow(delta_acc/Delta/Delta, 1/((LD) method.p+1.) ) ;
+    // fac*=h/h_old*std::pow(delta_acc/Delta/Delta, 1/((LD) RK_method::p+1.) ) ;
     
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
