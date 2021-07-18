@@ -14,7 +14,7 @@ CC=g++
 JACPATH="$(Path)/Jacobian"
 
 
-FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 #-Wall
+FLG=  -std=c++17  -I "$(Path)" -I $(JACPATH)  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 -Wall
 
 
 all: Ros.run

@@ -22,7 +22,7 @@ class Ros{
         diffeq dydt;
         jacobian Jac;
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
-        int max_N;
+        unsigned int max_N;
         LD h_old,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
@@ -83,8 +83,8 @@ class Ros{
         void calc_k();
         void calc_Jk();
 
-        void sum_ak(int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
-        void sum_gk(int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_ak(unsigned int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_gk(unsigned int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
         

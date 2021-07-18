@@ -5,7 +5,7 @@
 
 /*---------------------Functions I need for LU decomposition-------------------------------------------------*/
 template<const unsigned int N, class LD>
-int ind_max(std::array<LD,N> &row, int len_col){
+unsigned int ind_max(std::array<LD,N> &row, unsigned int len_col){
     /*   
     Find the index of the maximum of a list (row) of lentgth N up to len_col.
     */
@@ -98,39 +98,39 @@ void LUP(std::array<std::array<LD,N>,N> &M, std::array<std::array<LD,N>,N> &L ,s
         }
     }
     std::array<LD,N> _col,tmpU,tmpL;
-    int len_col,pivot;
+    unsigned int len_col,pivot;
     
 
-    for ( int  k = 1; k < N; k++){ for ( int  i = k; i < N; i++){   
-    for ( int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
+    for (unsigned int  k = 1; k < N; k++){ for ( unsigned int  i = k; i < N; i++){   
+    for (unsigned int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
     
     
     len_col=N-(k-1);
     pivot=ind_max<N,LD>( _col,len_col) + k - 1;
     // std::cout<<pivot<<std::endl;
 
-    if (fabs(U[pivot][k-1]) < _tiny)  {break;}
+    if (std::abs(U[pivot][k-1]) < _tiny)  {break;}
 
     if (pivot != k-1){ 
             
         index_swap<N,LD>(P,k-1,pivot);
         
-        for ( int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for ( int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
         
-        for ( int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for ( int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
         
-        for ( int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
         
-        for ( int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
     }
 
     L[i][k-1]=U[i][k-1]/U[k-1][k-1];
 
-    for (int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
+    for (unsigned int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
 
 
 
@@ -174,7 +174,7 @@ void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &
     for (int i = N-2; i > -1; i--)
     {
         tmps=0;
-        for (int j = i+1; j < N; j++){ tmps += U[i][j]*x[j];  }
+        for (unsigned int j = i+1; j < N; j++){ tmps += U[i][j]*x[j];  }
         x[i]=(d[i]-tmps )/U[i][i];
     }
 

@@ -42,7 +42,7 @@ void RKF<diffeq, N_eqs, RK_method, LD>::next_step(){
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
 void RKF<diffeq, N_eqs, RK_method, LD>::solve(){
-    int current_step=0;
+    unsigned int current_step=0;
     while (true){
         //increase current_step
         current_step++;

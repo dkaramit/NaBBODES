@@ -32,7 +32,7 @@ void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::calc_k(){
     // to make it more clear, we are going to separate the rhs in three different parts
     std::array<LD, N_eqs> rhs1,rhs2;
 
-    for(int stage = 0; stage < RK_method::s; stage++){
+    for(unsigned int stage = 0; stage < RK_method::s; stage++){
         sum_ak(stage);
         sum_gk(stage);
         // setup the argument for dydt (it is evaluated at y_n+\sum a*k )
