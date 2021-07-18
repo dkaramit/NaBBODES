@@ -4,6 +4,7 @@
 #include<cmath>
 #include<complex>
 #include<functional>
+#include<array>
 
 
 #include"../Rosenbrock/Ros.hpp"
@@ -28,7 +29,7 @@
 
 // this is how the diffeq should look like
 #define n_eqs 4 //number of equations
-typedef LD Array[n_eqs];//define an array type of length n_eqs
+typedef std::array<LD,n_eqs> Array;//define an array type of length n_eqs
 
 typedef std::function<void(Array &, Array &  , LD )> diffeq;
 
