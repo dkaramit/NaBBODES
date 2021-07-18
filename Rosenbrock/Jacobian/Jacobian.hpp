@@ -9,7 +9,7 @@ class Jacobian{
     LD h;
     diffeq dydt;
 
-    LD y0[n_eqs],y1[n_eqs],dydt0[n_eqs],dydt1[n_eqs];
+    std::array<LD, n_eqs> y0,y1,dydt0,dydt1;
 
     Jacobian()=default;
 
@@ -32,7 +32,7 @@ class Jacobian{
         return *this;
     }
 
-    void operator()(LD (&J)[n_eqs][n_eqs], LD (&dfdt)[n_eqs], LD (&y)[n_eqs]  , LD t ){
+    void operator()(std::array<std::array<LD, n_eqs>, n_eqs> &J, std::array<LD, n_eqs> &dfdt, std::array<LD, n_eqs> &y  , LD t ){
         // you can use something like this to scale the stepsize according to the scale of t
         LD a=this->h+this->h*t;
         // take the time derivative

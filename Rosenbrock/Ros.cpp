@@ -36,7 +36,7 @@ using std::endl;
 
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
-using Array =  LD[n_eqs];//define an array type of length n_eqs
+using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
 
 using std::pow;

@@ -5,8 +5,8 @@
 
 
 //The constructor. Remember that N has default value
-Ros_Template
-Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax,
     LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
     LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max, LD fac_min){
 
@@ -27,7 +27,7 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
     // ---------------------------------------------------------------------------------- //
     //define yprev[N_eqs]. It is also good to initialize ynext.
     (this->time).push_back(0);
-    for(int i = 0; i < N_eqs ;++i) {
+    for(unsigned int i = 0; i < N_eqs ;++i) {
         this->yprev[i]=init_cond[i];
         this->ynext[i]=init_cond[i];
         (this->solution)[i].push_back( init_cond[i]);
@@ -36,33 +36,20 @@ Ros_Namespace::Ros(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
     // ---------------------------------------------------------------------------------- //
 
-    // define k[N_eqs][RK_method::s]. Initialize also k=0.
-    this->k=new LD*[N_eqs];
-    for(int i = 0; i < N_eqs ;++i) {
-        this->k[i] = new LD[ RK_method::s];
-        for(int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;  }
-    } 
+    //Initialize also k=0.
+    for(unsigned int i = 0; i < N_eqs ;++i){for(int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;}} 
 
 
     // calculate sums over gamma for all stages 
-    this->sum_gamma=new LD[RK_method::s];
     for(int stage = 0; stage < RK_method::s; stage++){
         this->sum_gamma[stage]=0;
-        for(int j =0 ; j<=RK_method::s-1; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
+        for(int j =0 ; j<RK_method::s; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
     }
-
 
     //initialize tn
     this->tn=0;
     //initialize delta_acc
     delta_acc=1.;
-};
-
-//The destructor
-Ros_Template
-Ros_Namespace::~Ros(){
-    delete[] this->k;
-    delete[] this->sum_gamma;
 };
 
 #endif

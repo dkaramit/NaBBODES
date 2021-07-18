@@ -1,12 +1,11 @@
 #ifndef LU_Include
 #define LU_Include
-
+#include<array>
 #include<cmath>
 
-
 /*---------------------Functions I need for LU decomposition-------------------------------------------------*/
-template<class LD>
-int ind_max(LD *row , int N){
+template<const int N, class LD>
+int ind_max(std::array<LD,N> &row){
     /*   
     Find the index of the maximum of a list (row) of lentgth N.
     */
@@ -25,8 +24,8 @@ int ind_max(LD *row , int N){
 
 
 
-template<class LD>
-void index_swap(LD *A, int index_1, int index_2){
+template<const int N, class LD>
+void index_swap(std::array<LD,N> &A, int index_1, int index_2){
 
     /* 
         index_swap takes an array and interchanges 
@@ -39,8 +38,8 @@ void index_swap(LD *A, int index_1, int index_2){
 
 }
 
-template<class LD>
-void index_swap(int *A, int index_1, int index_2){
+template<const int N, class LD>
+void index_swap(std::array<int,N> &A, int index_1, int index_2){
 
     /* 
         index_swap takes an array and interchanges 
@@ -53,8 +52,8 @@ void index_swap(int *A, int index_1, int index_2){
 
 }
 
-template<class LD>
-void apply_permutations_vector(LD *A, int *P, int N, LD *Ap){
+template<const int N, class LD>
+void apply_permutations_vector(std::array<LD,N> &A, std::array<int,N> &P, std::array<LD,N> &Ap){
     /*
     Applies the permutations given by P from LUP
     to a list A of length N, and stores the result to Ap.
@@ -75,8 +74,8 @@ void apply_permutations_vector(LD *A, int *P, int N, LD *Ap){
 
 }
 
-template<class LD>
-void Map( LD (*F)(LD) , LD *L, int N, LD *FL){
+template<const int N, class LD>
+void Map( LD (*F)(LD) , std::array<LD,N> &L, std::array<LD,N> &FL){
     for (int i = 0; i < N; i++){ FL[i] = F(L[i]); }
     
 }
@@ -86,7 +85,7 @@ void Map( LD (*F)(LD) , LD *L, int N, LD *FL){
 /*-----------------------------LUP decompositioning--------------------------------------------------------*/
 
 template<const int N,class LD>
-void LUP(LD (&M)[N][N], LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD _tiny=1e-25){
+void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
     
     // Initialize LU
     for (int  i = 0; i < N; i++){
@@ -98,7 +97,7 @@ void LUP(LD (&M)[N][N], LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD _tiny=1e-2
         U[i][j]=M[i][j];
         }
     }
-    LD _col[N],tmpU[N],tmpL[N];
+    std::array<LD,N> _col,tmpU,tmpL;
     int len_col,pivot;
     
 
@@ -109,14 +108,14 @@ void LUP(LD (&M)[N][N], LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD _tiny=1e-2
     
     
     len_col=N-(k-1);
-    pivot=ind_max<LD>( _col ,len_col) + k - 1;
+    pivot=ind_max<N,LD>( _col) + k - 1;
     // std::cout<<pivot<<std::endl;
 
     if (fabs(U[pivot][k-1]) < _tiny)  {break;}
 
     if (pivot != k-1){ 
             
-        index_swap<LD>(P,k-1,pivot);
+        index_swap<N,LD>(P,k-1,pivot);
         
         for (int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
@@ -144,7 +143,7 @@ void LUP(LD (&M)[N][N], LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD _tiny=1e-2
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
 template<const int N, class LD>
-void Solve_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD (&b)[N] , LD (&x)[N] ){
+void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &U, std::array<int,N> P, std::array<LD,N> &b , std::array<LD,N> &x){
     /*
     This solves M*x=b
     Input:
@@ -156,10 +155,10 @@ void Solve_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD (&b)[N] , LD (&x)[N]
     x=an array to store the solution of M*x=b
     */    
 
-    LD d[N], bp[N];
+    std::array<LD,N> d, bp;
     LD tmps=0;
 
-    apply_permutations_vector<LD>(b,P,N,bp);
+    apply_permutations_vector<N,LD>(b,P,bp);
 
 
     d[0]=bp[0];
@@ -196,7 +195,7 @@ void Solve_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N], LD (&b)[N] , LD (&x)[N]
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
 template<const int N, class LD>
-void Inverse_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N] , LD (&invM)[N][N] ){
+void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, std::array<std::array<LD,N>,N> &invM){
     /*
     Finds the Inverse matrix given its LU decomposition.
     Basically this solves M*M^{-1}=1
@@ -210,13 +209,13 @@ void Inverse_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N] , LD (&invM)[N][N] ){
     */    
 
     //     
-    LD e[N];
+    std::array<LD,N> e;
     for(int i=0 ; i< N ; ++i){ e[i]=0; } 
-    LD x[N];
+    std::array<LD,N> x;
 
     for(int i=0 ; i< N ; ++i){
         e[i]=1;
-        Solve_LU(L,U,P,e,x);
+        Solve_LU<N,LD>(L,U,P,e,x);
 
         for(int j=0 ; j<N ; ++j){
             invM[j][i]=x[j];
@@ -229,7 +228,7 @@ void Inverse_LU(LD (&L)[N][N] ,LD (&U)[N][N], int (&P)[N] , LD (&invM)[N][N] ){
  
 /*------------------------------------------------Product of two matrices----------------------------------------------------------*/
 template<const int N, class LD>
-void dot(LD (&A)[N][N] ,LD (&B)[N][N], LD (&R)[N][N] ){
+void dot(std::array<std::array<LD,N>,N> &A, std::array<std::array<LD,N>,N> &B, std::array<std::array<LD,N>,N> &R){
     /*
     Calculates the product of two matrices.
     R=A*B
@@ -249,7 +248,7 @@ void dot(LD (&A)[N][N] ,LD (&B)[N][N], LD (&R)[N][N] ){
 
 /*------------------------------------------------Product of matrix with vector----------------------------------------------------------*/
 template<const int N, class LD>
-void dot(LD (&A)[N][N] ,LD (&x)[N], LD (&b)[N] ){
+void dot(std::array<std::array<LD,N>,N> &A, std::array<LD,N> &x, std::array<LD,N> &b){
     /*
     Calculates the product of  matrix with vector.
     b=A*x

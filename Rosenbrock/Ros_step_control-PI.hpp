@@ -9,17 +9,18 @@
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
-Ros_Template
-void Ros_Namespace::step_control(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+
+void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
     // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
-    LD regulated_delta[N_eqs];
+    std::array<LD, N_eqs> regulated_delta;
     //PI step size cotrol from "Solving Ordinary Differential Equations II"
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
-    for (int eq = 0; eq < N_eqs; eq++){
+    for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (regulated_delta[eq]/_sc)*(regulated_delta[eq]/_sc);

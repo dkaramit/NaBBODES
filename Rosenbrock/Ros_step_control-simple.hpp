@@ -6,13 +6,13 @@
 
 
 /*-----------------------Begin: step_control---------------------------------*/
-Ros_Template
-void Ros_Namespace::step_control(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
     
-    for (int eq = 0; eq < N_eqs; eq++){
+    for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);  

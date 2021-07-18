@@ -5,8 +5,8 @@
 
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-Ros_Template
-void Ros_Namespace::next_step(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     
@@ -24,7 +24,7 @@ void Ros_Namespace::next_step(){
         sum_bk();
 
         // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
-        for (int eq = 0; eq < N_eqs; eq++){   
+        for (unsigned int eq = 0; eq < N_eqs; eq++){   
             ynext[eq] =  yprev[eq] + bk[eq];
             ynext_star[eq] =  yprev[eq] + bstark[eq];       
             // calculate the error
@@ -43,9 +43,9 @@ void Ros_Namespace::next_step(){
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 
-Ros_Template
-void Ros_Namespace::solve(){
-    int current_step=0;
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::solve(){
+    unsigned int current_step=0;
     while (true){
         //increase current_step
         current_step++;
@@ -55,13 +55,13 @@ void Ros_Namespace::solve(){
         next_step();
 
         // set previous y to last one
-        for (int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
+        for (unsigned int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
         // increase time
         tn+=h;
 
         // store everything
         time.push_back(tn);
-        for (int eq = 0; eq < N_eqs; eq++){ 
+        for (unsigned int eq = 0; eq < N_eqs; eq++){ 
             solution[eq].push_back( ynext[eq] ); 
             error[eq].push_back(ynext[eq] - ynext_star[eq]);
         }

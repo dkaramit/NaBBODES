@@ -5,17 +5,18 @@
 
 
 /*--------Calculate the LU decomposition of (1-h*gamma*J) for this step--------------------------*/
-Ros_Template
-void Ros_Namespace::LU(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+
+void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::LU(){
     //initialize coefficient to 0
-    LD coeff[N_eqs][N_eqs]={0};
+    std::array<std::array<LD, N_eqs>, N_eqs> coeff{0};
    
     Jac(J,dfdt,yprev,tn);
 
     // Find the LUP decomposition of   (I-\gamma*h*J)     
-    for(int i=0; i<N_eqs ; i++){
+    for(unsigned int i=0; i<N_eqs ; i++){
         coeff[i][i]=1;
-        for(int j=0; j<N_eqs ; j++){
+        for(unsigned int j=0; j<N_eqs ; j++){
             coeff[i][j]+=-h*RK_method::gamma*J[i][j];
         }
     }
