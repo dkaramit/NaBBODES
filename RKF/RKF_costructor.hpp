@@ -3,8 +3,8 @@
 #include "RKF_class.hpp"
 
 //The constructor. Remember that N has default value
-RKF_Template
-RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
+template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
+RKF<diffeq, N_eqs, RK_method, LD>::RKF(diffeq dydt, const std::array<LD,N_eqs>& init_cond, LD tmax,
     LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
     LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max, LD fac_min){
     // Initialize inputs
@@ -32,12 +32,8 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
     // ---------------------------------------------------------------------------------- //
 
-    // define k[N_eqs][method.s]. Also put k=0 for definiteness.
-    this->k=new LD*[N_eqs];
-    for(int i = 0; i < N_eqs ;++i) {
-        this->k[i] = new LD[ RK_method::s];
-        for(int j =0 ; j<(RK_method::s)-1; j++ ){ this->k[i][j]=0; }
-    } 
+    // Initialize k=0 for definiteness.
+    for(unsigned int i = 0; i < N_eqs ;++i){for(int j=0; j<RK_method::s; j++ ){ this->k[i][j]=0;}} 
 
     //initialize tn, current_step, and End
     this->tn=0;
@@ -46,10 +42,5 @@ RKF_Namespace::RKF(diffeq dydt, LD (&init_cond)[N_eqs] , LD tmax,
 
 };
 
-//The destructor
-RKF_Template
-RKF_Namespace::~RKF(){
-    delete[] this->k;
-};
 
 #endif

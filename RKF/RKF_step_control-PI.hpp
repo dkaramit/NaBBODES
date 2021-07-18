@@ -7,13 +7,13 @@
 
 /*-----------------------Begin: step_control---------------------------------*/
 
-RKF_Template
-void RKF_Namespace::step_control(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
+void RKF<diffeq, N_eqs, RK_method, LD>::step_control(){
     LD Delta=0.;
     LD _sc=0;
     LD fac=beta;
     
-    for (int eq = 0; eq < N_eqs; eq++){
+    for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);

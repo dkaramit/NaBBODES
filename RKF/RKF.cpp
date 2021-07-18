@@ -33,7 +33,7 @@
 
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
-using Array =  LD[n_eqs];//define an array type of length n_eqs
+using Array =  std::array<LD,n_eqs>;//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
 
 using std::pow;
@@ -41,10 +41,10 @@ using std::pow;
 // you can use a function, but with a class you can also hold data that can be useful.
 class diffeq{
     public:
-    diffeq(){};
-    ~diffeq(){};
+    diffeq()=default;
+    ~diffeq()=default;
 
-    void operator()(Array &lhs, Array &y  , LD t){
+    void operator()(Array &lhs, Array &y, LD t){
         lhs[0]=-20*y[0]*pow(t,2) ;
         lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
         lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
@@ -59,7 +59,6 @@ int main(int argc, const char** argv) {
     Array y0 = {8,12,4};
 
     diffeq dydt;
-
 
     SOLVER System(dydt,y0,1e1, 
     initial_step_size,  minimum_step_size,  maximum_step_size, 

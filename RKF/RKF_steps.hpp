@@ -5,8 +5,8 @@
 
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-RKF_Template
-void RKF_Namespace::next_step(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
+void RKF<diffeq, N_eqs, RK_method, LD>::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     
@@ -40,8 +40,8 @@ void RKF_Namespace::next_step(){
 
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
-RKF_Template
-void RKF_Namespace::solve(){
+template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
+void RKF<diffeq, N_eqs, RK_method, LD>::solve(){
     int current_step=0;
     while (true){
         //increase current_step
@@ -52,13 +52,13 @@ void RKF_Namespace::solve(){
         next_step();
 
         // set previous y to last one
-        for (int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
+        for (unsigned int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
         // increase time
         tn+=h;
 
         // store everything
         time.push_back(tn);
-        for (int eq = 0; eq < N_eqs; eq++){ 
+        for (unsigned int eq = 0; eq < N_eqs; eq++){ 
             solution[eq].push_back( ynext[eq] ); 
             error[eq].push_back(ynext[eq] - ynext_star[eq]);
         }
