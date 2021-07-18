@@ -17,16 +17,15 @@ template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
 class RKF{
     private://There is no reason to make things private (if you break it it's not my fault)... 
         
-        LD tmax, h, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
+        LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         LD h_old, delta_acc, delta_rej;//these will be initialized at the beginning of next_step
         unsigned int max_N;
+        bool h_stop;//h_stop becomes true when suitable stepsize is found.    
     public:
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
         diffeq dydt;
         
-        //things that we'll need
-        LD tn;
-        bool h_stop;//h_stop becomes true when suitable stepsize is found.    
+        LD tmax, h, tn;
         std::array<LD, N_eqs> yprev;
         
         

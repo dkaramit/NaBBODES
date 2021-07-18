@@ -21,14 +21,14 @@ class Ros{
     private:
         diffeq dydt;
         jacobian Jac;
-        LD tmax, h, hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
+        LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         int max_N;
         LD h_old,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
     public:
 
-        LD tn;
+        LD tmax, h, tn;
         std::array<LD, N_eqs> yprev;// previously accepted step. maybe the name is not good.
 
 
