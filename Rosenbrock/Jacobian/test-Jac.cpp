@@ -1,15 +1,16 @@
 #include<iostream>
+#include<array>
 #include"Jacobian.hpp"
-
-// #define _class //run it with class with overloaded operator()
-#define _function //run it with function pointer
+#define _class //run it with class with overloaded operator()
+// #define _function //run it with function pointer
 
 #define LD double
 
 
 // this is how the diffeq should look like
 #define n_eqs 2 //number of equations
-typedef LD Array[n_eqs];//define an array type of length n_eqs
+typedef std::array<LD, n_eqs> Array;//define an array type of length n_eqs
+typedef std::array<Array, n_eqs> Array2;
 //-------------------------------------------------------------------------//
 
 
@@ -49,7 +50,7 @@ using std::endl;
 int main(){
     #ifdef _class
         Cdiffeq dydt;
-        Jacobian<Cdiffeq,n_eqs> jac(dydt);
+        Jacobian<Cdiffeq,n_eqs,LD> jac(dydt);
     #endif
 
     #ifdef _function
@@ -58,7 +59,7 @@ int main(){
 
     Array dfdt;
     // Matrix J={{0,0},{0,0}};
-    LD J[n_eqs][n_eqs];
+    Array2 J;
 
     Array y={1,4.2};
     LD t=0.3;

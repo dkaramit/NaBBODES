@@ -5,16 +5,16 @@
 
 /*---------------------Functions I need for LU decomposition-------------------------------------------------*/
 template<const unsigned int N, class LD>
-int ind_max(std::array<LD,N> &row){
+int ind_max(std::array<LD,N> &row, int len_col){
     /*   
-    Find the index of the maximum of a list (row) of lentgth N.
+    Find the index of the maximum of a list (row) of lentgth N up to len_col.
     */
     int _in=0;
-    LD _max = row[0];
+    LD _max = std::abs(row[0]);
 
-    for (unsigned int  i = 1; i < N; i++)
+    for (unsigned int  i = 1; i < len_col; i++)
     {
-        if(row[i]>_max){_max=row[i]; _in=i; }
+        if(std::abs(row[i])>_max){_max=std::abs(row[i]); _in=i; }
     }
     
 
@@ -85,7 +85,7 @@ void Map( LD (*F)(LD) , std::array<LD,N> &L, std::array<LD,N> &FL){
 /*-----------------------------LUP decompositioning--------------------------------------------------------*/
 
 template<const unsigned int N,class LD>
-void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
+void LUP(std::array<std::array<LD,N>,N> &M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
     
     // Initialize LU
     for (unsigned int  i = 0; i < N; i++){
@@ -101,12 +101,12 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
     int len_col,pivot;
     
 
-    for (unsigned int  k = 1; k < N; k++){ for (unsigned int  i = k; i < N; i++){   
-    for (unsigned int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
+    for ( int  k = 1; k < N; k++){ for ( int  i = k; i < N; i++){   
+    for ( int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
     
     
     len_col=N-(k-1);
-    pivot=ind_max<N,LD>( _col) + k - 1;
+    pivot=ind_max<N,LD>( _col,len_col) + k - 1;
     // std::cout<<pivot<<std::endl;
 
     if (fabs(U[pivot][k-1]) < _tiny)  {break;}
@@ -115,22 +115,22 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
             
         index_swap<N,LD>(P,k-1,pivot);
         
-        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for ( int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
+        for ( int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
         
-        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for ( int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
+        for ( int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
         
-        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
+        for ( int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
         
-        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
+        for ( int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
     }
 
     L[i][k-1]=U[i][k-1]/U[k-1][k-1];
 
-    for (unsigned int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
+    for (int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
 
 
 
@@ -141,7 +141,7 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
 template<const unsigned int N, class LD>
-void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &U, std::array<int,N> P, std::array<LD,N> &b , std::array<LD,N> &x){
+void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, std::array<LD,N> &b , std::array<LD,N> &x){
     /*
     This solves M*x=b
     Input:
@@ -153,7 +153,7 @@ void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &
     x=an array to store the solution of M*x=b
     */    
 
-    std::array<LD,N> d, bp;
+    std::array<LD,N> d{0}, bp{0};
     LD tmps=0;
 
     apply_permutations_vector<N,LD>(b,P,bp);

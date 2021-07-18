@@ -1,6 +1,7 @@
 #include<iostream>
-#include "LU.hpp"
+#include<array>
 #include<cmath>
+#include "LU.hpp"
 
 using std::cout;
 using std::endl;
@@ -30,26 +31,27 @@ int main(){
 
 
     #ifdef indmax
-        LD x[]={2,1,-1,2,50};
-        cout<<ind_max<LD>(x,5)<<endl;
+        std::array<LD,5> x={2,1,-1,2,50};
+        cout<<ind_max<5,LD>(x)<<endl;
     #endif
 
 
     
     #ifdef swap
-        LD x[]={2,1,-1,2,50};
-        index_swap<LD>(x,4,1);
+        std::array<LD,5> x={2,1,-1,2,50};
+        index_swap<5,LD>(x,4,1);
         for( LD i : x ){ cout<<i<<endl;}
     #endif
     
 
     #ifdef perm
-        LD A[]={1,2,5,8,3};
-        int P[]={2,4,0,3,1};
+        const unsigned int N=5;
+        std::array<LD,N> A={1,2,5,8,3};
+        std::array<int,N>  P={2,4,0,3,1};
 
-        LD Ap[5];
+        std::array<LD,N> Ap{0};
 
-        apply_permutations_vector<LD>(A,P,5,Ap);
+        apply_permutations_vector<N,LD>(A,P,Ap);
         for( int i =0 ; i<5 ; i++){ cout<<A[i]<<" ";}
         cout<<endl;
         for( int i =0 ; i<5 ; i++){ cout<<Ap[i]<<" ";}
@@ -60,18 +62,18 @@ int main(){
 
 
     #ifdef lup
-    const int N=5;
-    LD M[N][N]={
+    const unsigned int N=5;
+    std::array<std::array<LD,N> ,N>  M={{
     { 0,  2,  2 , 3 , 5},
     {-3, -1,  1 , 5 , 9},
     { 1, -1,  1 , 4 , 7},
     { 1, -1,  1 , 0 , 2},
     { 1, -1,  1 , 0 , 3}
-    };
+    }};
 
 
-    int P[N];
-    LD L[N][N], U[N][N];
+    std::array<int,N> P;
+    std::array<std::array<LD,N>,N> L, U;
 
     LUP<N,LD>(M,L,U,P);
 
@@ -108,21 +110,21 @@ int main(){
             of equations (with random coefficients of magnitude up to 100), and if 
             (M*x-b)/b > 1e-11, print it.
         */    
-        int runs=10000;
-        LD err[runs];
+        const unsigned int runs=100000;
+        std::array<LD,runs> err;
 
 
-        const int N=10;
-        LD M[N][N], b[N];
-        LD U[N][N], L[N][N] , x[N];
-        int P[N];
+        const unsigned int N=10;
+        std::array<std::array<LD,N>,N> M,U,L;
+        std::array<LD,N> b,x;
+        std::array<int,N> P;
         
-        LD tmp[N];
+        std::array<LD,N> tmp;
         
         LD tmpE;
 
-        for(int _r=0; _r<runs ; _r++){
-            for (int i = 0; i < N; i++) { for (int j = 0; j < N; j++)  {
+        for(unsigned int _r=0; _r<runs ; _r++){
+            for (unsigned int i = 0; i < N; i++) { for (int j = 0; j < N; j++)  {
                 M[i][j]= ( rand()/ ((LD) RAND_MAX ) -0.5 ) *100 ;  } 
                 b[i]= (rand()/ ((LD) RAND_MAX ) -0.5 ) *100 ;  
             } 
@@ -133,7 +135,7 @@ int main(){
             err[_r]=0;
             for (int i = 0; i < N; i++){
                 dot<N,LD>(M,x,tmp);
-                tmpE= fabs((tmp[i] - b[i])/b[i]) ;
+                tmpE= std::abs((tmp[i] - b[i])/b[i]) ;
                 if(tmpE>err[_r] ) {err[_r] = tmpE ;}
 
             }
@@ -158,14 +160,21 @@ int main(){
     */
     
     
-    const int N=10;
-    LD M[N][N];
-    LD Unit[N][N]={0};
+    const unsigned int N=10;
+    std::array<std::array<LD,N>,N> M,L,U,invM,R;
 
-    int P[N];
-    LD L[N][N], U[N][N],invM[N][N], R[N][N], tmp;
+    std::array<std::array<LD,N>,N> Unit;
+    for (int i = 0; i < N; i++){ 
+        for (int j = 0; j < N; j++){
+            Unit[i][j]=0;
+        }
+    } 
+
+
+    std::array<int,N> P;
+    LD tmp;
     
-    for(int _run=0 ; _run<10000; ++_run)
+    for(int _run=0 ; _run<1000; ++_run)
     {
         for (int i = 0; i < N; i++) 
         { 
