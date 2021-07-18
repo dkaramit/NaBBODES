@@ -31,7 +31,7 @@ void RKF<diffeq, N_eqs, RK_method, LD>::step_control(){
         // fac*=std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) RK_method::p+1.) ) ;
         h_stop=true ;
     }else{
-        fac*=std::pow( Delta , -1./((LD) RK_method::p +1. ) );
+        fac*=std::pow( Delta , -1./( static_cast<LD>(RK_method::p+1) ));
     }
     
     //this is an alternative. Not very good for some reason. 

@@ -23,7 +23,7 @@ RKF<diffeq, N_eqs, RK_method, LD>::RKF(diffeq dydt, const std::array<LD,N_eqs>& 
     // ---------------------------------------------------------------------------------- //
     (this->time).push_back(0);
     //define yprev[N_eqs]. It is also good to initialize ynext.
-    for(int i = 0; i < N_eqs ;++i) {
+    for(unsigned int i = 0; i < N_eqs ;++i) {
         this->yprev[i]=init_cond[i];
         this->ynext[i]=init_cond[i];
         (this->solution)[i].push_back( init_cond[i]);
@@ -33,7 +33,7 @@ RKF<diffeq, N_eqs, RK_method, LD>::RKF(diffeq dydt, const std::array<LD,N_eqs>& 
     // ---------------------------------------------------------------------------------- //
 
     // Initialize k=0 for definiteness.
-    for(unsigned int i = 0; i < N_eqs ;++i){for(int j=0; j<RK_method::s; j++ ){ this->k[i][j]=0;}} 
+    for(unsigned int i = 0; i < N_eqs ;++i){for(unsigned int j=0; j<RK_method::s; j++ ){ this->k[i][j]=0;}} 
 
     //initialize tn, current_step, and End
     this->tn=0;

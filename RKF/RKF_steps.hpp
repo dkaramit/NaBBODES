@@ -23,7 +23,7 @@ void RKF<diffeq, N_eqs, RK_method, LD>::next_step(){
         sum_bk();
         
         // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
-        for (int eq = 0; eq < N_eqs; eq++){   
+        for (unsigned int eq = 0; eq < N_eqs; eq++){   
             ynext[eq] =  yprev[eq] + bk[eq]*h;
             ynext_star[eq] =  yprev[eq] + bstark[eq]*h;       
             // calculate the error

@@ -70,8 +70,8 @@ int main(int argc, const char** argv) {
     int step=0;
     for (auto _t: System.time){
         printf("%e ",(double)_t);
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);}
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]);}
+        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][step]);}
+        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.error[eq][step]);}
         printf("\n");
         step++;
     }

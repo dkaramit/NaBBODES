@@ -4,11 +4,11 @@
 
 /*-----------------------Begin: sum_ak---------------------------------*/
 template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
-void RKF<diffeq, N_eqs, RK_method, LD>::sum_ak(int stage){
+void RKF<diffeq, N_eqs, RK_method, LD>::sum_ak(unsigned int stage){
     // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (unsigned int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.; 
-        for (int j = 0; j <= stage-1; j++){ ak[eq]+=RK_method::a[stage][j]*k[eq][j];  }
+        for (unsigned int j = 0; j < stage; j++){ ak[eq]+=RK_method::a[stage][j]*k[eq][j];  }
     }
     
 }
@@ -21,7 +21,7 @@ void RKF<diffeq, N_eqs, RK_method, LD>::sum_bk(){
     for (unsigned int eq = 0; eq <N_eqs ; eq++){
         bk[eq]=0.;
         bstark[eq]=0.; 
-        for (int i = 0; i < RK_method::s; i++){ 
+        for (unsigned int i = 0; i < RK_method::s; i++){ 
             bk[eq]+=RK_method::b[i]*k[eq][i];  
             bstark[eq]+=RK_method::bstar[i]*k[eq][i];  
             }

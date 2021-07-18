@@ -23,7 +23,7 @@ void RKF<diffeq, N_eqs, RK_method, LD>::step_control(){
     if(Delta<1) { h_stop=true ; }
 
     //step size cotrol from "Solving Ordinary Differential Equations I"
-    fac*=std::pow( Delta , -1./((LD) RK_method::p + 1.));
+    fac*=std::pow( Delta , -1./( static_cast<LD>(RK_method::p+1) ));
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
     

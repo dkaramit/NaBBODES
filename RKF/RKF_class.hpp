@@ -58,7 +58,7 @@ class RKF{
 
         void calc_k();
 
-        void sum_ak(int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_ak(unsigned int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
         
