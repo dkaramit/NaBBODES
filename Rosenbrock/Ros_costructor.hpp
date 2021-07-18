@@ -37,13 +37,13 @@ Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::Ros(diffeq dydt, const std::array<
     // ---------------------------------------------------------------------------------- //
 
     //Initialize also k=0.
-    for(unsigned int i = 0; i < N_eqs ;++i){for(int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;}} 
+    for(unsigned int i = 0; i < N_eqs ;++i){for(unsigned int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;}} 
 
 
     // calculate sums over gamma for all stages 
-    for(int stage = 0; stage < RK_method::s; stage++){
+    for(unsigned int stage = 0; stage < RK_method::s; stage++){
         this->sum_gamma[stage]=0;
-        for(int j =0 ; j<RK_method::s; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
+        for(unsigned int j =0 ; j<RK_method::s; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
     }
 
     //initialize tn

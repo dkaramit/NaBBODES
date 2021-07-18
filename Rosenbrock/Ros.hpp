@@ -1,8 +1,6 @@
 #ifndef Ros_headers
 #define Ros_headers
-#include <vector>
 #include "LU/LU.hpp"
-
 
 
 #include "Ros_class.hpp"

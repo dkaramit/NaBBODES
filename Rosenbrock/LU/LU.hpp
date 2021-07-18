@@ -4,7 +4,7 @@
 #include<cmath>
 
 /*---------------------Functions I need for LU decomposition-------------------------------------------------*/
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 int ind_max(std::array<LD,N> &row){
     /*   
     Find the index of the maximum of a list (row) of lentgth N.
@@ -12,7 +12,7 @@ int ind_max(std::array<LD,N> &row){
     int _in=0;
     LD _max = row[0];
 
-    for (int  i = 1; i < N; i++)
+    for (unsigned int  i = 1; i < N; i++)
     {
         if(row[i]>_max){_max=row[i]; _in=i; }
     }
@@ -24,7 +24,7 @@ int ind_max(std::array<LD,N> &row){
 
 
 
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void index_swap(std::array<LD,N> &A, int index_1, int index_2){
 
     /* 
@@ -38,7 +38,7 @@ void index_swap(std::array<LD,N> &A, int index_1, int index_2){
 
 }
 
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void index_swap(std::array<int,N> &A, int index_1, int index_2){
 
     /* 
@@ -52,7 +52,7 @@ void index_swap(std::array<int,N> &A, int index_1, int index_2){
 
 }
 
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void apply_permutations_vector(std::array<LD,N> &A, std::array<int,N> &P, std::array<LD,N> &Ap){
     /*
     Applies the permutations given by P from LUP
@@ -70,13 +70,13 @@ void apply_permutations_vector(std::array<LD,N> &A, std::array<int,N> &P, std::a
     we get Ap={5,3,1,8,2}
     */
 
-    for (int i = 0; i < N; i++){Ap[i]=A[ P[i] ];}
+    for (unsigned int i = 0; i < N; i++){Ap[i]=A[ P[i] ];}
 
 }
 
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void Map( LD (*F)(LD) , std::array<LD,N> &L, std::array<LD,N> &FL){
-    for (int i = 0; i < N; i++){ FL[i] = F(L[i]); }
+    for (unsigned int i = 0; i < N; i++){ FL[i] = F(L[i]); }
     
 }
 
@@ -84,13 +84,13 @@ void Map( LD (*F)(LD) , std::array<LD,N> &L, std::array<LD,N> &FL){
 
 /*-----------------------------LUP decompositioning--------------------------------------------------------*/
 
-template<const int N,class LD>
+template<const unsigned int N,class LD>
 void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
     
     // Initialize LU
-    for (int  i = 0; i < N; i++){
+    for (unsigned int  i = 0; i < N; i++){
         P[i]=i;
-        for (int  j = 0; j < N; j++)
+        for (unsigned int  j = 0; j < N; j++)
         {
         if(i==j){L[i][j]=1;}
         if(i!=j){L[i][j]=0;}
@@ -101,10 +101,8 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
     int len_col,pivot;
     
 
-    for (int  k = 1; k < N; k++){ for (int  i = k; i < N; i++)
-    {   
-    
-    for (int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=fabs(U[_r][k-1]);  }//we need to convert the index of _col because we start the loop from k-1
+    for (unsigned int  k = 1; k < N; k++){ for (unsigned int  i = k; i < N; i++){   
+    for (unsigned int _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
     
     
     len_col=N-(k-1);
@@ -117,22 +115,22 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
             
         index_swap<N,LD>(P,k-1,pivot);
         
-        for (int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { tmpU[_r-(k-1)]= U[k-1][_r] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for (int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[k-1][_r]=U[pivot][_r] ; }
         
-        for (int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
+        for (unsigned int _r=k-1 ; _r<N ; _r++ ) { U[pivot][_r]=tmpU[_r-(k-1)] ; }//we need to convert the index of tmpU because we start the loop from k-1
 
-        for (int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {tmpL[_r]= L[k-1][_r] ; }
         
-        for (int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[k-1][_r]=L[pivot][_r] ; }
         
-        for (int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
+        for (unsigned int _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
     }
 
     L[i][k-1]=U[i][k-1]/U[k-1][k-1];
 
-    for (int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
+    for (unsigned int j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
 
 
 
@@ -142,7 +140,7 @@ void LUP(std::array<std::array<LD,N>,N> M, std::array<std::array<LD,N>,N> &L ,st
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &U, std::array<int,N> P, std::array<LD,N> &b , std::array<LD,N> &x){
     /*
     This solves M*x=b
@@ -163,9 +161,9 @@ void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &
 
     d[0]=bp[0];
 
-    for(int i=1; i<N  ; i++){
+    for(unsigned int i=1; i<N  ; i++){
         tmps=0;
-        for (int j = 0; j < i; j++){ tmps +=L[i][j]*d[j]; }
+        for (unsigned int j = 0; j < i; j++){ tmps +=L[i][j]*d[j]; }
         
         d[i]=bp[i]-tmps;
     }
@@ -194,7 +192,7 @@ void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &
 
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, std::array<std::array<LD,N>,N> &invM){
     /*
     Finds the Inverse matrix given its LU decomposition.
@@ -210,14 +208,14 @@ void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N
 
     //     
     std::array<LD,N> e;
-    for(int i=0 ; i< N ; ++i){ e[i]=0; } 
+    for(unsigned int i=0 ; i< N ; ++i){ e[i]=0; } 
     std::array<LD,N> x;
 
-    for(int i=0 ; i< N ; ++i){
+    for(unsigned int i=0 ; i< N ; ++i){
         e[i]=1;
         Solve_LU<N,LD>(L,U,P,e,x);
 
-        for(int j=0 ; j<N ; ++j){
+        for(unsigned int j=0 ; j<N ; ++j){
             invM[j][i]=x[j];
         }
 
@@ -227,17 +225,17 @@ void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N
 /*-------------------------------------------------------------------------------------------------------------------*/
  
 /*------------------------------------------------Product of two matrices----------------------------------------------------------*/
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void dot(std::array<std::array<LD,N>,N> &A, std::array<std::array<LD,N>,N> &B, std::array<std::array<LD,N>,N> &R){
     /*
     Calculates the product of two matrices.
     R=A*B
     */
 
-    for(int i=0; i<N; ++i){
-        for(int j=0; j<N; ++j){
+    for(unsigned int i=0; i<N; ++i){
+        for(unsigned int j=0; j<N; ++j){
             R[i][j]=0;
-            for(int l=0; l<N; ++l){
+            for(unsigned int l=0; l<N; ++l){
                 R[i][j] += A[i][l]*B[l][j];
             }
         }
@@ -247,16 +245,16 @@ void dot(std::array<std::array<LD,N>,N> &A, std::array<std::array<LD,N>,N> &B, s
 
 
 /*------------------------------------------------Product of matrix with vector----------------------------------------------------------*/
-template<const int N, class LD>
+template<const unsigned int N, class LD>
 void dot(std::array<std::array<LD,N>,N> &A, std::array<LD,N> &x, std::array<LD,N> &b){
     /*
     Calculates the product of  matrix with vector.
     b=A*x
     */
 
-    for(int i=0; i<N; ++i){
+    for(unsigned int i=0; i<N; ++i){
         b[i]=0;
-        for(int j=0; j<N; ++j){
+        for(unsigned int j=0; j<N; ++j){
             b[i] += A[i][j]*x[j];
         }
     }
