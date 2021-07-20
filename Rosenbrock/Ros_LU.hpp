@@ -9,7 +9,8 @@ template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, clas
 
 void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::LU(){
     //initialize coefficient to 0
-    std::array<std::array<LD, N_eqs>, N_eqs> coeff{0};
+    std::array<std::array<LD, N_eqs>, N_eqs> coeff;
+    coeff.fill({});
    
     Jac(J,dfdt,yprev,tn);
 
