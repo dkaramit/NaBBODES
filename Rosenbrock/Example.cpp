@@ -1,7 +1,8 @@
-// This is how you run RK. 
+// This is how you run Rosenbrock, using a functor
 #include<iostream>
 #include<fstream>
 #include<cmath>
+#include<functional>
 #include"Ros.hpp"
 #include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
 #include "METHOD.hpp"
@@ -26,16 +27,16 @@ using std::endl;
 
 #define initial_step_size 1e-2
 #define minimum_step_size 1e-8
-#define maximum_step_size 1e4
+#define maximum_step_size 1e3
 #define maximum_No_steps 1000000
 #define absolute_tolerance 1e-8
 #define relative_tolerance 1e-8
-#define beta 0.95
-#define fac_max 1.1
-#define fac_min 0.7
+#define beta 0.5
+#define fac_max 1.01
+#define fac_min 0.9
 
 // this is how the diffeq should look like
-#define n_eqs 3 //number of equations
+#define n_eqs 1 //number of equations
 using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
 
@@ -45,25 +46,24 @@ using std::pow;
 // you can use a function, but with a class you can also hold data that can be useful.
 class diffeq{
     public:
-    diffeq(){};
-    ~diffeq(){};
+    LD c;
+    diffeq(LD c):c(c){};
 
     void operator()(Array &lhs, Array &y  , LD t){
-        lhs[0]=-2*y[0]*pow(t,2) ;
-        lhs[1]=2*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
-        lhs[2]=4*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
+        lhs[0]=t*c;
     }
 
 };
 
 
 
-using SOLVER = Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD> , LD>;
+using SOLVER = Ros<std::function<void(Array &lhs, Array &y  , LD t)>,n_eqs, METHOD<LD> ,Jacobian<std::function<void(Array &lhs, Array &y  , LD t)>,n_eqs,LD> , LD>;
 
 int main(int argc, const char** argv) {
     
-    Array y0 = {8,12,4};
-    diffeq dydt;
+    Array y0 = {2};
+    diffeq dydt(2);
+
 
     SOLVER System(dydt,y0, 1e4,
     initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 

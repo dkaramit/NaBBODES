@@ -137,10 +137,8 @@ int main(int argc, const char** argv) {
     
     std::complex<LD> H[2][2]={{5,.5},{.5,3}};
 
-    TwoStateSystem sys(H,tmax);
-    diffeq   schrodinger =[&] (Array &lhs, Array &y  , LD t){sys(lhs, y,t );};
+    TwoStateSystem schrodinger(H,tmax);
     
-    Jacobian<diffeq,n_eqs,LD> jac(schrodinger);
     Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, LD > System(schrodinger,c0,tmax, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
@@ -162,10 +160,10 @@ int main(int argc, const char** argv) {
         C[1].real(System.solution[2][i]);
         C[1].imag(System.solution[3][i]);
         
-        Emean=conj(C[0])*sys.Hamiltonian(0,0,t)*C[0]; 
-        Emean+=conj(C[0])*sys.Hamiltonian(0,1,t)*C[1]; 
-        Emean+=conj(C[1])*sys.Hamiltonian(1,0,t)*C[0];
-        Emean+=conj(C[1])*sys.Hamiltonian(1,1,t)*C[1];
+        Emean=conj(C[0])*schrodinger.Hamiltonian(0,0,t)*C[0]; 
+        Emean+=conj(C[0])*schrodinger.Hamiltonian(0,1,t)*C[1]; 
+        Emean+=conj(C[1])*schrodinger.Hamiltonian(1,0,t)*C[0];
+        Emean+=conj(C[1])*schrodinger.Hamiltonian(1,1,t)*C[1];
 
         printf("%e ",(double)Emean.real()); 
         printf("%e ",(double)Emean.imag()); 
