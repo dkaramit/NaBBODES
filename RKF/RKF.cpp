@@ -53,7 +53,7 @@ class diffeq{
 };
 
 
-using SOLVER = RKF<diffeq,n_eqs,METHOD<LD>,LD>;
+using SOLVER = RKF<n_eqs,METHOD<LD>,LD>;
 
 int main(int argc, const char** argv) {
     Array y0 = {8,12,4};

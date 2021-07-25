@@ -3,8 +3,9 @@
 
 #include<array>
 #include<vector>
+#include<functional>
+
 /*
-diffeq is a class of the system of  equations to be solved 
 N_eqs is ten number of equations to be solved RK_method 
 is the method
 */
@@ -15,10 +16,11 @@ is the method
 
 
 
-template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
 //Note that you can use template to pass the method
 class Ros{
     private:
+        using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y  , LD t)>;
         diffeq dydt;
         jacobian Jac;
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;

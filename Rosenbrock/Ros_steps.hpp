@@ -5,8 +5,8 @@
 
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::next_step(){
+template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+void Ros<N_eqs, RK_method,  jacobian, LD>::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     
@@ -43,8 +43,8 @@ void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::next_step(){
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 
-template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::solve(){
+template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+void Ros<N_eqs, RK_method,  jacobian, LD>::solve(){
     unsigned int current_step=0;
     while (true){
         //increase current_step

@@ -3,6 +3,8 @@
 
 #include<array>
 #include<vector>
+#include<functional>
+
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
 
@@ -13,10 +15,12 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 */
 
 
-template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
+template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
     private://There is no reason to make things private (if you break it it's not my fault)... 
-        
+        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y, LD t)>;
+
+
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         LD h_old, delta_acc, delta_rej;//these will be initialized at the beginning of next_step
         unsigned int max_N;

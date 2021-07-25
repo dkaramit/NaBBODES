@@ -9,9 +9,9 @@
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
 
-void Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::step_control(){
+void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;

@@ -2,7 +2,6 @@
 #include<iostream>
 #include<fstream>
 #include<cmath>
-#include<functional>
 #include"Ros.hpp"
 #include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
 #include "METHOD.hpp"
@@ -57,7 +56,7 @@ class diffeq{
 
 
 
-using SOLVER = Ros<std::function<void(Array &lhs, Array &y  , LD t)>,n_eqs, METHOD<LD> ,Jacobian<std::function<void(Array &lhs, Array &y  , LD t)>,n_eqs,LD> , LD>;
+using SOLVER = Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD> , LD>;
 
 int main(int argc, const char** argv) {
     

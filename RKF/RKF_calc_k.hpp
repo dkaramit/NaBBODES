@@ -3,8 +3,8 @@
 #include "RKF_class.hpp"
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
-void RKF<diffeq, N_eqs, RK_method, LD>::calc_k(){
+template<unsigned int N_eqs, class RK_method, class LD>
+void RKF<N_eqs, RK_method, LD>::calc_k(){
     std::array<LD,N_eqs> yn;//thi i here to hold ynext + sum a*k
     std::array<LD,N_eqs> fyn;//this is here to get dydt in each step
 

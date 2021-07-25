@@ -7,8 +7,8 @@
 
 /*-----------------------Begin: step_control---------------------------------*/
 
-template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
-void RKF<diffeq, N_eqs, RK_method, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD>
+void RKF<N_eqs, RK_method, LD>::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;

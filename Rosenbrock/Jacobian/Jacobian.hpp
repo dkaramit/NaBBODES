@@ -1,15 +1,18 @@
 #ifndef Jac_head
 #define Jac_head
+#include<functional>
+#include<array>
 // This is an example Jacobian class.
 
 
-template<class diffeq, int n_eqs, class LD>
+template<int N_eqs, class LD>
 class Jacobian{
+    using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y  , LD t)>;
     public:
     LD h;
     diffeq dydt;
 
-    std::array<LD, n_eqs> y0,y1,dydt0,dydt1;
+    std::array<LD, N_eqs> y0,y1,dydt0,dydt1;
 
     Jacobian()=default;
 
@@ -32,18 +35,18 @@ class Jacobian{
         return *this;
     }
 
-    void operator()(std::array<std::array<LD, n_eqs>, n_eqs> &J, std::array<LD, n_eqs> &dfdt, std::array<LD, n_eqs> &y  , LD t ){
+    void operator()(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, std::array<LD, N_eqs> &y  , LD t ){
         // you can use something like this to scale the stepsize according to the scale of t
         LD a=this->h+this->h*t;
         // take the time derivative
         dydt(dydt0,y,t-a);
         dydt(dydt1,y,t+a);
-        for (int i = 0; i < n_eqs; i++){ dfdt[i]=(dydt1[i]-dydt0[i])/(2*a); }
+        for (int i = 0; i < N_eqs; i++){ dfdt[i]=(dydt1[i]-dydt0[i])/(2*a); }
 
         // take the derivatives over y
-        for (int i = 0; i < n_eqs; i++){
-            for (int j = 0; j < n_eqs; j++){
-                for(int _d = 0; _d < n_eqs; _d++){y0[_d]=y[_d]; y1[_d]=y[_d]; }
+        for (int i = 0; i < N_eqs; i++){
+            for (int j = 0; j < N_eqs; j++){
+                for(int _d = 0; _d < N_eqs; _d++){y0[_d]=y[_d]; y1[_d]=y[_d]; }
                 // you can use something like this to scale the stepsize according to the scale of y[j]
                 a=this->h+this->h*std::abs(y0[j]);
                 

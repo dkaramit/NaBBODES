@@ -58,7 +58,7 @@ class diffeq{
 
 
 
-using SOLVER = Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD> , LD>;
+using SOLVER = Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD> , LD>;
 
 int main(int argc, const char** argv) {
     

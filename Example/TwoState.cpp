@@ -3,7 +3,6 @@
 #include<fstream>
 #include<cmath>
 #include<complex>
-#include<functional>
 #include<array>
 
 
@@ -30,9 +29,6 @@
 // this is how the diffeq should look like
 #define n_eqs 4 //number of equations
 typedef std::array<LD,n_eqs> Array;//define an array type of length n_eqs
-
-typedef std::function<void(Array &, Array &  , LD )> diffeq;
-
 //-------------------------------------------------------------------------//
 
 
@@ -139,7 +135,7 @@ int main(int argc, const char** argv) {
 
     TwoStateSystem schrodinger(H,tmax);
     
-    Ros<diffeq,n_eqs, METHOD<LD> ,Jacobian<diffeq,n_eqs,LD>, LD > System(schrodinger,c0,tmax, 
+    Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD>, LD > System(schrodinger,c0,tmax, 
      initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
      absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
     System.solve();

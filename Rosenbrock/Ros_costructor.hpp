@@ -5,8 +5,8 @@
 
 
 //The constructor. Remember that N has default value
-template<class diffeq, unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-Ros<diffeq, N_eqs, RK_method,  jacobian, LD>::Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax,
+template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+Ros<N_eqs, RK_method,  jacobian, LD>::Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax,
     LD initial_step_size, LD minimum_step_size, LD maximum_step_size,int maximum_No_steps, 
     LD absolute_tolerance,LD relative_tolerance,LD beta,LD fac_max, LD fac_min){
 

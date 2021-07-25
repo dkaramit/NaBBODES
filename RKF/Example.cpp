@@ -2,7 +2,6 @@
 #include<iostream>
 #include<stdio.h>
 #include<cmath>
-#include<functional>
 #include"RKF.hpp"
 #include"METHOD.hpp"
 
@@ -52,7 +51,7 @@ class diffeq{
 
 };
 
-using SOLVER = RKF<std::function<void(Array &lhs, Array &y, LD t)>,n_eqs,METHOD<LD>,LD>;
+using SOLVER = RKF<n_eqs,METHOD<LD>,LD>;
 
 int main(int argc, const char** argv) {
     Array y0={0};

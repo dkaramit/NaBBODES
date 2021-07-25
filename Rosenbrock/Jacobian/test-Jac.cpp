@@ -1,8 +1,8 @@
 #include<iostream>
 #include<array>
 #include"Jacobian.hpp"
-#define _class //run it with class with overloaded operator()
-// #define _function //run it with function pointer
+// #define _class //run it with class with overloaded operator()
+#define _function //run it with function pointer
 
 #define LD double
 
@@ -50,11 +50,11 @@ using std::endl;
 int main(){
     #ifdef _class
         Cdiffeq dydt;
-        Jacobian<Cdiffeq,n_eqs,LD> jac(dydt);
+        Jacobian<n_eqs,LD> jac(dydt);
     #endif
 
     #ifdef _function
-        Jacobian<diffeq,n_eqs,LD> jac(sys);
+        Jacobian<n_eqs,LD> jac(sys);
     #endif
 
     Array dfdt;

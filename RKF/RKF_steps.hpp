@@ -5,8 +5,8 @@
 
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
-void RKF<diffeq, N_eqs, RK_method, LD>::next_step(){
+template<unsigned int N_eqs, class RK_method, class LD>
+void RKF<N_eqs, RK_method, LD>::next_step(){
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     
@@ -40,8 +40,8 @@ void RKF<diffeq, N_eqs, RK_method, LD>::next_step(){
 
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
-template<class diffeq, unsigned int N_eqs, class RK_method, class LD>
-void RKF<diffeq, N_eqs, RK_method, LD>::solve(){
+template<unsigned int N_eqs, class RK_method, class LD>
+void RKF<N_eqs, RK_method, LD>::solve(){
     unsigned int current_step=0;
     while (true){
         //increase current_step
