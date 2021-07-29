@@ -51,5 +51,6 @@ void RKF<N_eqs, RK_method, LD>::step_control(){
 }
 /*-----------------------End: step_control---------------------------------*/
 
+#undef max
 
 #endif

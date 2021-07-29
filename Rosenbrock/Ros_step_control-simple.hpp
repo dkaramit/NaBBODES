@@ -36,5 +36,6 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
 }
 /*-----------------------End: step_control---------------------------------*/
 
+#undef max
 
 #endif
