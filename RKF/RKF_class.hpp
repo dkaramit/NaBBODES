@@ -22,14 +22,14 @@ class RKF{
 
 
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
-        LD h_old, delta_acc, delta_rej;//these will be initialized at the beginning of next_step
+        LD h_old,h_trial,h_acc,delta_acc, delta_rej;//these will be initialized at the beginning of next_step
         unsigned int max_N;
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
     public:
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
         diffeq dydt;
         
-        LD tmax, h, tn;
+        LD tmax, tn;
         std::array<LD, N_eqs> yprev;
         
         

@@ -31,13 +31,16 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     // I use the step control from 
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
     if(Delta<=1) { 
-        if(delta_rej<=1){fac*=h/h_old; }
+        if(delta_rej<=1){fac*=h_trial/h_old; }
         fac*=std::pow(Delta, -0.65/( static_cast<LD>(RK_method::p + 1)) );   
         fac*=std::pow( delta_acc/Delta, 0.3/ ( static_cast<LD>(RK_method::p + 1) ) );   
         // fac*=std::pow(delta_acc/Delta/Delta, 1/((LD) RK_method::p+1.) ) ;
         h_stop=true ;
+        delta_acc=Delta;
+        
     }else{
         fac*=std::pow( Delta , -1./(static_cast<LD>(RK_method::p +1.) ) );
+        delta_rej=Delta;
     }
     
     //this is an alternative. Not very good for some reason. 
@@ -45,17 +48,10 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
-    h= h*fac ;
+    h_trial=h_trial*fac ;
 
-    if(Delta<=1){h_stop=true;}
-    if (h>hmax ){ h=hmax; h_stop=true;}
-    if (h<hmin ){ h=hmin; h_stop=true;}
-    
-    
-    delta_rej=Delta;
-    if(h_stop){delta_acc=Delta;}
-    if (tn+h>tmax ){ h=tmax-tn;  }
-
+    if (h_trial>hmax ){ h_trial=hmax; h_stop=true;}
+    if (h_trial<hmin ){ h_trial=hmin; h_stop=true;}
 }
 /*-----------------------End: step_control---------------------------------*/
 #undef max

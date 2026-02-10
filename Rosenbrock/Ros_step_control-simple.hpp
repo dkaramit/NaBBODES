@@ -19,20 +19,20 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     ;}
 
     Delta=std::sqrt(1./N_eqs*Delta);
-    if(Delta<1) { h_stop=true ; }
+    if(Delta<1) { 
+        delta_acc=Delta;
+        h_stop=true; 
+    }
 
     //step size cotrol from "Solving Ordinary Differential Equations I"
     fac*=std::pow( Delta , -1./( static_cast<LD>(RK_method::p + 1)));
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
     
-    h= h*fac ;
+    h_trial= h_trial*fac ;
 
-    if (h>hmax ){ h=hmax; h_stop=true;}
-    if (h<hmin ){ h=hmin; h_stop=true;}
-
-    if(h_stop){delta_acc=Delta;}
-    if (tn+h>tmax ){ h=tmax-tn;}
+    if (h_trial>hmax ){ h_trial=hmax; h_stop=true;}
+    if (h_trial<hmin ){ h_trial=hmin; h_stop=true;}
 }
 /*-----------------------End: step_control---------------------------------*/
 

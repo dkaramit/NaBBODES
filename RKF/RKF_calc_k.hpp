@@ -15,9 +15,9 @@ void RKF<N_eqs, RK_method, LD>::calc_k(){
         // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j
         sum_ak(stage);
         // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
-        for (unsigned int eq = 0; eq < N_eqs; eq++){yn[eq]=yprev[eq]+ak[eq]*h;}
+        for (unsigned int eq = 0; eq < N_eqs; eq++){yn[eq]=yprev[eq]+ak[eq]*h_trial;}
         // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
-        dydt(fyn, yn,tn+h*RK_method::c[stage] );
+        dydt(fyn, yn,tn+h_trial*RK_method::c[stage] );
         // now we can fill \vec{k}[stage]
         for(unsigned int eq = 0; eq < N_eqs; eq++){ k[eq][stage]=fyn[eq]; }
     }

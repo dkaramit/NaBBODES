@@ -7,10 +7,11 @@
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD>
 void RKF<N_eqs, RK_method, LD>::next_step(){
+    if (tn + h_trial > tmax){h_trial = tmax - tn;} //make sure that h_trial does not push tn>tmax. 
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
     
-    h_old=h;//for the PI controller
+    h_old=h_acc;//for the PI controller
     delta_rej=delta_acc;//for the PI controller
 
     //calculate ynext and ynext_star until h_stop=true 
@@ -24,11 +25,12 @@ void RKF<N_eqs, RK_method, LD>::next_step(){
         
         // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
         for (unsigned int eq = 0; eq < N_eqs; eq++){   
-            ynext[eq] =  yprev[eq] + bk[eq]*h;
-            ynext_star[eq] =  yprev[eq] + bstark[eq]*h;       
+            ynext[eq] =  yprev[eq] + bk[eq]*h_trial;
+            ynext_star[eq] =  yprev[eq] + bstark[eq]*h_trial;       
             // calculate the error
             abs_delta[eq]= ynext[eq] - ynext_star[eq] ;   
         }
+        h_acc=h_trial;//note that h is the trial step size, while h_acc is the accepted one (the one used to compute y_next).
         
         // call step_control to see if the error is acceptable
         step_control();
@@ -54,7 +56,7 @@ void RKF<N_eqs, RK_method, LD>::solve(){
         // set previous y to last one
         for (unsigned int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
         // increase time
-        tn+=h;
+        tn+=h_acc;
 
         // store everything
         time.push_back(tn);

@@ -15,6 +15,7 @@ Ros<N_eqs, RK_method,  jacobian, LD>::Ros(diffeq dydt, const std::array<LD, N_eq
     this->tmax=tmax;
     this->Jac=jacobian(dydt);
     this->h=initial_step_size;
+    this->h_trial=initial_step_size;
     this->hmin=minimum_step_size;
     this->hmax=maximum_step_size;
     this->max_N=maximum_No_steps;

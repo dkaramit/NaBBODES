@@ -39,13 +39,13 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::calc_k(){
         for(unsigned int eq=0; eq<N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
         /*--- Get the rhs terms ---*/
         // first term
-        dydt(rhs1, yn, tn+RK_method::c[stage]*h);
+        dydt(rhs1, yn, tn+RK_method::c[stage]*h_trial);
         // second term
         for(unsigned int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (RK_method::gamma+sum_gamma[stage])*dfdt[eq];}
         // third term
         calc_Jk();
         // then the rhs becomes
-        for(unsigned int eq=0; eq<N_eqs ; eq++) { rhs[eq] = h*rhs1[eq] + h*h*rhs2[eq] + h*Jk[eq];}
+        for(unsigned int eq=0; eq<N_eqs ; eq++) { rhs[eq] = h_trial*rhs1[eq] + h_trial*h_trial*rhs2[eq] + h_trial*Jk[eq];}
         /*------------------------*/
 
 

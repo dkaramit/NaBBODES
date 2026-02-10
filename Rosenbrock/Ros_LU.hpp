@@ -12,13 +12,13 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::LU(){
     std::array<std::array<LD, N_eqs>, N_eqs> coeff;
     coeff.fill({});
    
-    Jac(J,dfdt,yprev,tn);
+    // Jac(J,dfdt,yprev,tn);
 
     // Find the LUP decomposition of   (I-\gamma*h*J)     
     for(unsigned int i=0; i<N_eqs ; i++){
         coeff[i][i]=1;
         for(unsigned int j=0; j<N_eqs ; j++){
-            coeff[i][j]+=-h*RK_method::gamma*J[i][j];
+            coeff[i][j]+=-h_trial*RK_method::gamma*J[i][j];
         }
     }
     LUP<N_eqs,LD>(coeff,L,U,P); //LU decomposition of (1-h*gamma*J)
