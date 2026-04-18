@@ -51,5 +51,5 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     if (h_trial<hmin ){ h_trial=hmin; h_stop=true;}
 }
 /*-----------------------End: step_control---------------------------------*/
-#undef max
+
 #endif
