@@ -11,7 +11,7 @@ LONG=long #set to long , in order to use long doubles
 
 
 
-Path=$(PWD)
+Path=$(CURDIR)
 CC=g++
 
 FLG=  -std=c++17  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 -Wall

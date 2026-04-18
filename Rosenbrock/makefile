@@ -9,7 +9,7 @@ METHOD=RODASPR2
 LONG=long #set to long , in order to use long doubles
 
 
-Path=$(PWD)
+Path=$(CURDIR)
 CC=g++
 
 # path to Jacobian.hpp

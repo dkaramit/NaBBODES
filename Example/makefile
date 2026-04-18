@@ -8,8 +8,9 @@ LONG=long #set to long , in order to use long doubles
 
  
 
-Path=$(PWD)
-PathRos=`bash -c "dirname $(Path)"`
+Path=$(CURDIR)
+PathRos=$(abspath $(Path)/..)
+
 
 CC=g++
 FLG=  -std=c++17  -I "$(PathRos)/Rosenbrock/Jacobian"  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
