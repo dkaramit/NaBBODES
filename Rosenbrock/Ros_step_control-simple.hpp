@@ -2,9 +2,6 @@
 #define Ros_step_control
 #include "Ros_class.hpp"
 
-#define max(a,b)  (a <= b) ? b : a
-
-
 /*-----------------------Begin: step_control---------------------------------*/
 template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
 void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
@@ -13,7 +10,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     LD fac=beta;
     
     for (unsigned int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
+        _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);  
     ;}

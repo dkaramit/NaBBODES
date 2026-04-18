@@ -2,9 +2,6 @@
 #define Ros_step_control
 #include "Ros_class.hpp"
 
-#define max(a,b)  (a <= b) ? b : a
-
-
 // Keep in mind that here delta_acc=Deltas.back(), while 
 // delta_rej is the previous Delta (not the accepted one).
 
@@ -21,7 +18,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
     for (unsigned int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
+        _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (regulated_delta[eq]/_sc)*(regulated_delta[eq]/_sc);
     }

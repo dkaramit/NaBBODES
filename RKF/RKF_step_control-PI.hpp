@@ -2,9 +2,6 @@
 #define RKF_step_control
 #include "RKF_class.hpp"
 
-#define max(a,b)  (a <= b) ? b : a
-
-
 /*-----------------------Begin: step_control---------------------------------*/
 
 template<unsigned int N_eqs, class RK_method, class LD>
@@ -14,7 +11,7 @@ void RKF<N_eqs, RK_method, LD>::step_control(){
     LD fac=beta;
     
     for (unsigned int eq = 0; eq < N_eqs; eq++){
-        _sc=max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
+        _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);
         
