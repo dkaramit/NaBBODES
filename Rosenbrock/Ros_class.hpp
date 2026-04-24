@@ -25,7 +25,7 @@ class Ros{
         jacobian Jac;
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         unsigned int max_N;
-        LD h_old,h_trial,h,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
+        LD h_old,h_trial,h_acc,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
     public:

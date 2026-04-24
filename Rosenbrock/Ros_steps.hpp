@@ -12,7 +12,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::next_step(){
     h_stop=false;
     
     //for the PI controller: h has to be the laste *accepted* stepsize. Remember that h_trial is the last updaed h, once the last one is accepted. So, the last accepted step size is h, not h_trial. 
-    h_old=h; 
+    h_old=h_acc; 
     
     //for the PI controller: initialize  delta_rej to delta_acc.
     delta_rej=delta_acc;
@@ -42,7 +42,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::next_step(){
             abs_delta[eq]= ynext[eq] - ynext_star[eq] ;
         }
         
-        h=h_trial;//note that h is the trial step size, while h is the accepted one (the one used to compute y_next).
+        h_acc=h_trial;//note that h is the trial step size, while h is the accepted one (the one used to compute y_next).
 
         // call step_control to see if the error is acceptable
         step_control();
@@ -71,7 +71,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::solve(){
         // set previous y to last one
         for (unsigned int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
         // increase time by the accepted step size (not the trial one, which is h)
-        tn+=h;
+        tn+=h_acc;
 
         // store everything
         time.push_back(tn);
