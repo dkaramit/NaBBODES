@@ -13,7 +13,7 @@ PathRos=$(abspath $(Path)/..)
 
 
 CC=g++
-FLG=  -std=c++17  -I "$(PathRos)/Rosenbrock/Jacobian"  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
+FLG=  -std=c++20  -I "$(PathRos)/Rosenbrock/Jacobian"  -I "$(Path)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3
 
 
 all: TwoState.run

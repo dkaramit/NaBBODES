@@ -24,16 +24,6 @@ using std::endl;
 #endif
 
 
-#define initial_step_size 1e-2
-#define minimum_step_size 1e-8
-#define maximum_step_size 1e4
-#define maximum_No_steps 1000000
-#define absolute_tolerance 1e-8
-#define relative_tolerance 1e-8
-#define beta 0.95
-#define fac_max 1.1
-#define fac_min 0.7
-
 // this is how the diffeq should look like
 #define n_eqs 3 //number of equations
 using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
@@ -66,11 +56,20 @@ int main(int argc, const char** argv) {
     diffeq dydt;
 
     SOLVER System(dydt,y0, 1e5,
-    initial_step_size,  minimum_step_size,  maximum_step_size, maximum_No_steps, 
-    absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
+        {
+            .initial_step_size = 1e-2,
+            .minimum_step_size = 1e-8,
+            .maximum_step_size = 1e4,
+            .maximum_No_steps = 1000000,
+            .absolute_tolerance = 1e-8,
+            .relative_tolerance = 1e-8,
+            .beta = 0.95,
+            .fac_max = 1.1,
+            .fac_min = 0.7
+        }    
+    );
     
     System.solve();
-    // return 0;
 
     int step=0;
     for (auto _t: System.time){

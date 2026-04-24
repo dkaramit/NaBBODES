@@ -13,7 +13,18 @@ is the method
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
 
-
+template<class LD>
+struct parameters{
+    LD initial_step_size=1e-5; 
+    LD minimum_step_size=1e-11; 
+    LD maximum_step_size=1e-3;
+    int maximum_No_steps=1000000; 
+    LD absolute_tolerance=1e-8;
+    LD relative_tolerance=1e-8;
+    LD beta=0.85;
+    LD fac_max=3; 
+    LD fac_min=0.3;
+};
 
 
 template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
@@ -72,9 +83,8 @@ class Ros{
 
         
         /*----------------------------------------------------------------------------------------------------*/
-        Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax,
-            LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,int maximum_No_steps=1000000, 
-            LD absolute_tolerance=1e-8,LD relative_tolerance=1e-8,LD beta=0.85,LD fac_max=3, LD fac_min=0.3);
+        Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=parameters<LD>{})
+                    : dydt(dydt),Jac(jacobian(dydt)) {reset(init_cond, tmax, opt);};
         
         ~Ros()=default;
 
@@ -95,7 +105,8 @@ class Ros{
         void step_control();//adjust stepsize until error is acceptable
         void solve();
 
-
+        void set_parameters(const parameters<LD>& opt=parameters<LD>{});
+        void reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt=parameters<LD>{});
 };
 
 
