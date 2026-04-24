@@ -14,6 +14,19 @@ N_eqs is ten number of equations to be solved
 RKF_method is the method (the DormandPrince seems to be the standard here)
 */
 
+template<class LD>
+struct parameters{
+    LD initial_step_size=1e-5; 
+    LD minimum_step_size=1e-11; 
+    LD maximum_step_size=1e-3;
+    int maximum_No_steps=1000000; 
+    LD absolute_tolerance=1e-8;
+    LD relative_tolerance=1e-8;
+    LD beta=0.85;
+    LD fac_max=3; 
+    LD fac_min=0.3;
+};
+
 
 template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
@@ -50,9 +63,7 @@ class RKF{
         
         
         RKF(diffeq  dydt, const std::array<LD,N_eqs>& init_cond, LD tmax, 
-            LD initial_step_size=1e-5, LD minimum_step_size=1e-11, LD maximum_step_size=1e-3,
-            int maximum_No_steps=1000000, LD absolute_tolerance=1e-8,LD relative_tolerance=1e-8,
-            LD beta=0.85,LD fac_max=3, LD fac_min=0.3);
+            const parameters<LD>& opt=parameters<LD>{}): dydt(dydt) { reset(init_cond,tmax,opt); };
         
         ~RKF()=default;
 
@@ -68,7 +79,13 @@ class RKF{
         void step_control();//adjust stepsize until error is acceptable
         
         void solve();
+
+
+        void set_parameters(const parameters<LD>& opt=parameters<LD>{});
+        void reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt=parameters<LD>{});
 };
+
+
 
 
 

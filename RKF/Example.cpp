@@ -19,24 +19,10 @@
 #endif
 
 
-
-#define initial_step_size 1e-2
-#define minimum_step_size 1e-5
-#define maximum_step_size 1e1
-#define maximum_No_steps 1000000
-#define absolute_tolerance 1e-9
-#define relative_tolerance 1e-9
-#define beta 0.95
-#define fac_max 1.1
-#define fac_min 0.8
-
-
 // this is how the diffeq should look like
 #define n_eqs 1 //number of equations
 using Array =  std::array<LD,n_eqs>;//define an array type of length n_eqs
 //-------------------------------------------------------------------------//
-
-using std::pow;
 
 /*std::function supports any callable object, so we cna simply use this without overloading 
 operator=, or defining copy constructor.*/
@@ -58,12 +44,20 @@ int main(int argc, const char** argv) {
 
     diffeq dydt(2);
 
-    SOLVER System(dydt,y0,1e1, 
-    initial_step_size,  minimum_step_size,  maximum_step_size, 
-    maximum_No_steps, absolute_tolerance, relative_tolerance, beta, fac_max, fac_min);
+    SOLVER System(dydt,y0,1e1,
+        {.initial_step_size=1e-2,
+        .minimum_step_size=1e-5,
+        .maximum_step_size=1e1,
+        .maximum_No_steps=1000000,
+        .absolute_tolerance=1e-9,
+        .relative_tolerance=1e-9,
+        .beta=0.95,
+        .fac_max=1.1,
+        .fac_min=0.8
+        }
+    );
     
     System.solve();
-    // return 0;
 
     int step=0;
     for (auto _t: System.time){
@@ -73,9 +67,6 @@ int main(int argc, const char** argv) {
         printf("\n");
         step++;
     }
-
-
-
-
+    
     return 0;
  }
