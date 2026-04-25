@@ -38,7 +38,7 @@ class diffeq{
     diffeq(){};
     ~diffeq(){};
 
-    void operator()(Array &lhs, Array &y  , LD t){
+    void operator()(Array &lhs, const Array &y  , const LD& t){
         lhs[0]= -0.04*y[0]+1e4*y[1]*y[2] ;
         lhs[1]= 0.04*y[0]-1e4*y[1]*y[2]-3e7* y[1]*y[1] ;
         lhs[2]=  3e7*y[1]*y[1];
@@ -72,10 +72,10 @@ int main(int argc, const char** argv) {
     System.solve();
 
     int step=0;
-    for (auto _t: System.time){
+    for (auto _t: System.get_t()){
         printf("%e ",(double)_t);
-        for( unsigned int eq = 0; eq < n_eqs; eq++ ){printf("%e ",(double)System.solution[eq][step]);}
-        for( unsigned int eq = 0; eq < n_eqs; eq++ ){printf("%e ",(double)System.error[eq][step]);}
+        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
         printf("\n");
         step++;
     }
