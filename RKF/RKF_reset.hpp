@@ -2,7 +2,7 @@
 #define RKF_constructor
 #include "RKF_class.hpp"
 
-
+// change the parameters of the solver
 template<unsigned int N_eqs, class RK_method, class LD>
 void RKF<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
 
@@ -20,7 +20,7 @@ void RKF<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
     
 }
 
-
+// reset the solver (set clear arrays, set t=0, set y to its initial condition, etc.)
 template<unsigned int N_eqs, class RK_method, class LD>
 void RKF<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt){
     
@@ -52,6 +52,5 @@ void RKF<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, con
     //initialize delta_acc
     delta_acc=1.;
 }
-
 
 #endif

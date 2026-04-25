@@ -5,15 +5,8 @@
 #include<vector>
 #include<functional>
 
-//This is a general implementation of explicit embedded RK solver of
-// a system of differential equations in the interval [0,tmax].
-
-/*
-diffeq is a class of the system of  equations to be solved 
-N_eqs is ten number of equations to be solved
-RKF_method is the method (the DormandPrince seems to be the standard here)
-*/
-
+// struct for the parameters of the RKF algorithm. 
+// It is useful because we can now pass them named parameters!
 template<class LD>
 struct parameters{
     const LD initial_step_size=1e-5; 
@@ -27,6 +20,14 @@ struct parameters{
     const LD fac_min=0.3;
 };
 
+//This is a general implementation of explicit embedded RK solver of
+// a system of differential equations in the interval [0,tmax].
+
+/*
+diffeq is a class of the system of  equations to be solved 
+N_eqs is ten number of equations to be solved
+RKF_method is the method (the DormandPrince seems to be the standard here)
+*/
 
 template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
@@ -61,14 +62,10 @@ class RKF{
         std::vector<LD> time;
         std::array<std::vector<LD>, N_eqs> solution;
         std::array<std::vector<LD>, N_eqs> error;
-        
 
-
-        
         void calc_k(); //calculate the values of k
         void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and pass it to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
-        void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
         void step_control();//adjust stepsize until error is acceptable
 
         public:
