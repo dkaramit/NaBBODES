@@ -6,18 +6,19 @@
 template<unsigned int N_eqs, class RK_method, class LD>
 void RKF<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
 
-    this->h_trial=opt.initial_step_size;
-    this->h_acc=this->h_trial;
+    // change the parameters that exist in opt (inclusing an update to the corresponding parameter in params). 
+    // If a parameter does not have a value. set it to the existing params.
+    if(opt.initial_step_size.has_value()) {params.initial_step_size=h_trial=opt.initial_step_size.value();}else{h_trial=params.initial_step_size.value();}
+    if(opt.minimum_step_size.has_value()) {params.minimum_step_size.value()=hmin=opt.minimum_step_size.value();}else{hmin=params.minimum_step_size.value();}
+    if(opt.maximum_step_size.has_value()) {params.maximum_step_size.value()=hmax=opt.maximum_step_size.value();}else{hmax=params.maximum_step_size.value();}
+    if(opt.maximum_No_steps.has_value())  {params.maximum_No_steps=max_N=opt.maximum_No_steps.value();}else{max_N=params.maximum_No_steps.value();}
+    if(opt.absolute_tolerance.has_value()){params.absolute_tolerance=abs_tol=opt.absolute_tolerance.value();}else{abs_tol=params.absolute_tolerance.value();}
+    if(opt.relative_tolerance.has_value()){params.relative_tolerance=rel_tol=opt.relative_tolerance.value();}else{rel_tol=params.relative_tolerance.value();}
+    if(opt.beta.has_value())              {params.beta=beta=opt.beta.value();}else{beta=params.beta.value();}
+    if(opt.fac_max.has_value())           {params.fac_max=fac_max=opt.fac_max.value();}else{fac_max=params.fac_max.value();}
+    if(opt.fac_min.has_value())           {params.fac_min=fac_min=opt.fac_min.value();}else{fac_min=params.fac_min.value();}
     
-    this->hmin=opt.minimum_step_size;
-    this->hmax=opt.maximum_step_size;
-    this->max_N=opt.maximum_No_steps;
-    this->abs_tol=opt.absolute_tolerance;
-    this->rel_tol=opt.relative_tolerance;
-    this->beta=opt.beta;
-    this->fac_max=opt.fac_max;
-    this->fac_min=opt.fac_min;
-    
+    h_acc=h_trial;
 }
 
 // reset the solver (set clear arrays, set t=0, set y to its initial condition, etc.)

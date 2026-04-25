@@ -4,20 +4,35 @@
 #include<array>
 #include<vector>
 #include<functional>
+#include<optional>
 
 // struct for the parameters of the RKF algorithm. 
 // It is useful because we can now pass them named parameters!
 template<class LD>
 struct parameters{
-    const LD initial_step_size=1e-5; 
-    const LD minimum_step_size=1e-11; 
-    const LD maximum_step_size=1e-3;
-    const unsigned int maximum_No_steps=1000000; 
-    const LD absolute_tolerance=1e-8;
-    const LD relative_tolerance=1e-8;
-    const LD beta=0.85;
-    const LD fac_max=3; 
-    const LD fac_min=0.3;
+    std::optional<LD> initial_step_size{}; 
+    std::optional<LD> minimum_step_size{}; 
+    std::optional<LD> maximum_step_size{};
+    std::optional<unsigned int> maximum_No_steps{}; 
+    std::optional<LD> absolute_tolerance{};
+    std::optional<LD> relative_tolerance{};
+    std::optional<LD> beta{};
+    std::optional<LD> fac_max{}; 
+    std::optional<LD> fac_min{};
+};
+
+//these are the default set of parameters
+template<class LD>
+const parameters<LD> default_parameters {
+    .initial_step_size=1e-5, 
+    .minimum_step_size=1e-9, 
+    .maximum_step_size=1e-3,
+    .maximum_No_steps=1000000, 
+    .absolute_tolerance=1e-6,
+    .relative_tolerance=1e-6,
+    .beta=0.85,
+    .fac_max=3, 
+    .fac_min=0.3
 };
 
 //This is a general implementation of explicit embedded RK solver of
@@ -33,6 +48,8 @@ template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
     private:
         using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const  LD &t)>;
+
+        parameters<LD> params; //use this to get and change parameters if needed
 
         //these are not constant because reset can update them
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
@@ -71,7 +88,20 @@ class RKF{
         public:
         
         RKF(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
-            const parameters<LD>& opt=parameters<LD>{}): dydt(dydt) { reset(init_cond,tmax,opt); };
+            const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {
+                // if some parameter in opt does not have a value, use the correspondinf parameter from default.default_parameters 
+                if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
+                if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}
+                if(!params.maximum_step_size.has_value()){params.maximum_step_size=default_parameters<LD>.maximum_step_size.value();}
+                if(!params.maximum_No_steps.has_value()){params.maximum_No_steps=default_parameters<LD>.maximum_No_steps.value();}
+                if(!params.absolute_tolerance.has_value()){params.absolute_tolerance=default_parameters<LD>.absolute_tolerance.value();}
+                if(!params.relative_tolerance.has_value()){params.relative_tolerance=default_parameters<LD>.relative_tolerance.value();}
+                if(!params.beta.has_value()){params.beta=default_parameters<LD>.beta.value();}
+                if(!params.fac_max.has_value()){params.fac_max=default_parameters<LD>.fac_max.value();}
+                if(!params.fac_min.has_value()){params.fac_min=default_parameters<LD>.fac_min.value();}
+
+                reset(init_cond,tmax,opt); 
+            };
         
         ~RKF()=default;
 
@@ -83,19 +113,21 @@ class RKF{
         //access the array of solution[eq]
         const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
         //access the element solution[eq][step]
-        LD get_solution(const unsigned int& eq, const unsigned int& step) const { return solution.at(eq).at(step); }
+        auto get_solution(const unsigned int& eq, const unsigned int& step) const { return solution.at(eq).at(step); }
         
         //access the array of error[eq]
         const std::vector<LD>& get_error(const unsigned int& eq) const { return error.at(eq); }
         //access the element error[eq][step]
-        LD get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
-
-        void set_parameters(const parameters<LD>& opt=parameters<LD>{});
-        void reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt=parameters<LD>{});
-};
-
-
-
-
+        auto get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
+        
+        
+        void set_parameters(const parameters<LD>& opt=default_parameters<LD>);
+        void reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt=default_parameters<LD>);
+        
+        //generally helpful, but not very important
+        auto get_current_step() const {return time.size();}
+        auto get_current_step_size() const {return h_acc;}
+        auto get_parameters() const {return params;}
+    };
 
 #endif
