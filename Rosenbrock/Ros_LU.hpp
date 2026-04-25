@@ -5,9 +5,9 @@
 
 
 /*--------Calculate the LU decomposition of (1-h*gamma*J) for this step--------------------------*/
-template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+template<unsigned int N_eqs, class RK_method, class LD> 
 
-void Ros<N_eqs, RK_method,  jacobian, LD>::LU(){
+void Ros<N_eqs, RK_method, LD>::LU(){
     //initialize coefficient to 0
     std::array<std::array<LD, N_eqs>, N_eqs> coeff;
     coeff.fill({});

@@ -2,8 +2,8 @@
 #define Ros_constructor
 #include "Ros_class.hpp"
 
-template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-void Ros<N_eqs, RK_method,  jacobian, LD>::set_parameters(const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD> 
+void Ros<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
     // change the parameters that exist in opt (inclusing an update to the corresponding parameter in params). 
     // If a parameter does not have a value. set it to the existing params.
     if(opt.initial_step_size.has_value()) {params.initial_step_size=h_trial=opt.initial_step_size.value();}else{h_trial=params.initial_step_size.value();}
@@ -19,8 +19,8 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::set_parameters(const parameters<LD>& 
     h_acc=h_trial;
 }
 
-template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-void Ros<N_eqs, RK_method,  jacobian, LD>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD> 
+void Ros<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
     
     this->tmax=tmax;
     set_parameters(opt);

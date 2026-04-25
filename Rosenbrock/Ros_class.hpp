@@ -43,7 +43,7 @@ is the method
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
-template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
+template<unsigned int N_eqs, class RK_method, class LD> 
 //Note that you can use template to pass the method
 class Ros{
     private:

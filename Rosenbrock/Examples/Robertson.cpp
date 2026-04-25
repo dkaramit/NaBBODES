@@ -48,14 +48,15 @@ class diffeq{
 
 
 
-using SOLVER = Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD> , LD>;
+using SOLVER = Ros<n_eqs, METHOD<LD>, LD>;
 
 int main(int argc, const char** argv) {
     
     Array y0 = {1,0,0};
     diffeq dydt;
+    Jacobian<n_eqs,LD> Jac(dydt);
 
-    SOLVER System(dydt,y0, 1e5,
+    SOLVER System(dydt,y0, 1e5, Jac,
         {
             .initial_step_size = 1e-2,
             .minimum_step_size = 1e-8,

@@ -6,9 +6,8 @@
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
-
-void Ros<N_eqs, RK_method,  jacobian, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD> 
+void Ros<N_eqs, RK_method, LD>::step_control(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;

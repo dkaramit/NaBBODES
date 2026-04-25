@@ -79,7 +79,7 @@ void jacobian(std::array<std::array<LD, n_eqs>, n_eqs> &J, std::array<LD, n_eqs>
 }
 
 
-using SOLVER = Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD> , LD>;
+using SOLVER = Ros<n_eqs, METHOD<LD>, LD>;
 
 int main(int argc, const char** argv) {
     
