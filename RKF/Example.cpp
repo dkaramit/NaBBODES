@@ -31,7 +31,7 @@ class diffeq{
     LD c;
     diffeq(double c):c(c){}; 
 
-    void operator()(Array &lhs, Array &y, LD t){
+    void operator()(Array &lhs, const Array &y, const LD& t){
         lhs[0]=t*c;
     }
 

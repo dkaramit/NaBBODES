@@ -32,7 +32,7 @@ class diffeq{
     diffeq()=default;
     ~diffeq()=default;
 
-    void operator()(Array &lhs, Array &y, LD t){
+    void operator()(Array &lhs, const Array &y, const LD& t){
         lhs[0]=-20*y[0]*pow(t,2) ;
         lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
         lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);

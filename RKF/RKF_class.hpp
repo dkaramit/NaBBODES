@@ -32,7 +32,7 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
     private:
-        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y, LD t)>;
+        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const  LD &t)>;
 
         //these are not constant because reset can update them
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
@@ -83,12 +83,12 @@ class RKF{
         //access the array of solution[eq]
         const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution[eq]; }
         //access the element solution[eq][step]
-        const LD get_solution(const unsigned int& eq, const unsigned int& step) const { return solution[eq][step]; }
+        LD get_solution(const unsigned int& eq, const unsigned int& step) const { return solution[eq][step]; }
         
         //access the array of error[eq]
         const std::vector<LD>& get_error(const unsigned int& eq) const { return error[eq]; }
         //access the element error[eq][step]
-        const LD get_error(const unsigned int& eq, const unsigned int& step) const { return error[eq][step]; }
+        LD get_error(const unsigned int& eq, const unsigned int& step) const { return error[eq][step]; }
 
         void set_parameters(const parameters<LD>& opt=parameters<LD>{});
         void reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt=parameters<LD>{});
