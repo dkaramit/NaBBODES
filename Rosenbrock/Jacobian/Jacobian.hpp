@@ -7,7 +7,7 @@
 
 template<int N_eqs, class LD>
 class Jacobian{
-    using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y  , LD t)>;
+    using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, const std::array<LD, N_eqs> &y, const LD& t)>;
     public:
     LD h;
     diffeq dydt;
@@ -18,24 +18,24 @@ class Jacobian{
 
     // It is good to have a copy contructor is needed here, in case you need it. 
     // Rosenbrock works without it, but may be useful in the future.
-    Jacobian(Jacobian &Jac){
+    Jacobian(const Jacobian &Jac){
         this->dydt=Jac.dydt;
         this->h=Jac.h;
     };
 
-    Jacobian(diffeq dydt, LD h=1e-10){
+    Jacobian(const diffeq& dydt, LD h=1e-10){
         this->dydt=dydt;
         this->h=h;
 
     };
 
-    Jacobian& operator=(const Jacobian &Jac){
-        this->dydt=Jac.dydt;
-        this->h=Jac.h;
-        return *this;
-    }
+    // Jacobian& operator=(const Jacobian &Jac){
+    //     this->dydt=Jac.dydt;
+    //     this->h=Jac.h;
+    //     return *this;
+    // }
 
-    void operator()(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, std::array<LD, N_eqs> &y  , LD t ){
+    void operator()(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t){
         // you can use something like this to scale the stepsize according to the scale of t
         LD a=this->h+this->h*t;
         // take the time derivative

@@ -49,7 +49,9 @@ class Ros{
     private:
         using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
         diffeq dydt;
-        jacobian Jac;
+        
+        using Jacobian=std::function<void(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)>;
+        Jacobian Jac;
 
         parameters<LD> params; //use this to get and change parameters if needed
 
@@ -103,8 +105,8 @@ class Ros{
         void step_control();//adjust stepsize until error is acceptable
     public:
 
-        Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>)
-                    : dydt(dydt),Jac(jacobian(dydt)),params(opt) {
+        Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, Jacobian Jac, const parameters<LD>& opt=default_parameters<LD>)
+                    : dydt(dydt),Jac(Jac),params(opt) {
                 // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
                 if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
                 if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}

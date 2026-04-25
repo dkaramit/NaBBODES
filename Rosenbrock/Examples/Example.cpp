@@ -3,7 +3,7 @@
 #include<fstream>
 #include<cmath>
 #include"Ros.hpp"
-#include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
+// #include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
 #include "METHOD.hpp"
 
 using std::cout;
@@ -34,14 +34,49 @@ using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
 class diffeq{
     public:
     LD c;
-    diffeq(LD c):c(c){};
+    diffeq(const LD& c):c(c){};
 
-    void operator()(Array &lhs, const Array &y  , const LD& t){
+    void operator()(Array &lhs, const Array &y  , const LD& t)const{
         lhs[0]=t*c;
     }
 
 };
 
+
+void jacobian(std::array<std::array<LD, n_eqs>, n_eqs> &J, std::array<LD, n_eqs> &dfdt, const std::array<LD, n_eqs> &y, const LD& t){
+    LD h=1e-10;
+    const diffeq dydt(2);
+    
+    std::array<LD, n_eqs> y0,y1,dydt0,dydt1;
+
+    // you can use something like this to scale the stepsize according to the scale of t
+    LD a;
+    
+    for (int i = 0; i < n_eqs; i++){
+        // take the time derivative
+        a=h+h*t;
+        dydt(dydt0,y,t-a);
+        dydt(dydt1,y,t+a);
+        dfdt[i]=(dydt1[i]-dydt0[i])/(2*a);
+        // take the derivatives over y
+        for (int j = 0; j < n_eqs; j++){
+            y0=y; 
+            y1=y;
+
+            // you can use something like this to scale the stepsize according to the scale of y[j]
+            a=h+h*std::abs(y0[j]);
+            
+            y0[j]=y0[j]-a;
+            y1[j]=y1[j]+a;
+            
+            dydt(dydt0,y0,t);
+            dydt(dydt1,y1,t);
+
+            J[i][j]=(dydt1[i]-dydt0[i])/(2*a);
+        }
+    }
+
+}
 
 
 using SOLVER = Ros<n_eqs, METHOD<LD> ,Jacobian<n_eqs,LD> , LD>;
@@ -50,9 +85,9 @@ int main(int argc, const char** argv) {
     
     Array y0 = {2};
     diffeq dydt(2);
+    Jacobian<n_eqs,LD> Jac(dydt);
 
-
-    SOLVER System(dydt,y0, 1e4,
+    SOLVER System(dydt,y0, 1e4, Jac,
         {
             .initial_step_size=1e-2,
             .minimum_step_size=1e-8,
