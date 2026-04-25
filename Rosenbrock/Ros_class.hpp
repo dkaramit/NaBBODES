@@ -134,6 +134,16 @@ class Ros{
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
         
+        const std::vector<LD>& get_t() const { return time; }
+        //access the array of solution[eq]
+        const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
+        //access the element solution[eq][step]
+        auto get_solution(const unsigned int& eq, const unsigned int& step) const { return solution.at(eq).at(step); }
+        
+        //access the array of error[eq]
+        const std::vector<LD>& get_error(const unsigned int& eq) const { return error.at(eq); }
+        //access the element error[eq][step]
+        auto get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
 
         
         void step_control();//adjust stepsize until error is acceptable

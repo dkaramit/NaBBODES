@@ -57,12 +57,11 @@ int main(int argc, const char** argv) {
             .initial_step_size=1e-2,
             .minimum_step_size=1e-8,
             .maximum_step_size=1e3,
-            .maximum_No_steps=1000000,
             .absolute_tolerance=1e-8,
             .relative_tolerance=1e-8,
             .beta=0.5,
-            .fac_max=1.01,
-            .fac_min=0.9
+            .fac_max=1.2,
+            .fac_min=0.6
         }
     );
     
@@ -76,6 +75,22 @@ int main(int argc, const char** argv) {
         printf("\n");
         step++;
     }
+
+    System.reset(y0,1e4,{.initial_step_size=20,.absolute_tolerance=1e-2,.relative_tolerance=1e-2});
+    System.solve();
+    
+    step=0;
+    step=System.get_current_step()-1;
+    printf("%e ",(double)System.get_t().at(step));
+    for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+    for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
+    printf("\n");
+    std::cout<<System.get_current_step();
+    printf("\n");
+
+    std::cout<<System.get_parameters().initial_step_size.value()<<std::endl;
+    std::cout<<System.get_parameters().minimum_step_size.value()<<std::endl;
+    
 
     
     return 0;
