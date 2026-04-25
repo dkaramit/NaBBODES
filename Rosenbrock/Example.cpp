@@ -76,6 +76,7 @@ int main(int argc, const char** argv) {
         step++;
     }
 
+    //this is how you can change parameters
     System.reset(y0,1e4,{.initial_step_size=20,.absolute_tolerance=1e-2,.relative_tolerance=1e-2});
     System.solve();
     

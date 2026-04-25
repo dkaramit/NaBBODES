@@ -22,8 +22,6 @@ unsigned int ind_max(std::array<LD,N> &row, unsigned int len_col){
 }
 
 
-
-
 template<const unsigned int N, class LD>
 void index_swap(std::array<LD,N> &A, int index_1, int index_2){
 
@@ -53,7 +51,7 @@ void index_swap(std::array<int,N> &A, int index_1, int index_2){
 }
 
 template<const unsigned int N, class LD>
-void apply_permutations_vector(std::array<LD,N> &A, std::array<int,N> &P, std::array<LD,N> &Ap){
+void apply_permutations_vector(const std::array<LD,N> &A, const std::array<int,N> &P, std::array<LD,N> &Ap){
     /*
     Applies the permutations given by P from LUP
     to a list A of length N, and stores the result to Ap.
@@ -85,16 +83,15 @@ void Map( LD (*F)(LD) , std::array<LD,N> &L, std::array<LD,N> &FL){
 /*-----------------------------LUP decompositioning--------------------------------------------------------*/
 
 template<const unsigned int N,class LD>
-void LUP(std::array<std::array<LD,N>,N> &M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
+void LUP(const std::array<std::array<LD,N>,N> &M, std::array<std::array<LD,N>,N> &L ,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, LD _tiny=1e-25){
     
     // Initialize LU
     for (unsigned int  i = 0; i < N; i++){
         P[i]=i;
-        for (unsigned int  j = 0; j < N; j++)
-        {
-        if(i==j){L[i][j]=1;}
-        if(i!=j){L[i][j]=0;}
-        U[i][j]=M[i][j];
+        for (unsigned int  j = 0; j < N; j++){
+            if(i==j){L[i][j]=1;}
+            if(i!=j){L[i][j]=0;}
+            U[i][j]=M[i][j];
         }
     }
     std::array<LD,N> _col,tmpU,tmpL;
@@ -141,7 +138,7 @@ void LUP(std::array<std::array<LD,N>,N> &M, std::array<std::array<LD,N>,N> &L ,s
 
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
 template<const unsigned int N, class LD>
-void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, std::array<LD,N> &b , std::array<LD,N> &x){
+void Solve_LU(const std::array<std::array<LD,N>,N> &L, const std::array<std::array<LD,N>,N> &U, const std::array<int,N> &P, const std::array<LD,N> &b , std::array<LD,N> &x){
     /*
     This solves M*x=b
     Input:
@@ -183,17 +180,9 @@ void Solve_LU(std::array<std::array<LD,N>,N> &L,std::array<std::array<LD,N>,N> &
 
 
 
-
-
-
-
-
-
-
-
 /*------------------------------------------------Solve-LU----------------------------------------------------------*/
 template<const unsigned int N, class LD>
-void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N> &U, std::array<int,N> &P, std::array<std::array<LD,N>,N> &invM){
+void Inverse_LU(const std::array<std::array<LD,N>,N> &L, const std::array<std::array<LD,N>,N> &U, const std::array<int,N> &P, std::array<std::array<LD,N>,N> &invM){
     /*
     Finds the Inverse matrix given its LU decomposition.
     Basically this solves M*M^{-1}=1
@@ -226,7 +215,7 @@ void Inverse_LU(std::array<std::array<LD,N>,N> &L, std::array<std::array<LD,N>,N
  
 /*------------------------------------------------Product of two matrices----------------------------------------------------------*/
 template<const unsigned int N, class LD>
-void dot(std::array<std::array<LD,N>,N> &A, std::array<std::array<LD,N>,N> &B, std::array<std::array<LD,N>,N> &R){
+void dot(const std::array<std::array<LD,N>,N> &A, const std::array<std::array<LD,N>,N> &B, std::array<std::array<LD,N>,N> &R){
     /*
     Calculates the product of two matrices.
     R=A*B
@@ -246,7 +235,7 @@ void dot(std::array<std::array<LD,N>,N> &A, std::array<std::array<LD,N>,N> &B, s
 
 /*------------------------------------------------Product of matrix with vector----------------------------------------------------------*/
 template<const unsigned int N, class LD>
-void dot(std::array<std::array<LD,N>,N> &A, std::array<LD,N> &x, std::array<LD,N> &b){
+void dot(const std::array<std::array<LD,N>,N> &A, const std::array<LD,N> &x, std::array<LD,N> &b){
     /*
     Calculates the product of  matrix with vector.
     b=A*x

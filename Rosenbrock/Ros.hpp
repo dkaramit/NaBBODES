@@ -1,6 +1,10 @@
 #ifndef Ros_headers
 #define Ros_headers
+
 #include "LU/LU.hpp"
+//You need this for LU decomposition. 
+// I have not seen a reason for this to be changed.
+template<class LD> constexpr LD _tiny=1e-25;
 
 
 #include "Ros_class.hpp"

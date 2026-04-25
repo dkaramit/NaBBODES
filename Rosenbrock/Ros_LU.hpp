@@ -21,7 +21,7 @@ void Ros<N_eqs, RK_method,  jacobian, LD>::LU(){
             coeff[i][j]+=-h_trial*RK_method::gamma*J[i][j];
         }
     }
-    LUP<N_eqs,LD>(coeff,L,U,P); //LU decomposition of (1-h*gamma*J)
+    LUP<N_eqs,LD>(coeff,L,U,P,_tiny<LD>); //LU decomposition of (1-h*gamma*J)
     Inverse_LU<N_eqs,LD>(L,U,P,_inv); // the inverse of (1-h*gamma*J)
 }
 /*---------------------------------------------------------------------------------------------*/
