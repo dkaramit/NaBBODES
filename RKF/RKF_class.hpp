@@ -89,7 +89,7 @@ class RKF{
         
         RKF(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
             const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {
-                // if some parameter in opt does not have a value, use the correspondinf parameter from default.default_parameters 
+                // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
                 if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
                 if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}
                 if(!params.maximum_step_size.has_value()){params.maximum_step_size=default_parameters<LD>.maximum_step_size.value();}

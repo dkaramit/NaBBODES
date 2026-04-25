@@ -4,6 +4,37 @@
 #include<array>
 #include<vector>
 #include<functional>
+#include<optional>
+
+
+// struct for the parameters of the RKF algorithm. 
+// It is useful because we can now pass them named parameters!
+template<class LD>
+struct parameters{
+    std::optional<LD> initial_step_size{}; 
+    std::optional<LD> minimum_step_size{}; 
+    std::optional<LD> maximum_step_size{};
+    std::optional<unsigned int> maximum_No_steps{}; 
+    std::optional<LD> absolute_tolerance{};
+    std::optional<LD> relative_tolerance{};
+    std::optional<LD> beta{};
+    std::optional<LD> fac_max{}; 
+    std::optional<LD> fac_min{};
+};
+
+//these are the default set of parameters
+template<class LD>
+inline constexpr parameters<LD> default_parameters {
+    .initial_step_size=1e-5, 
+    .minimum_step_size=1e-9, 
+    .maximum_step_size=1e-3,
+    .maximum_No_steps=1000000, 
+    .absolute_tolerance=1e-6,
+    .relative_tolerance=1e-6,
+    .beta=0.85,
+    .fac_max=3, 
+    .fac_min=0.3
+};
 
 /*
 N_eqs is ten number of equations to be solved RK_method 
@@ -12,21 +43,6 @@ is the method
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
-
-template<class LD>
-struct parameters{
-    LD initial_step_size=1e-5; 
-    LD minimum_step_size=1e-11; 
-    LD maximum_step_size=1e-3;
-    int maximum_No_steps=1000000; 
-    LD absolute_tolerance=1e-8;
-    LD relative_tolerance=1e-8;
-    LD beta=0.85;
-    LD fac_max=3; 
-    LD fac_min=0.3;
-};
-
-
 template<unsigned int N_eqs, class RK_method, class jacobian, class LD> 
 //Note that you can use template to pass the method
 class Ros{
@@ -34,6 +50,10 @@ class Ros{
         using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y  , LD t)>;
         diffeq dydt;
         jacobian Jac;
+
+        parameters<LD> params; //use this to get and change parameters if needed
+
+
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         unsigned int max_N;
         LD h_old,h_trial,h_acc,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
@@ -83,8 +103,22 @@ class Ros{
 
         
         /*----------------------------------------------------------------------------------------------------*/
-        Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=parameters<LD>{})
-                    : dydt(dydt),Jac(jacobian(dydt)) {reset(init_cond, tmax, opt);};
+        Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>)
+                    : dydt(dydt),Jac(jacobian(dydt)),params(opt) {
+                // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
+                if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
+                if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}
+                if(!params.maximum_step_size.has_value()){params.maximum_step_size=default_parameters<LD>.maximum_step_size.value();}
+                if(!params.maximum_No_steps.has_value()){params.maximum_No_steps=default_parameters<LD>.maximum_No_steps.value();}
+                if(!params.absolute_tolerance.has_value()){params.absolute_tolerance=default_parameters<LD>.absolute_tolerance.value();}
+                if(!params.relative_tolerance.has_value()){params.relative_tolerance=default_parameters<LD>.relative_tolerance.value();}
+                if(!params.beta.has_value()){params.beta=default_parameters<LD>.beta.value();}
+                if(!params.fac_max.has_value()){params.fac_max=default_parameters<LD>.fac_max.value();}
+                if(!params.fac_min.has_value()){params.fac_min=default_parameters<LD>.fac_min.value();}
+
+                reset(init_cond,tmax,opt); 
+            };
+
         
         ~Ros()=default;
 
@@ -105,8 +139,13 @@ class Ros{
         void step_control();//adjust stepsize until error is acceptable
         void solve();
 
-        void set_parameters(const parameters<LD>& opt=parameters<LD>{});
-        void reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt=parameters<LD>{});
+        void set_parameters(const parameters<LD>& opt=default_parameters<LD>);
+        void reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>);
+
+        //generally helpful, but not very important
+        auto get_current_step() const {return time.size();}
+        auto get_current_step_size() const {return h_acc;}
+        auto get_parameters() const {return params;}
 };
 
 
