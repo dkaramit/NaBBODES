@@ -47,7 +47,7 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
     private:
-        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const  LD &t)>;
+        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
 
         parameters<LD> params; //use this to get and change parameters if needed
 
@@ -127,7 +127,7 @@ class RKF{
         //generally helpful, but not very important
         auto get_current_step() const {return time.size();}
         auto get_current_step_size() const {return h_acc;}
-        auto get_parameters() const {return params;}
+        const parameters<LD>& get_parameters() const {return params;}
     };
 
 #endif

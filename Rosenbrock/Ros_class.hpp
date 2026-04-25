@@ -47,7 +47,7 @@ template<unsigned int N_eqs, class RK_method, class jacobian, class LD>
 //Note that you can use template to pass the method
 class Ros{
     private:
-        using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, std::array<LD, N_eqs> &y  , LD t)>;
+        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
         diffeq dydt;
         jacobian Jac;
 
@@ -59,17 +59,15 @@ class Ros{
         LD h_old,h_trial,h_acc,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
-    public:
-
         LD tmax, tn;
         std::array<LD, N_eqs> yprev;// previously accepted step. maybe the name is not good.
-
-
+    
+    
         std::vector<LD> time;
         std::array<std::vector<LD>, N_eqs> solution;
         std::array<std::vector<LD>, N_eqs> error;
-
-    
+        
+        
         //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
         std::array<std::array<LD,RK_method::s>,N_eqs> k;
         std::array<LD,N_eqs> ak,gk,Jk, bk,bstark;
@@ -78,12 +76,9 @@ class Ros{
         // abs_delta=abs(ynext-ynext_star)
         std::array<LD, N_eqs> abs_delta;
         
-        
-
         std::array<LD, N_eqs> ynext;//this is here to hold the prediction
         std::array<LD, N_eqs> ynext_star;//this is here to hold the second prediction
-
-        
+    
         
         /*--These are specific to Rosenbrock methods*/
         std::array<LD, N_eqs> dfdt; 
@@ -97,13 +92,18 @@ class Ros{
         std::array<LD, N_eqs> lu_sol;
         std::array<std::array<LD, N_eqs>, N_eqs> J;//this is here to hold values of the Jacobian
 
+        void LU();
+        void calc_k();
+        void calc_Jk();
         
+        void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_gk(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         
+        void step_control();//adjust stepsize until error is acceptable
+    public:
 
-
-        
-        /*----------------------------------------------------------------------------------------------------*/
-        Ros(diffeq dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>)
+        Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>)
                     : dydt(dydt),Jac(jacobian(dydt)),params(opt) {
                 // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
                 if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
@@ -122,18 +122,6 @@ class Ros{
         
         ~Ros()=default;
 
-        /*-------------------it would be nice to have a way to define these sums more generaly-----------------*/
-        void next_step();
-        void LU();
-
-        void calc_k();
-        void calc_Jk();
-
-        void sum_ak(unsigned int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
-        void sum_gk(unsigned int stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
-        void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
-        void sum_bstark();// calculate sum_i b^{\star}_i*k_i and passit to this->bk
-        
         const std::vector<LD>& get_t() const { return time; }
         //access the array of solution[eq]
         const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
@@ -144,9 +132,9 @@ class Ros{
         const std::vector<LD>& get_error(const unsigned int& eq) const { return error.at(eq); }
         //access the element error[eq][step]
         auto get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
-
         
-        void step_control();//adjust stepsize until error is acceptable
+        
+        void next_step();
         void solve();
 
         void set_parameters(const parameters<LD>& opt=default_parameters<LD>);
@@ -155,7 +143,7 @@ class Ros{
         //generally helpful, but not very important
         auto get_current_step() const {return time.size();}
         auto get_current_step_size() const {return h_acc;}
-        auto get_parameters() const {return params;}
+        const parameters<LD>& get_parameters() const {return params;}
 };
 
 
