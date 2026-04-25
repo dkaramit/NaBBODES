@@ -23,7 +23,7 @@ struct parameters{
 
 //these are the default set of parameters
 template<class LD>
-const parameters<LD> default_parameters {
+inline constexpr parameters<LD> default_parameters {
     .initial_step_size=1e-5, 
     .minimum_step_size=1e-9, 
     .maximum_step_size=1e-3,
