@@ -22,7 +22,7 @@ void RKF<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
 
 
 template<unsigned int N_eqs, class RK_method, class LD>
-void RKF<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
+void RKF<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt){
     
     set_parameters(opt);
     

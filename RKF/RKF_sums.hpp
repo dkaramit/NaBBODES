@@ -4,7 +4,7 @@
 
 /*-----------------------Begin: sum_ak---------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD>
-void RKF<N_eqs, RK_method, LD>::sum_ak(unsigned int stage){
+void RKF<N_eqs, RK_method, LD>::sum_ak(const unsigned int& stage){
     // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (unsigned int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.; 
