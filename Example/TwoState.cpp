@@ -43,7 +43,7 @@ class TwoStateSystem{
 
         TwoStateSystem(std::complex<LD> H[2][2], LD tmax);
         ~TwoStateSystem(){};
-        void operator()( Array &lhs, Array &c  , LD t );
+        void operator()( Array &lhs, const Array &c  , const LD& t );
         std::complex<LD> Hamiltonian(int i, int j, LD t );//this is to allow the hamiltoninan to be time-dependent
 
 };
@@ -77,7 +77,7 @@ std::complex<LD> TwoStateSystem::Hamiltonian(int i, int j, LD t ){
 
 }
 
-void TwoStateSystem::operator()( Array &lhs, Array &c  , LD t )
+void TwoStateSystem::operator()( Array &lhs, const Array &c  , const LD &t )
         {
             C[0].real(c[0]);
             C[0].imag(c[1]);
@@ -138,23 +138,25 @@ int main(int argc, const char** argv) {
             .fac_min = 1/6.
         }
     );
+
+
     System.solve();
 
     LD P1,P2;
     LD t;
     std::complex<LD> Emean,C[2];
-    for(int i=0; i< System.time.size() ; ++i) {  
-        P1=pow(System.solution[0][i],2 )+pow(System.solution[1][i],2 );
-        P2=pow(System.solution[2][i],2 )+pow(System.solution[3][i],2 );
-        t=System.time[i];
+    for(int i=0; i< System.get_t().size() ; ++i) {  
+        P1=pow(System.get_solution(0,i),2 )+pow(System.get_solution(1,i),2 );
+        P2=pow(System.get_solution(2,i),2 )+pow(System.get_solution(3,i),2 );
+        t=System.get_t().at(i);
         printf("%e ",(double)(t) ) ;
         printf("%e ", (double)P1);
         printf("%e ",(double)P2); 
         
-        C[0].real(System.solution[0][i]);
-        C[0].imag(System.solution[1][i]);
-        C[1].real(System.solution[2][i]);
-        C[1].imag(System.solution[3][i]);
+        C[0].real(System.get_solution(0,i));
+        C[0].imag(System.get_solution(1,i));
+        C[1].real(System.get_solution(2,i));
+        C[1].imag(System.get_solution(3,i));
         
         Emean=conj(C[0])*schrodinger.Hamiltonian(0,0,t)*C[0]; 
         Emean+=conj(C[0])*schrodinger.Hamiltonian(0,1,t)*C[1]; 
@@ -164,8 +166,8 @@ int main(int argc, const char** argv) {
         printf("%e ",(double)Emean.real()); 
         printf("%e ",(double)Emean.imag()); 
         
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.solution[eq][i]);    }
-        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.error[eq][i]);    }
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,i));    }
+        for( int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_error(eq,i));    }
         printf("\n");
         }
 
