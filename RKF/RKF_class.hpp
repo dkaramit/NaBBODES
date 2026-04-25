@@ -81,14 +81,14 @@ class RKF{
         
         const std::vector<LD>& get_t() const { return time; }
         //access the array of solution[eq]
-        const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution[eq]; }
+        const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
         //access the element solution[eq][step]
-        LD get_solution(const unsigned int& eq, const unsigned int& step) const { return solution[eq][step]; }
+        LD get_solution(const unsigned int& eq, const unsigned int& step) const { return solution.at(eq).at(step); }
         
         //access the array of error[eq]
-        const std::vector<LD>& get_error(const unsigned int& eq) const { return error[eq]; }
+        const std::vector<LD>& get_error(const unsigned int& eq) const { return error.at(eq); }
         //access the element error[eq][step]
-        LD get_error(const unsigned int& eq, const unsigned int& step) const { return error[eq][step]; }
+        LD get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
 
         void set_parameters(const parameters<LD>& opt=parameters<LD>{});
         void reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt=parameters<LD>{});
