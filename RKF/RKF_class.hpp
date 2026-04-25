@@ -110,7 +110,7 @@ class RKF{
 
         
         const std::vector<LD>& get_t() const { return time; }
-        const std::vector<LD>& get_t(const unsigned int& step) const { return time.at(step); }
+        auto get_t(const unsigned int& step) const { return time.at(step); }
         //access the array of solution[eq]
         const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
         //access the element solution[eq][step]

@@ -145,10 +145,10 @@ int main(int argc, const char** argv) {
     LD P1,P2;
     LD t;
     std::complex<LD> Emean,C[2];
-    for(int i=0; i< System.get_t().size() ; ++i) {  
+    for(int i=0; i< System.get_current_step() ; ++i) {  
         P1=pow(System.get_solution(0,i),2 )+pow(System.get_solution(1,i),2 );
         P2=pow(System.get_solution(2,i),2 )+pow(System.get_solution(3,i),2 );
-        t=System.get_t().at(i);
+        t=System.get_t(i);
         printf("%e ",(double)(t) ) ;
         printf("%e ", (double)P1);
         printf("%e ",(double)P2); 
