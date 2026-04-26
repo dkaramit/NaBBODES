@@ -1,9 +1,9 @@
-METHOD=RODASPR2
+METHOD=RODAS5
+# METHOD=RODASPR2
 # METHOD=ROS34PW2
 # METHOD=GRK4A
 # METHOD=GRK4T
 # METHOD=ROS3w
-
 
 # LONG=  #leave empty to use doubles
 LONG=long #set to long , in order to use long doubles
