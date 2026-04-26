@@ -2,6 +2,8 @@
 #define RKF_METHOD
 #include<array>
 
+namespace rkf{
+
 template<class LD>
 struct DormandPrince{
     static constexpr unsigned int s=7;
@@ -68,4 +70,7 @@ struct RKF45{
         arr{-8/27.,2.,-3544/2565.,1859/4104.,-11/40.,0}
     };
 };
+
+}
+
 #endif

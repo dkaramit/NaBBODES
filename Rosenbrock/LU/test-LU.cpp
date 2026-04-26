@@ -5,6 +5,7 @@
 
 using std::cout;
 using std::endl;
+using namespace rosenbrock;
 
 #define LD double
 
@@ -16,7 +17,7 @@ using std::endl;
 
 // #define lup //run LUP test
 
-// #define _rand //run random tests of Solve_LU
+#define _rand //run random tests of Solve_LU
 
 // #define inv_test // random tests of Inverse_LU
 

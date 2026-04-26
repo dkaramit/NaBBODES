@@ -8,6 +8,8 @@ template<class LD> constexpr LD _tiny=1e-25;
 
 #include"Jacobian/Jacobian.hpp"
 
+#include"METHOD.hpp"
+
 #include "Ros_class.hpp"
 #include "Ros_reset.hpp"
 #include "Ros_LU.hpp"

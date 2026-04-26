@@ -3,7 +3,6 @@
 #include<stdio.h>
 #include<cmath>
 #include"RKF.hpp"
-#include"METHOD.hpp"
 
 
 #ifndef LONG
@@ -41,8 +40,8 @@ class diffeq{
 };
 
 // choose step controller (if you don't choose, it will use PI by default)
-// using SOLVER = rkf::Solver<n_eqs,METHOD<LD>,LD, rkf::step_controllers::PI>;
-using SOLVER = rkf::Solver<n_eqs,METHOD<LD>,LD, rkf::step_controllers::simple>;
+// using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::PI>;
+using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::simple>;
 
 int main(int argc, const char** argv) {
     Array y0 = {8,12,4};

@@ -2,6 +2,8 @@
 #define Ros_METHOD
 #include<array>
 
+namespace rosenbrock{
+
 template<class LD>
 struct ROS3w{
     static constexpr unsigned int s=3;
@@ -216,5 +218,7 @@ struct RODAS5{
         arr{4.794535932845209e-16,1.0687801665244841e-15,1.7420305409054608e-15,1.6087567997877664e-16,-2.0173112091667213e-15,0.019776375776706823,-0.2097763757767068,0}
     };
 };
+
+}
 
 #endif

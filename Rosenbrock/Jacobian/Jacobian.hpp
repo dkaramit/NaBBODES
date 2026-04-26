@@ -3,6 +3,8 @@
 #include<functional>
 #include<array>
 
+namespace rosenbrock{
+
 // This is the default Jacobian class.
 
 template<int N_eqs, class LD>
@@ -60,5 +62,6 @@ class Jacobian{
 
 };
 
+}
 
 #endif

@@ -1,6 +1,8 @@
 #ifndef RKF_headers
 #define RKF_headers
 
+#include "METHOD.hpp"
+
 #include "RKF_class.hpp"
 #include "RKF_reset.hpp"
 #include "RKF_calc_k.hpp"

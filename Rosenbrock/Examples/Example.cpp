@@ -3,7 +3,6 @@
 #include<fstream>
 #include<cmath>
 #include"Rosenbrock.hpp"
-#include "METHOD.hpp"
 
 using std::cout;
 using std::endl;
@@ -42,8 +41,8 @@ class diffeq{
 };
 
 // choose step controller (if you don't choose, it will use PI by default)
-using SOLVER = rosenbrock::Solver<n_eqs, METHOD<LD>, LD, rosenbrock::step_controllers::PI>;
-// using SOLVER = rosenbrock::Solver<n_eqs, METHOD<LD>, LD, rosenbrock::step_controllers::simple>;
+using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::PI>;
+// using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::simple>;
 
 int main(int argc, const char** argv){
     

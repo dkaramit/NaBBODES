@@ -3,6 +3,8 @@
 #include<array>
 #include<cmath>
 
+namespace rosenbrock{
+
 /*---------------------Functions I need for LU decomposition-------------------------------------------------*/
 template<const unsigned int N, class LD>
 unsigned int ind_max(std::array<LD,N> &row, unsigned int len_col){
@@ -250,5 +252,6 @@ void dot(const std::array<std::array<LD,N>,N> &A, const std::array<LD,N> &x, std
 }
 /*-------------------------------------------------------------------------------------------------------------------*/
 
+}
 
 #endif

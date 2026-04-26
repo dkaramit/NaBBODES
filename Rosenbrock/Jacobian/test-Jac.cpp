@@ -6,6 +6,8 @@
 
 #define LD double
 
+using namespace rosenbrock; 
+
 
 // this is how the diffeq should look like
 #define n_eqs 2 //number of equations
@@ -16,8 +18,8 @@ typedef std::array<Array, n_eqs> Array2;
 
 
 #ifdef _function
-typedef void (*diffeq)(Array &lhs, Array &y  , LD t); // define function pointer
-void sys(Array &lhs, Array &y  , LD t)
+typedef void (*diffeq)(Array &lhs, const Array &y  , const LD& t); // define function pointer
+void sys(Array &lhs, const Array &y  , const LD& t)
 {
 
     lhs[0]=y[1]*y[0]*t;
@@ -32,7 +34,7 @@ class Cdiffeq{
     public:
     Cdiffeq(){};
     ~Cdiffeq(){};
-    void operator()(Array &lhs, Array &y  , LD t)
+    void operator()(Array &lhs, const Array &y  , const LD& t)
     {
         lhs[0]=y[1]*y[0]*t;
         lhs[1]=y[0]*y[1]+t;

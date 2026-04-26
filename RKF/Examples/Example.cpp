@@ -3,7 +3,6 @@
 #include<stdio.h>
 #include<cmath>
 #include"RKF.hpp"
-#include"METHOD.hpp"
 
 #ifndef LONG
 #define LONG 
@@ -36,7 +35,8 @@ class diffeq{
 
 };
 
-using SOLVER = rkf::Solver<n_eqs,METHOD<LD>,LD, rkf::step_controllers::PI>;
+// using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::PI>;
+using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::simple>;
 
 int main(int argc, const char** argv) {
     Array y0={0};
