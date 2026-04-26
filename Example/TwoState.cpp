@@ -125,7 +125,7 @@ int main(int argc, const char** argv) {
 
     TwoStateSystem schrodinger(H,tmax);
     
-    Jacobian<n_eqs,LD> Jac(schrodinger);
+    Jacobian<n_eqs,LD> Jac(schrodinger,1e-8);
     
     Ros<n_eqs, METHOD<LD>, LD > System(schrodinger,c0,tmax, Jac,
         {

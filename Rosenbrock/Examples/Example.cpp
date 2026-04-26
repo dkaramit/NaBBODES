@@ -42,50 +42,18 @@ class diffeq{
 
 };
 
-
-void jacobian(std::array<std::array<LD, n_eqs>, n_eqs> &J, std::array<LD, n_eqs> &dfdt, const std::array<LD, n_eqs> &y, const LD& t){
-    LD h=1e-10;
-    const diffeq dydt(2);
-    
-    std::array<LD, n_eqs> y0,y1,dydt0,dydt1;
-
-    // you can use something like this to scale the stepsize according to the scale of t
-    LD a;
-    
-    for (int i = 0; i < n_eqs; i++){
-        // take the time derivative
-        a=h+h*t;
-        dydt(dydt0,y,t-a);
-        dydt(dydt1,y,t+a);
-        dfdt[i]=(dydt1[i]-dydt0[i])/(2*a);
-        // take the derivatives over y
-        for (int j = 0; j < n_eqs; j++){
-            y0=y; 
-            y1=y;
-
-            // you can use something like this to scale the stepsize according to the scale of y[j]
-            a=h+h*std::abs(y0[j]);
-            
-            y0[j]=y0[j]-a;
-            y1[j]=y1[j]+a;
-            
-            dydt(dydt0,y0,t);
-            dydt(dydt1,y1,t);
-
-            J[i][j]=(dydt1[i]-dydt0[i])/(2*a);
-        }
-    }
-
-}
-
-
 using SOLVER = Ros<n_eqs, METHOD<LD>, LD>;
 
-int main(int argc, const char** argv) {
+int main(int argc, const char** argv){
     
     Array y0 = {2};
     diffeq dydt(2);
-    Jacobian<n_eqs,LD> Jac(dydt);
+
+    // this is the numerical Jacobian
+    // Jacobian<n_eqs,LD> Jac(dydt,1e-10);
+    
+    //we know the analytical jacobian here (type deduction is powerful :P)
+    SOLVER::Jacobian Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.fill({0}); };
 
     SOLVER System(dydt,y0, 1e4, Jac,
         {

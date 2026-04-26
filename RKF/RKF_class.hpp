@@ -46,9 +46,11 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 
 template<unsigned int N_eqs, class RK_method, class LD>
 class RKF{
-    private:
-        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
+    public:
+    // maybe it is useful to know the type of the equation
+    using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
 
+    private:
         parameters<LD> params; //use this to get and change parameters if needed
 
         //these are not constant because reset can update them

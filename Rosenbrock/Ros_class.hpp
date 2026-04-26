@@ -46,13 +46,15 @@ is the method
 template<unsigned int N_eqs, class RK_method, class LD> 
 //Note that you can use template to pass the method
 class Ros{
-    private:
+    public:
+        // maybe it is useful to know the type of the equations
         using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
-        diffeq dydt;
-        
         using Jacobian=std::function<void(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)>;
+    
+    private:
+        diffeq dydt;
         Jacobian Jac;
-
+        
         parameters<LD> params; //use this to get and change parameters if needed
 
 
