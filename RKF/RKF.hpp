@@ -5,8 +5,8 @@
 #include "RKF_reset.hpp"
 #include "RKF_calc_k.hpp"
 #include "RKF_sums.hpp"
-// #include "RKF_step_control-simple.hpp"
-#include "RKF_step_control-PI.hpp"
+#include "RKF_step_control_simple.hpp"
+#include "RKF_step_control_PI.hpp"
 #include "RKF_steps.hpp"
 
 

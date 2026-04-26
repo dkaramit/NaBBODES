@@ -1,11 +1,11 @@
-#ifndef RKF_step_control
-#define RKF_step_control
+#ifndef RKF_step_control_PI
+#define RKF_step_control_PI
 #include "RKF_class.hpp"
 
 /*-----------------------Begin: step_control---------------------------------*/
 
-template<unsigned int N_eqs, class RK_method, class LD>
-void RKF<N_eqs, RK_method, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
+void RKF<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
     LD Delta=0.;
     LD _sc=0;
     LD fac=beta;

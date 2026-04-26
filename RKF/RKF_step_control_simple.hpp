@@ -1,15 +1,15 @@
-#ifndef RKF_step_control
-#define RKF_step_control
+#ifndef RKF_step_control_simple
+#define RKF_step_control_simple
 #include "RKF_class.hpp"
 
 /*-----------------------Begin: step_control---------------------------------*/
 
-template<unsigned int N_eqs, class RK_method, class LD>
-void RKF<N_eqs, RK_method, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
+void RKF<N_eqs, RK_method, LD, step_controler>::step_control_simple(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
-    
+
     for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;

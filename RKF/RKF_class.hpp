@@ -43,8 +43,12 @@ diffeq is a class of the system of  equations to be solved
 N_eqs is ten number of equations to be solved
 RKF_method is the method (the DormandPrince seems to be the standard here)
 */
+enum class  step_controlers{
+    simple,
+    PI
+};
 
-template<unsigned int N_eqs, class RK_method, class LD>
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI>
 class RKF{
     public:
     // maybe it is useful to know the type of the equation
@@ -85,8 +89,17 @@ class RKF{
         void calc_k(); //calculate the values of k
         void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and pass it to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
-        void step_control();//adjust stepsize until error is acceptable
-
+        void step_control_PI();//adjust stepsize until error is acceptable
+        void step_control_simple();//adjust stepsize until error is acceptable
+        
+        void step_control(){
+            if constexpr (step_controler==step_controlers::PI){
+                step_control_PI();
+            }else{
+                step_control_simple();
+            }
+        };//adjust stepsize until error is acceptable
+        
         public:
         
         RKF(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
