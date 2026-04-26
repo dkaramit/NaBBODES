@@ -3,10 +3,11 @@
 #include "RKF_class.hpp"
 
 
-
+namespace RKF{
+    
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void RKF<N_eqs, RK_method, LD, step_controler>::next_step(){
+void Solver<N_eqs, RK_method, LD, step_controler>::next_step(){
     if (tn + h_trial > tmax){h_trial = tmax - tn;} //make sure that h_trial does not push tn>tmax. 
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
@@ -43,7 +44,7 @@ void RKF<N_eqs, RK_method, LD, step_controler>::next_step(){
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void RKF<N_eqs, RK_method, LD, step_controler>::solve(){
+void Solver<N_eqs, RK_method, LD, step_controler>::solve(){
     unsigned int current_step=0;
     while (true){
         //increase current_step
@@ -68,7 +69,6 @@ void RKF<N_eqs, RK_method, LD, step_controler>::solve(){
 } 
 /*---------------------------------------------------End: solve-------------------------------------------------------------------------------*/
 
-
-
+}
 
 #endif

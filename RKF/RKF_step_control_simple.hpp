@@ -2,10 +2,13 @@
 #define RKF_step_control_simple
 #include "RKF_class.hpp"
 
+
+namespace RKF{
+    
 /*-----------------------Begin: step_control---------------------------------*/
 
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void RKF<N_eqs, RK_method, LD, step_controler>::step_control_simple(){
+void Solver<N_eqs, RK_method, LD, step_controler>::step_control_simple(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
@@ -34,5 +37,6 @@ void RKF<N_eqs, RK_method, LD, step_controler>::step_control_simple(){
 }
 /*-----------------------End: step_control---------------------------------*/
 
+}
 
 #endif

@@ -6,6 +6,9 @@
 #include<functional>
 #include<optional>
 
+
+namespace RKF{
+    
 // struct for the parameters of the RKF algorithm. 
 // It is useful because we can now pass them named parameters!
 template<class LD>
@@ -51,7 +54,7 @@ RKF_method is the method (the DormandPrince seems to be the standard here)
 */
 
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI>
-class RKF{
+class Solver{
     public:
     // maybe it is useful to know the type of the equation
     using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
@@ -104,10 +107,10 @@ class RKF{
         
         public:
         
-        RKF(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
+        Solver(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
             const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {reset(init_cond,tmax,opt); };
         
-        ~RKF()=default;
+        ~Solver()=default;
 
         void next_step();
         void solve();
@@ -134,5 +137,7 @@ class RKF{
         auto get_current_step_size() const {return h_acc;}
         const parameters<LD>& get_parameters() const {return params;}
     };
+
+}
 
 #endif

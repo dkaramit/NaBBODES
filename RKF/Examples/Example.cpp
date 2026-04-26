@@ -5,7 +5,6 @@
 #include"RKF.hpp"
 #include"METHOD.hpp"
 
-
 #ifndef LONG
 #define LONG 
 #endif
@@ -37,7 +36,7 @@ class diffeq{
 
 };
 
-using SOLVER = RKF<n_eqs,METHOD<LD>,LD,step_controlers::PI>;
+using SOLVER = RKF::Solver<n_eqs,METHOD<LD>,LD, RKF::step_controlers::PI>;
 
 int main(int argc, const char** argv) {
     Array y0={0};

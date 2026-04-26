@@ -41,8 +41,8 @@ class diffeq{
 };
 
 // choose step controller (if you don't choose, it will use PI by default)
-// using SOLVER = RKF<n_eqs,METHOD<LD>,LD,step_controlers::PI>;
-using SOLVER = RKF<n_eqs,METHOD<LD>,LD,step_controlers::simple>;
+// using SOLVER = RKF::Solver<n_eqs,METHOD<LD>,LD, RKF::step_controlers::PI>;
+using SOLVER = RKF::Solver<n_eqs,METHOD<LD>,LD, RKF::step_controlers::simple>;
 
 int main(int argc, const char** argv) {
     Array y0 = {8,12,4};

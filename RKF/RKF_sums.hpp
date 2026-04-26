@@ -2,9 +2,11 @@
 #define RKF_sums
 #include "RKF_class.hpp"
 
+namespace RKF{
+
 /*-----------------------Begin: sum_ak---------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void RKF<N_eqs, RK_method, LD, step_controler>::sum_ak(const unsigned int& stage){
+void Solver<N_eqs, RK_method, LD, step_controler>::sum_ak(const unsigned int& stage){
     // this function stores sum_{j}^{stage-1}a_{stage,j}\vec{k}_j in ak, so we first need to make all elements zero, and then take the sum for each component
     for (unsigned int eq = 0; eq <N_eqs ; eq++){
         ak[eq]=0.; 
@@ -16,7 +18,7 @@ void RKF<N_eqs, RK_method, LD, step_controler>::sum_ak(const unsigned int& stage
 
 /*-----------------------Begin: sum_bk---------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void RKF<N_eqs, RK_method, LD, step_controler>::sum_bk(){
+void Solver<N_eqs, RK_method, LD, step_controler>::sum_bk(){
     // this function stores sum_{i}^{s}b_{i}\vec{k}_i in bk and sum_{i}^{s}b_{i}^{\star}\vec{k}_i in bstark  
     for (unsigned int eq = 0; eq <N_eqs ; eq++){
         bk[eq]=0.;
@@ -30,7 +32,6 @@ void RKF<N_eqs, RK_method, LD, step_controler>::sum_bk(){
 }
 /*-----------------------End: sum_bk---------------------------------*/
 
-
-
+}
 
 #endif
