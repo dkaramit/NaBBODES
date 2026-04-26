@@ -6,8 +6,7 @@
 #include<array>
 
 
-#include"../Rosenbrock/Ros.hpp"
-#include "../Rosenbrock/Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
+#include"../Rosenbrock/Rosenbrock.hpp"
 #include "../Rosenbrock/METHOD.hpp"
 
 /*--------------------------------------------------------------------------------------------------------*/

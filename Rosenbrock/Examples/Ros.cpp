@@ -2,8 +2,7 @@
 #include<iostream>
 #include<fstream>
 #include<cmath>
-#include"Ros.hpp"
-#include "Jacobian/Jacobian.hpp"//this is treated as user input, since one may have an analytic form.
+#include"Rosenbrock.hpp"
 #include "METHOD.hpp"
 
 using std::cout;
