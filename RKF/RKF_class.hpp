@@ -7,7 +7,7 @@
 #include<optional>
 
 
-namespace RKF{
+namespace rkf{
     
 // struct for the parameters of the RKF algorithm. 
 // It is useful because we can now pass them named parameters!
@@ -39,7 +39,7 @@ inline constexpr parameters<LD> default_parameters {
 };
 
 // these will be passed as template arguments to chose step controller
-enum class  step_controlers{
+enum class  step_controllers{
     simple,
     PI
 };
@@ -53,7 +53,7 @@ N_eqs is ten number of equations to be solved
 RKF_method is the method (the DormandPrince seems to be the standard here)
 */
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI>
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller=step_controllers::PI>
 class Solver{
     public:
     // maybe it is useful to know the type of the equation
@@ -98,7 +98,7 @@ class Solver{
         void step_control_simple();//adjust stepsize until error is acceptable
         
         void step_control(){
-            if constexpr (step_controler==step_controlers::PI){
+            if constexpr (step_controller==step_controllers::PI){
                 step_control_PI();
             }else{
                 step_control_simple();

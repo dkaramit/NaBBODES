@@ -36,7 +36,7 @@ class diffeq{
 
 };
 
-using SOLVER = RKF::Solver<n_eqs,METHOD<LD>,LD, RKF::step_controlers::PI>;
+using SOLVER = rkf::Solver<n_eqs,METHOD<LD>,LD, rkf::step_controllers::PI>;
 
 int main(int argc, const char** argv) {
     Array y0={0};

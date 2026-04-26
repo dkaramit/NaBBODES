@@ -2,11 +2,11 @@
 #define RKF_calc_k
 #include "RKF_class.hpp"
 
-namespace RKF{
+namespace rkf{
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void Solver<N_eqs, RK_method, LD, step_controler>::calc_k(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
+void Solver<N_eqs, RK_method, LD, step_controller>::calc_k(){
     std::array<LD,N_eqs> yn;//thi i here to hold ynext + sum a*k
     std::array<LD,N_eqs> fyn;//this is here to get dydt in each step
 

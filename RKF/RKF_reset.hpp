@@ -8,11 +8,11 @@
 #define option_check(opt_name,class_name)  \
     if(opt.opt_name.has_value()) {params.opt_name=class_name=opt.opt_name.value();}else{class_name=params.opt_name.value();}
 
-namespace RKF{
+namespace rkf{
 
     // change the parameters of the solver
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void Solver<N_eqs, RK_method, LD, step_controler>::set_parameters(const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
+void Solver<N_eqs, RK_method, LD, step_controller>::set_parameters(const parameters<LD>& opt){
 
     // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
     parameter_check(initial_step_size)
@@ -41,8 +41,8 @@ void Solver<N_eqs, RK_method, LD, step_controler>::set_parameters(const paramete
 }
 
 // reset the solver (set clear arrays, set t=0, set y to its initial condition, etc.)
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void Solver<N_eqs, RK_method, LD, step_controler>::reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
+void Solver<N_eqs, RK_method, LD, step_controller>::reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt){
 
     set_parameters(opt);
     

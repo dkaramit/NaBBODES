@@ -3,10 +3,10 @@
 #include "RKF_class.hpp"
 
 /*-----------------------Begin: step_control---------------------------------*/
-namespace RKF{
+namespace rkf{
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler>
-void Solver<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
+void Solver<N_eqs, RK_method, LD, step_controller>::step_control_PI(){
     LD Delta=0.;
     LD _sc=0;
     LD fac=beta;
