@@ -10,7 +10,6 @@ template<class LD> constexpr LD _tiny=1e-25;
 
 #include "Ros_class.hpp"
 #include "Ros_reset.hpp"
-#include "Jacobian.hpp"
 #include "Ros_LU.hpp"
 #include "Ros_calc_k.hpp"
 #include "Ros_sums.hpp"
