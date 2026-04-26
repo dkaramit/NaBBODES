@@ -90,20 +90,7 @@ class RKF{
         public:
         
         RKF(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
-            const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {
-                // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
-                if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
-                if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}
-                if(!params.maximum_step_size.has_value()){params.maximum_step_size=default_parameters<LD>.maximum_step_size.value();}
-                if(!params.maximum_No_steps.has_value()){params.maximum_No_steps=default_parameters<LD>.maximum_No_steps.value();}
-                if(!params.absolute_tolerance.has_value()){params.absolute_tolerance=default_parameters<LD>.absolute_tolerance.value();}
-                if(!params.relative_tolerance.has_value()){params.relative_tolerance=default_parameters<LD>.relative_tolerance.value();}
-                if(!params.beta.has_value()){params.beta=default_parameters<LD>.beta.value();}
-                if(!params.fac_max.has_value()){params.fac_max=default_parameters<LD>.fac_max.value();}
-                if(!params.fac_min.has_value()){params.fac_min=default_parameters<LD>.fac_min.value();}
-
-                reset(init_cond,tmax,opt); 
-            };
+            const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {reset(init_cond,tmax,opt); };
         
         ~RKF()=default;
 
