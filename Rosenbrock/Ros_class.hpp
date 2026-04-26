@@ -8,7 +8,7 @@
 
 #include"Jacobian/Jacobian.hpp"
 
-namespace Rosenbrock{
+namespace rosenbrock{
     
 // struct for the parameters of the RKF algorithm. 
 // It is useful because we can now pass them named parameters!
@@ -40,7 +40,7 @@ inline constexpr parameters<LD> default_parameters {
 };
 
 // these will be passed as template arguments to chose step controller
-enum class  step_controlers{
+enum class  step_controllers{
     simple,
     PI
 };
@@ -52,7 +52,7 @@ is the method
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
-template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI> 
+template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller=step_controllers::PI> 
 //Note that you can use template to pass the method
 class Solver{
     public:
@@ -117,7 +117,7 @@ class Solver{
         void step_control_simple();//adjust stepsize until error is acceptable
         
         void step_control(){
-            if constexpr (step_controler==step_controlers::PI){
+            if constexpr (step_controller==step_controllers::PI){
                 step_control_PI();
             }else{
                 step_control_simple();

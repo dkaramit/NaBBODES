@@ -127,7 +127,7 @@ int main(int argc, const char** argv) {
     
     Jacobian<n_eqs,LD> Jac(schrodinger,1e-8);
     
-    Rosenbrock::Solver<n_eqs, METHOD<LD>, LD, Rosenbrock::step_controlers::simple> System(schrodinger,c0,tmax, Jac,
+    rosenbrock::Solver<n_eqs, METHOD<LD>, LD, rosenbrock::step_controllers::simple> System(schrodinger,c0,tmax, Jac,
         {
             .initial_step_size = 1e-4,
             .minimum_step_size = 1e-8,
