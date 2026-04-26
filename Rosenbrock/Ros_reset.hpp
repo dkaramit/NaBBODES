@@ -2,32 +2,37 @@
 #define Ros_constructor
 #include "Ros_class.hpp"
 
+#define parameter_check(opt_name)  \
+    if(!params.opt_name.has_value()){params.opt_name=default_parameters<LD>.opt_name.value();}
+
+#define option_check(opt_name,class_name)  \
+    if(opt.opt_name.has_value()) {params.opt_name=class_name=opt.opt_name.value();}else{class_name=params.opt_name.value();}
+
 template<unsigned int N_eqs, class RK_method, class LD> 
 void Ros<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
 
     // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
-    if(!params.initial_step_size.has_value()){params.initial_step_size=default_parameters<LD>.initial_step_size.value();}
-    if(!params.minimum_step_size.has_value()){params.minimum_step_size=default_parameters<LD>.minimum_step_size.value();}
-    if(!params.maximum_step_size.has_value()){params.maximum_step_size=default_parameters<LD>.maximum_step_size.value();}
-    if(!params.maximum_No_steps.has_value()){params.maximum_No_steps=default_parameters<LD>.maximum_No_steps.value();}
-    if(!params.absolute_tolerance.has_value()){params.absolute_tolerance=default_parameters<LD>.absolute_tolerance.value();}
-    if(!params.relative_tolerance.has_value()){params.relative_tolerance=default_parameters<LD>.relative_tolerance.value();}
-    if(!params.beta.has_value()){params.beta=default_parameters<LD>.beta.value();}
-    if(!params.fac_max.has_value()){params.fac_max=default_parameters<LD>.fac_max.value();}
-    if(!params.fac_min.has_value()){params.fac_min=default_parameters<LD>.fac_min.value();}
-
+    parameter_check(initial_step_size)
+    parameter_check(minimum_step_size)
+    parameter_check(maximum_step_size)
+    parameter_check(maximum_No_steps)
+    parameter_check(absolute_tolerance)
+    parameter_check(relative_tolerance)
+    parameter_check(beta)
+    parameter_check(fac_max)
+    parameter_check(fac_min)
 
     // change the parameters that exist in opt (inclusing an update to the corresponding parameter in params). 
     // If a parameter does not have a value. set it to the existing params.
-    if(opt.initial_step_size.has_value()) {params.initial_step_size=h_trial=opt.initial_step_size.value();}else{h_trial=params.initial_step_size.value();}
-    if(opt.minimum_step_size.has_value()) {params.minimum_step_size.value()=hmin=opt.minimum_step_size.value();}else{hmin=params.minimum_step_size.value();}
-    if(opt.maximum_step_size.has_value()) {params.maximum_step_size.value()=hmax=opt.maximum_step_size.value();}else{hmax=params.maximum_step_size.value();}
-    if(opt.maximum_No_steps.has_value())  {params.maximum_No_steps=max_N=opt.maximum_No_steps.value();}else{max_N=params.maximum_No_steps.value();}
-    if(opt.absolute_tolerance.has_value()){params.absolute_tolerance=abs_tol=opt.absolute_tolerance.value();}else{abs_tol=params.absolute_tolerance.value();}
-    if(opt.relative_tolerance.has_value()){params.relative_tolerance=rel_tol=opt.relative_tolerance.value();}else{rel_tol=params.relative_tolerance.value();}
-    if(opt.beta.has_value())              {params.beta=beta=opt.beta.value();}else{beta=params.beta.value();}
-    if(opt.fac_max.has_value())           {params.fac_max=fac_max=opt.fac_max.value();}else{fac_max=params.fac_max.value();}
-    if(opt.fac_min.has_value())           {params.fac_min=fac_min=opt.fac_min.value();}else{fac_min=params.fac_min.value();}
+    option_check(initial_step_size,h_trial)
+    option_check(minimum_step_size,hmin)
+    option_check(maximum_step_size,hmax)
+    option_check(maximum_No_steps,max_N)
+    option_check(absolute_tolerance,abs_tol)
+    option_check(relative_tolerance,rel_tol)
+    option_check(beta,beta)
+    option_check(fac_max,fac_max)
+    option_check(fac_min,fac_min)
     
     h_acc=h_trial;
 }
@@ -70,5 +75,8 @@ void Ros<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, LD 
     //initialize delta_acc
     delta_acc=1.;
 }
+
+#undef parameter_check
+#undef option_check
 
 #endif
