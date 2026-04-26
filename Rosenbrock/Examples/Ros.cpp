@@ -53,9 +53,9 @@ int main(int argc, const char** argv) {
     
     Array y0 = {8,12,4};
     diffeq dydt;
-    Jacobian<n_eqs,LD> Jac(dydt,1e-8);
     
-    SOLVER System(dydt,y0, 1e4, Jac,
+    // we use the default Jacobian. The final parameter in the constructor is the Jacobian's value for h
+    SOLVER System(dydt,y0, 1e4,
         {
         .initial_step_size = 1e-2,
         .minimum_step_size = 1e-8,
@@ -66,7 +66,8 @@ int main(int argc, const char** argv) {
         .beta = 0.95,
         .fac_max = 1.1,
         .fac_min = 0.7
-        }
+        },
+        1e-4
     );
     
     System.solve();

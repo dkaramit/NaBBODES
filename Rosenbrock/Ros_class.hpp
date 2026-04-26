@@ -109,7 +109,7 @@ class Ros{
         void step_control();//adjust stepsize until error is acceptable
     public:
 
-        // Notice that if you use the default Jacobian, you have the option to change its default value for h
+        // Notice that if you use the default Jacobian, you have the option to change its default value for h.
         Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
             :dydt(dydt),Jac(Jacobian<N_eqs,LD>(dydt,Jacobian_h)), params(opt) {reset(init_cond,tmax,opt);}
             

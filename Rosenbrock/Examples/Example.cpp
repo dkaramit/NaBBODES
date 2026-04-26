@@ -49,13 +49,10 @@ int main(int argc, const char** argv){
     Array y0 = {2};
     diffeq dydt(2);
 
-    // this is the numerical Jacobian
-    // Jacobian<n_eqs,LD> Jac(dydt,1e-10);
-    
     //we know the analytical jacobian here (type deduction is powerful :P)
     SOLVER::Jacobian_type Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.fill({0}); };
 
-    SOLVER System(dydt,y0, 1e4,
+    SOLVER System(dydt,y0, 1e4, Jac,
         {
             .initial_step_size=1e-2,
             .minimum_step_size=1e-8,
