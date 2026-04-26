@@ -8,7 +8,8 @@
 
 #include"Jacobian/Jacobian.hpp"
 
-
+namespace Rosenbrock{
+    
 // struct for the parameters of the RKF algorithm. 
 // It is useful because we can now pass them named parameters!
 template<class LD>
@@ -53,7 +54,7 @@ is the method
 // a system of differential equations in the interval [0,tmax].
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI> 
 //Note that you can use template to pass the method
-class Ros{
+class Solver{
     public:
         // maybe it is useful to know the type of the equations
         using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
@@ -126,15 +127,15 @@ class Ros{
     public:
 
         // Notice that if you use the default Jacobian, you have the option to change its default value for h.
-        Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
+        Solver(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
             :dydt(dydt),Jac(Jacobian<N_eqs,LD>(dydt,Jacobian_h)), params(opt) {reset(init_cond,tmax,opt);}
             
             
-            Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
+        Solver(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
             : dydt(dydt),Jac(Jac), params(opt) {reset(init_cond,tmax,opt);}
 
         
-        ~Ros()=default;
+        ~Solver()=default;
 
         const std::vector<LD>& get_t() const { return time; }
         auto get_t(const unsigned int& step) const { return time.at(step); }
@@ -161,6 +162,6 @@ class Ros{
         const parameters<LD>& get_parameters() const {return params;}
 };
 
-
+}
 
 #endif

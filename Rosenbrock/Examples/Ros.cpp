@@ -48,8 +48,8 @@ class diffeq{
 
 
 // choose step controller (if you don't choose, it will use PI by default)
-using SOLVER = Ros<n_eqs, METHOD<LD>, LD, step_controlers::PI>;
-// using SOLVER = Ros<n_eqs, METHOD<LD>, LD, step_controlers::simple>;
+using SOLVER = Rosenbrock::Solver<n_eqs, METHOD<LD>, LD, Rosenbrock::step_controlers::PI>;
+// using SOLVER = Rosenbrock::Solver<n_eqs, METHOD<LD>, LD, Rosenbrock::step_controlers::simple>;
 
 int main(int argc, const char** argv) {
     

@@ -2,12 +2,15 @@
 #define Ros_step_control_PI
 #include "Ros_class.hpp"
 
+
+namespace Rosenbrock{
+
 // Keep in mind that here delta_acc=Deltas.back(), while 
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
-void Ros<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
+void Solver<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
@@ -51,5 +54,7 @@ void Ros<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
     if (h_trial<hmin ){ h_trial=hmin; h_stop=true;}
 }
 /*-----------------------End: step_control---------------------------------*/
+
+}
 
 #endif

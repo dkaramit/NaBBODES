@@ -8,8 +8,10 @@
 #define option_check(opt_name,class_name)  \
     if(opt.opt_name.has_value()) {params.opt_name=class_name=opt.opt_name.value();}else{class_name=params.opt_name.value();}
 
+namespace Rosenbrock{
+
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
-void Ros<N_eqs, RK_method, LD, step_controler>::set_parameters(const parameters<LD>& opt){
+void Solver<N_eqs, RK_method, LD, step_controler>::set_parameters(const parameters<LD>& opt){
 
     // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
     parameter_check(initial_step_size)
@@ -38,7 +40,7 @@ void Ros<N_eqs, RK_method, LD, step_controler>::set_parameters(const parameters<
 }
 
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
-void Ros<N_eqs, RK_method, LD, step_controler>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
+void Solver<N_eqs, RK_method, LD, step_controler>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
     
     this->tmax=tmax;
     set_parameters(opt);
@@ -74,6 +76,8 @@ void Ros<N_eqs, RK_method, LD, step_controler>::reset(const std::array<LD,N_eqs>
     this->tn=0;
     //initialize delta_acc
     delta_acc=1.;
+}
+
 }
 
 #undef parameter_check
