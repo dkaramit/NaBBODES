@@ -53,9 +53,9 @@ int main(int argc, const char** argv){
     // Jacobian<n_eqs,LD> Jac(dydt,1e-10);
     
     //we know the analytical jacobian here (type deduction is powerful :P)
-    SOLVER::Jacobian Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.fill({0}); };
+    SOLVER::Jacobian_type Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.fill({0}); };
 
-    SOLVER System(dydt,y0, 1e4, Jac,
+    SOLVER System(dydt,y0, 1e4,
         {
             .initial_step_size=1e-2,
             .minimum_step_size=1e-8,
@@ -79,8 +79,13 @@ int main(int argc, const char** argv){
         step++;
     }
 
+
+    std::cout<<System.get_parameters().initial_step_size.value()<<std::endl;
+    std::cout<<System.get_parameters().minimum_step_size.value()<<std::endl;
+    std::cout<<System.get_parameters().maximum_No_steps.value()<<std::endl;
+
     //this is how you can change parameters
-    System.reset(y0,1e4,{.initial_step_size=20,.absolute_tolerance=1e-2,.relative_tolerance=1e-2});
+    System.reset(y0,1e4,{.initial_step_size=20,.maximum_No_steps=500,.absolute_tolerance=1e-2,.relative_tolerance=1e-2});
     System.solve();
     
     step=0;
@@ -94,6 +99,7 @@ int main(int argc, const char** argv){
 
     std::cout<<System.get_parameters().initial_step_size.value()<<std::endl;
     std::cout<<System.get_parameters().minimum_step_size.value()<<std::endl;
+    std::cout<<System.get_parameters().maximum_No_steps.value()<<std::endl;
     
 
     

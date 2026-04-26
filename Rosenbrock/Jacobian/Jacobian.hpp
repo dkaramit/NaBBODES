@@ -2,8 +2,8 @@
 #define Jac_head
 #include<functional>
 #include<array>
-// This is an example Jacobian class.
 
+// This is the default Jacobian class.
 
 template<int N_eqs, class LD>
 class Jacobian{
