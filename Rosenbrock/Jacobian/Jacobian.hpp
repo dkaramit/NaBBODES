@@ -15,9 +15,11 @@ class Jacobian{
         
         public:
         
-        Jacobian(const diffeq& dydt, LD h=1e-10):  dydt(dydt), h(h) {};
+        Jacobian(const diffeq& dydt, const LD& h=1e-8):  dydt(dydt), h(h) {};
         ~Jacobian()=default;
         
+        void update_step_size(const LD& h){this->h=h;}
+
         void operator()(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)const{
             
             std::array<LD, N_eqs> y0,y1,dydt0,dydt1;

@@ -52,7 +52,7 @@ class Ros{
         // maybe it is useful to know the type of the equations
         using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
         using Jacobian_type=std::function<void(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)>;
-    
+
     private:
         diffeq dydt;
         Jacobian_type Jac;
@@ -108,7 +108,8 @@ class Ros{
         
         void step_control();//adjust stepsize until error is acceptable
     public:
-        
+
+        // Notice that if you use the default Jacobian, you have the option to change its default value for h
         Ros(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
             :dydt(dydt),Jac(Jacobian<N_eqs,LD>(dydt,Jacobian_h)), params(opt) {reset(init_cond,tmax,opt);}
             
