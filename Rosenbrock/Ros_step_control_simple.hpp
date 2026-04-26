@@ -1,10 +1,10 @@
-#ifndef Ros_step_control
-#define Ros_step_control
+#ifndef Ros_step_control_simple
+#define Ros_step_control_simple
 #include "Ros_class.hpp"
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD> 
-void Ros<N_eqs, RK_method, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::step_control_simple(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;

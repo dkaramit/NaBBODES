@@ -8,8 +8,8 @@
 #define option_check(opt_name,class_name)  \
     if(opt.opt_name.has_value()) {params.opt_name=class_name=opt.opt_name.value();}else{class_name=params.opt_name.value();}
 
-template<unsigned int N_eqs, class RK_method, class LD> 
-void Ros<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::set_parameters(const parameters<LD>& opt){
 
     // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
     parameter_check(initial_step_size)
@@ -37,8 +37,8 @@ void Ros<N_eqs, RK_method, LD>::set_parameters(const parameters<LD>& opt){
     h_acc=h_trial;
 }
 
-template<unsigned int N_eqs, class RK_method, class LD> 
-void Ros<N_eqs, RK_method, LD>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
     
     this->tmax=tmax;
     set_parameters(opt);

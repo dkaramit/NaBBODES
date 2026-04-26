@@ -6,8 +6,8 @@
 
 
 /*-----------------------Begin: calc_Jk---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD> 
-void Ros<N_eqs, RK_method, LD>::calc_Jk(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::calc_Jk(){
     /*
     Calculate product of matrix with vector. 
     We use it to get J*gk.
@@ -20,9 +20,8 @@ void Ros<N_eqs, RK_method, LD>::calc_Jk(){
 /*-----------------------End: calc_Jk---------------------------------*/
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD> 
-
-void Ros<N_eqs, RK_method, LD>::calc_k(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::calc_k(){
     // since LU decomposition is not updated as you try to find suitable step, put it ouside the step control loop (should be faster)!
     // LU();
     // calculate k for the other stages

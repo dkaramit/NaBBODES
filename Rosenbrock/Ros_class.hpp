@@ -38,6 +38,12 @@ inline constexpr parameters<LD> default_parameters {
     .fac_min=0.3
 };
 
+// these will be passed as template arguments to chose step controller
+enum class  step_controlers{
+    simple,
+    PI
+};
+
 /*
 N_eqs is ten number of equations to be solved RK_method 
 is the method
@@ -45,7 +51,7 @@ is the method
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
-template<unsigned int N_eqs, class RK_method, class LD> 
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI> 
 //Note that you can use template to pass the method
 class Ros{
     public:
@@ -106,7 +112,17 @@ class Ros{
         void sum_gk(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         
-        void step_control();//adjust stepsize until error is acceptable
+        void step_control_PI();//adjust stepsize until error is acceptable
+        void step_control_simple();//adjust stepsize until error is acceptable
+        
+        void step_control(){
+            if constexpr (step_controler==step_controlers::PI){
+                step_control_PI();
+            }else{
+                step_control_simple();
+            }
+        };//adjust stepsize until error is acceptable
+
     public:
 
         // Notice that if you use the default Jacobian, you have the option to change its default value for h.

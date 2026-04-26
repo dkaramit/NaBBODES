@@ -35,6 +35,12 @@ inline constexpr parameters<LD> default_parameters {
     .fac_min=0.3
 };
 
+// these will be passed as template arguments to chose step controller
+enum class  step_controlers{
+    simple,
+    PI
+};
+
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
 
@@ -43,10 +49,6 @@ diffeq is a class of the system of  equations to be solved
 N_eqs is ten number of equations to be solved
 RKF_method is the method (the DormandPrince seems to be the standard here)
 */
-enum class  step_controlers{
-    simple,
-    PI
-};
 
 template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler=step_controlers::PI>
 class RKF{

@@ -1,13 +1,13 @@
-#ifndef Ros_step_control
-#define Ros_step_control
+#ifndef Ros_step_control_PI
+#define Ros_step_control_PI
 #include "Ros_class.hpp"
 
 // Keep in mind that here delta_acc=Deltas.back(), while 
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD> 
-void Ros<N_eqs, RK_method, LD>::step_control(){
+template<unsigned int N_eqs, class RK_method, class LD, step_controlers step_controler> 
+void Ros<N_eqs, RK_method, LD, step_controler>::step_control_PI(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
@@ -16,6 +16,7 @@ void Ros<N_eqs, RK_method, LD>::step_control(){
     //PI step size cotrol from "Solving Ordinary Differential Equations II"
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
+
     for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;

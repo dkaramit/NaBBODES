@@ -48,7 +48,9 @@ class diffeq{
 
 
 
-using SOLVER = Ros<n_eqs, METHOD<LD>, LD>;
+// choose step controller (if you don't choose, it will use PI by default)
+using SOLVER = Ros<n_eqs, METHOD<LD>, LD, step_controlers::PI>;
+// using SOLVER = Ros<n_eqs, METHOD<LD>, LD, step_controlers::simple>;
 
 int main(int argc, const char** argv) {
     
