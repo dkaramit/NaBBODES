@@ -398,9 +398,11 @@ The variables should be given as `constexpr` because they are not meant to chang
 The different variables correspond to how RKF takes the iterative steps:
 
 Assuming that we have a system of differential equations
+
 $$
 \dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y},t) \;,
 $$
+
 with  given $\vec{y}(0)$ (assume that integration starts at $t=0$). 
 
 RKF follows the iteration
