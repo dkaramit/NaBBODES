@@ -403,7 +403,7 @@ $$
 \dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y},t) \;,
 $$
 
-with  given $\vec{y}(0)$ (assume that integration starts at $t=0$). 
+with  given $\vec{y} (0)$ (assume that integration starts at $t=0$). 
 
 RKF follows the iteration
 
