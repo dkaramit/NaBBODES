@@ -454,7 +454,7 @@ $$
 \dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y},t) \;,
 $$
 
-with given $\vec{y}(0)$ (assume that integration starts at $t=0$). 
+with given $\vec{y}\left(0\right)$ (assume that integration starts at $t=0$). 
 
 
 After a bit ao algebra, the Rosenbrock method solves differential equations using 
