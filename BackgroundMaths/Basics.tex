@@ -1,0 +1,235 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+\usepackage{slashed}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+
+\usepackage{cite}
+
+
+\usepackage[labelformat=simple]{subcaption}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\captionsetup[figure]{format=plain, font={sl}}
+
+\usepackage{multirow}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multicol}
+\usepackage{authblk}
+
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+
+
+\include{macros}
+
+
+
+
+\author[ ]{Dimitrios Karamitros}
+%\affil[ ]{\em Department of Physics and Astronomy, University of Padova\\ INFN Padova}
+
+\affil[ ]{}
+\affil[ ]{\textit{E-mail: } \href{mailto:dkaramit@yahoo.com}{\color{blue}{dkaramit@yahoo.com}}}
+
+
+\title{Basics of Runge Kutta methods used in {\tt NaBBODES}}
+\begin{document}
+	
+	\maketitle
+	
+	\section{RKF}\label{sec:RKF}
+	\setcounter{equation}{0}
+	%
+	The explicit Runge–Kutta (RK) method can be made, efficiently, adaptive. This is done
+	by the so-called embedded methods, which basically involves the calculation of each step
+	by two different solvers, and adapting the step-size until their difference is below some acceptable
+	value. The procedure is similar to the classical RM methods (one of order $p$ and the other $p+1$).
+	
+	Lets assume that we have a differential equation
+	\begin{equation}
+		\dfrac{d\vec{y}}{dt}=f(\vec{y},t) \;,
+	\end{equation}
+	
+	with  given $\vec{y}\left(0\right)$ (for initial $t=0$). We follow the iteration\footnote{
+	
+		Butcher tableau in this case is written as	
+	
+		\begin{eqnarray*}
+		\begin{array}{c|cccccc}
+			0      & 0      &   0   &      0& \dots & 0& 0\\
+			c_2    & a_{21} &   0   &   0   & \dots & 0& 0\\
+			c_3    & a_{31} & a_{32}&      0& \dots & 0& 0\\
+			\vdots & \vdots & \vdots& \vdots&\ddots &\ddots& \vdots\\
+			c_s    & a_{s1} & a_{s2}& a_{s3}& \dots & a_{s s-1}& 0 \\
+			\hline
+			p      & b_1    & b_2  & b_3 & \dots & b_{s-1} & b_s \\
+			p+1      & b_1^{\star}    & b_2^{\star}  & b_3^{\star} & \dots & b_{s-1}^{\star} & b_s^{\star}
+		\end{array}
+		\end{eqnarray*}
+	
+	}
+	
+	$$
+	\vec{y}_{n+1}=\vec{y}_{n}+ h\sum_{i=1}^{s} b_i \vec{k}_i \\
+	\vec{y}^{\star}_{n+1}=\vec{y}_{n}+ h\sum_{i=1}^{s} b_i^{\star} \vec{k}_i \;,
+	$$
+	with
+	$$
+	\vec{k}_{i}=\vec f\Bigg(\vec{y}_{n}+h \Big(\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j} \Big), t_{n}+h c_{i}   \Bigg)\;.
+	$$
+	
+	Having the two estimates for the next step, we can estimate the error 
+	
+	$$
+	\epsilon \equiv \left|\vec{y}_{n+1}- \vec{y}^{\star}_{n+1} \right|
+	$$
+	
+	Then, if $\epsilon \geq \epsilon_0$ ($\epsilon_0$ is some desirable error), we adjust the stepsize as\footnote{ Note that $\beta \approx 1$ is an input parameter used to adjust the aggressiveness of the changes in h.}
+	
+	$$ 
+	h \to \beta h \left (h\dfrac{\epsilon_0}{\epsilon} \right)^{1/p} \;,
+	$$
+	
+	and calculate again $\vec{y}_{n+1}$ and $\vec{y}_{n+1}^{\star}$ until  $\epsilon < \epsilon_0$.
+	When $\epsilon < \epsilon_0$, we accept $y_{n+1}$ ($y_{n+1}^{\star}$ is just for step size control!),
+	we increase the step size a bit
+	
+	$$ 
+	h \to \beta h \left (\dfrac{\epsilon_0}{\epsilon} \right)^{1/(p+1)} \;,
+	$$
+	
+	and move to the next step.
+	
+%	
+	A better step update would be to use 
+	$$err = \sqrt{\frac{1}{n}\sum_{i=1}^n\left(\frac{y_{n+1 ,i}-y^{\star}_{n+1 ,i}}{sc}\right)^{2}}$$
+	with
+	$$sc_i = Atol + \max\left(|y_{n+1, i}|,|y^{\star}_{n+1 ,i}|\right)\; Rtol.$$
+	where Atol, and Rtol are user inputs. Then you change
+	$$h \to \beta \; h \;  \left(\frac{1}{err}\right)^{\frac{1}{p+1}}.$$
+	You can also restrict the increase by
+	$$h \to \beta \; h \;  min\left[\left(\frac{1}{err}\right)^{\frac{1}{p+1}}, f_{max}\right],$$
+	with $f_{max}$ input that restricts how much we are allowed to increase $h$.	
+	%
+	This is how the simple step controller works. The ``PI'' is a bit more advanced, but the idea (and parameters) is the same.
+
+
+
+
+	\section{Rosenbrock}\label{sec:Rosenbrock}
+	\setcounter{equation}{0}
+
+	Assume that we have a system of differential equations
+	
+	$$
+	\dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y},t) \;,
+	$$
+	
+	with  given $\vec{y}\left(0\right)$ (for initial $t=0$). In quite involveed methods, in order to simplify 
+	the notation, we take $t$ as a component of $\vec{y}$. So if we have $N$ differential equations with
+	explicit t-dependence, we now have $N+1$, for which $y_{N+1}=t$ with $\dfrac{dy_{N+1}}{dt}=1$ and $t_0 =0$.
+	Doing so, we can follow the RK algorithms, and  $t_{n+1}=t_{n}+h$, $\sum_i b_i =1$, $c_i \sum_i a_{ji}$, 
+	we find that $k_{N+1,i}=h$. 
+	
+	
+	So it suffices to study the solution of
+	
+	$$
+	\dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y}) \;,
+	$$
+	
+	i.e. remove the explicit $t$ dependence. We follow then the standard iteration:
+	
+	$$
+	\vec{y}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i \vec{k}_i \\
+	\vec{y}^{\star}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i^{\star} \vec{k}_i \;.
+	$$
+	
+	The Rosenbrock method says that the $\vec{k}$'s are given by
+	
+	$$
+	\left(\hat I - \gamma_i h \hat J \right)\cdot \vec{k}_i =  
+	h \vec{f}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j} \Big)+
+	h \hat J \cdot \sum_{j=1}^{i-1}\gamma_{ij}\vec{k}_{j},
+	$$
+	where the  $\alpha, b, c$, and $\gamma$ parameters define the method, $\hat I$ is the $(N+1,N+1)$ unit matrix,
+	and $\hat J =\dfrac{\partial \vec{f}}{\partial \vec{y}}\Bigg|_{\vec{y}=\vec{y}_n} $ is the Jacobian of the system.
+	Particularly interested methods include those with $\gamma_i=\gamma \; \forall i$, since we can just calculate the LU-factorisation 
+	of $\left(\hat I - \gamma h \hat J \right)$ once in every step. This is the case in which I'm focusing here.
+	
+	
+	Introducing the indices, the left-hand-side of the equation for the $\vec{k}$s becomes
+	
+	$$
+	\left(\hat I - \gamma h \hat J \right)\cdot \vec{k}_i =  
+	\sum_{\beta=1}^{N+1}
+	\left(\delta_{\alpha \beta} - \gamma h \dfrac{\partial f_{\alpha}}{\partial y_{\beta}}\right)k_{\beta,i}=
+	\sum_{\beta=1}^{N}
+	\left(\delta_{\alpha \beta} - \gamma h \dfrac{\partial f_{\alpha}}{\partial y_{\beta}}\right)k_{\beta,i}+
+	\left(\delta_{\alpha N+1} - \gamma h^2 \dfrac{\partial f_{\alpha}}{\partial t}\right)\;.
+	$$
+	The right-hand-side is
+	
+	\begin{eqnarray}
+		%
+		&h& \vec{f}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j} \Big)+
+		h \hat J \cdot \sum_{j=1}^{i-1}\gamma_{ij}\vec{k}_{j}=
+		\\
+		&h& f_{\alpha}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
+		h \sum_{\beta=1}^{N+1}  \dfrac{\partial f_{\alpha}}{\partial y_{\beta}} \sum_{j=1}^{i-1}\gamma_{ij} k_{\beta,j}=\nonumber\\ 
+		&h& f_{\alpha}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j}, t_n + c_{i}h\Big)+
+		h \sum_{\beta=1}^{N}  \dfrac{\partial f_{\alpha}}{\partial y_{\beta}} \sum_{j=1}^{i-1}\gamma_{ij} k_{\beta,j}+
+		h^2\dfrac{\partial f_{\alpha}}{\partial t} \sum_{j=1}^{i-1}\gamma_{ij}\;.  \nonumber
+		%
+	\end{eqnarray}
+	These two give us 
+	
+	\hspace*{-2.5cm}
+	\begin{eqnarray}
+	&&\sum_{\beta=1}^{N}
+	\left(\delta_{\alpha \beta} - \gamma h^2 \dfrac{\partial f_{\alpha}}{\partial y_{\beta}}\right)k_{\beta,i}+
+	\left(\delta_{\alpha N+1} - \gamma h \dfrac{\partial f_{\alpha}}{\partial t}\right)=
+	\\ \nonumber
+	%	
+	&&h f_{\alpha}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
+	h \sum_{\beta=1}^{N}  \dfrac{\partial f_{\alpha}}{\partial y_{\beta}} \sum_{j=1}^{i-1}\gamma_{ij} k_{\beta,j}+
+	h^2\dfrac{\partial f_{\alpha}}{\partial t} \sum_{j=1}^{i-1}\gamma_{ij} \Rightarrow \\ \nonumber
+	%
+	&&\sum_{\beta=1}^{N}
+	\left(\delta_{\alpha \beta} - \gamma h \dfrac{\partial f_{\alpha}}{\partial y_{\beta}}\right)k_{\beta,i}=
+	h f_{\alpha}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
+	h^2\left(\gamma + \sum_{j=1}^{i-1}\gamma_{ij}\right) \dfrac{\partial f_{\alpha}}{\partial t}+
+	h \sum_{\beta=1}^{N}  \dfrac{\partial f_{\alpha}}{\partial y_{\beta}} \sum_{j=1}^{i-1}\gamma_{ij} k_{\beta,j}
+	\Rightarrow \\ \nonumber
+	&&\left(\hat I - \gamma h \hat J\right)\cdot \vec{k}_{i}=
+	h \vec{f}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
+	h^2\left(\gamma + \sum_{j=1}^{i-1}\gamma_{ij}\right)\dfrac{\partial \vec{f} }{\partial t}+
+	h \hat J \cdot \sum_{j=1}^{i-1}\gamma_{ij} \vec{k}_{j}\; ,
+	\end{eqnarray}
+	
+	where we have used that $\delta_{a,N+1}=0$, since we know that $k_{N+1,i}=h$. 
+	
+	To recap, the Rosenbrock method solves differential equations using 
+	
+	\begin{eqnarray}
+	\vec{y}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i \vec{k}_i \\
+	\vec{y}^{\star}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i^{\star} \vec{k}_i  
+	\end{eqnarray}
+	
+	\begin{eqnarray}
+	\left(\hat I - \gamma h \hat J\right)\cdot \vec{k}_{i}=
+	h \vec{f}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
+	h^2 \left(\gamma + \sum_{j=1}^{i-1}\gamma_{ij}\right)\dfrac{\partial \vec{f} }{\partial t}+
+	h \hat J \cdot \sum_{j=1}^{i-1}\gamma_{ij} \vec{k}_{j}\; ,
+	\end{eqnarray}
+
+
+\end{document}
