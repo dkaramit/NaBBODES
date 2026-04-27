@@ -447,9 +447,11 @@ The different variables correspond to how Rosenbrock takes the iterative steps:
 
 
 Assuming that we have a system of differential equations
+
 $$
 \dfrac{d\vec{y}}{dt}=\vec{f}(\vec{y},t) \;,
 $$
+
 with given $\vec{y}(0)$ (assume that integration starts at $t=0$). 
 
 
