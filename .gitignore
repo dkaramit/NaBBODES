@@ -2,3 +2,9 @@
 *.vscode
 *.run
 *.DS_Store
+*.out
+*.aux
+*.log
+*.blg
+*.bbl
+*synctex.gz
