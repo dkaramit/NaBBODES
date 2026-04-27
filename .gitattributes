@@ -1,4 +1,6 @@
 *.ipynb linguist-detectable=false
+*.tex linguist-language=false
+*makefile linguist-language=false
 *.cpp linguist-language=C++
 *.hpp linguist-language=C++
-*.tex linguist-language=false
+
