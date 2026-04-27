@@ -406,7 +406,9 @@ with  given $\vec{y}(0)$ (assume that integration starts at $t=0$).
 RKF follows the iteration
 
 $$
-\vec{y}_{n+1}=\vec{y}_{n}+ h\sum_{i=1}^{s} b_i \vec{k}_i \\
+\vec{y}_{n+1}=\vec{y}_{n}+ h\sum_{i=1}^{s} b_i \vec{k}_i
+$$
+$$
 \vec{y}^{\star}_{n+1}=\vec{y}_{n}+ h\sum_{i=1}^{s} b_i^{\star} \vec{k}_i \;,
 $$
 with
@@ -454,8 +456,13 @@ with given $\vec{y}(0)$ (assume that integration starts at $t=0$).
 After a bit ao algebra, the Rosenbrock method solves differential equations using 
 
 $$
-\vec{y}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i \vec{k}_i \\
-\vec{y}^{\star}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i^{\star} \vec{k}_i  \\
+\vec{y}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i \vec{k}_i
+$$
+$$
+\vec{y}^{\star}_{n+1}=\vec{y}_{n}+ \sum_{i=1}^{s} b_i^{\star} \vec{k}_i 
+$$
+
+$$
 \left(\hat I - \gamma h \hat J\right)\cdot \vec{k}_{i}=
 h \vec{f}\Big(\vec{y}_n+\sum_{j=1}^{i-1}a_{ij}\vec{k}_{j},t_n + c_{i}h \Big)+
 h^2 \left(\gamma + \sum_{j=1}^{i-1}\gamma_{ij}\right)\dfrac{\partial \vec{f} }{\partial t}+
