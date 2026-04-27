@@ -1,6 +1,6 @@
-# NaBBODES Documentation (Usage + Public API)
+# NaBBODES
 
-This document is a practical user guide for the current solver API.
+This document is a practical user guide.
 
 ---
 
