@@ -22,35 +22,33 @@ using std::endl;
 #endif
 
 
-// this is how the diffeq should look like
-#define n_eqs 1 //number of equations
-using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
-//-------------------------------------------------------------------------//
-
-
 // you can use a function, but with a class you can also hold data that can be useful.
 class diffeq{
     public:
     LD c;
     diffeq(const LD& c):c(c){};
 
-    void operator()(Array &lhs, const Array &y  , const LD& t)const{
+    void operator()(std::vector<LD> &lhs, const std::vector<LD> &y  , const LD& t)const{
         lhs[0]=t*c;
     }
 
 };
 
 // choose step controller (if you don't choose, it will use PI by default)
-using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::PI>;
-// using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::simple>;
+// using SOLVER = rosenbrock::Solver<LD, rosenbrock::METHOD<LD>, rosenbrock::step_controllers::PI>;
+// using SOLVER = rosenbrock::Solver<LD, rosenbrock::METHOD<LD>, rosenbrock::step_controllers::simple>;
+using SOLVER = rosenbrock::Solver<LD>;
 
 int main(int argc, const char** argv){
     
-    Array y0 = {2};
+    std::vector<LD> y0 = {2};
     diffeq dydt(2);
 
+    unsigned int n_eqs=y0.size();
+
+
     //we know the analytical jacobian here (type deduction is powerful :P)
-    SOLVER::Jacobian_type Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.fill({0}); };
+    SOLVER::Jacobian_type Jac=[&dydt](auto& J, auto& dfdt,auto& y, auto& t){ dfdt[0]=dydt.c; J.assign(1,std::vector<LD>(1,0)); };
 
     SOLVER System(dydt,y0, 1e4, Jac,
         {

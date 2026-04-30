@@ -7,10 +7,10 @@ namespace rosenbrock{
 
 // This is the default Jacobian class.
 
-template<int N_eqs, class LD>
+template<class LD>
 class Jacobian{
     private:
-        using diffeq = std::function<void(std::array<LD, N_eqs> &lhs, const std::array<LD, N_eqs> &y, const LD& t)>;
+        using diffeq = std::function<void(std::vector<LD> &lhs, const std::vector<LD> &y, const LD& t)>;
         
         LD h;
         diffeq dydt;
@@ -22,9 +22,12 @@ class Jacobian{
         
         void update_step_size(const LD& h){this->h=h;}
 
-        void operator()(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)const{
+        void operator()(std::vector<std::vector<LD>> &J, std::vector<LD> &dfdt, const std::vector<LD> &y, const LD& t)const{
             
-            std::array<LD, N_eqs> y0,y1,dydt0,dydt1;
+            unsigned int N_eqs=y.size();
+
+
+            std::vector<LD> y0(N_eqs),y1(N_eqs),dydt0(N_eqs),dydt1(N_eqs);
 
             // you can use something like this to scale the stepsize according to the scale of t
             LD a=h+h*t;

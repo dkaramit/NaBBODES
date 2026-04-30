@@ -13,13 +13,11 @@ rootDir="../"
 IncludeDir=$(rootDir)
 IncludeHPP = $(shell find $(rootDir) -type f -name '*.hpp')
 
-# path to Jacobian.hpp
-JACPATH="$(rootDir)/Jacobian"
 
 Path=$(CURDIR)
 CC=g++
 
-FLG=  -std=c++20  -I "$(rootDir)" -I "$(JACPATH)" -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 -Wpedantic
+FLG=  -std=c++20  -I "$(rootDir)"  -lm  -DMETHOD=$(METHOD) -DLONG=$(LONG)  -O3 -Wpedantic
 
 all: Ros.run Robertson.run Example.run
 

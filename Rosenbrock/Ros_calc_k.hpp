@@ -6,8 +6,8 @@
 namespace rosenbrock{
 
 /*-----------------------Begin: calc_Jk---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::calc_Jk(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::calc_Jk(){
     /*
     Calculate product of matrix with vector. 
     We use it to get J*gk.
@@ -20,16 +20,16 @@ void Solver<N_eqs, RK_method, LD, step_controller>::calc_Jk(){
 /*-----------------------End: calc_Jk---------------------------------*/
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::calc_k(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::calc_k(){
     // since LU decomposition is not updated as you try to find suitable step, put it ouside the step control loop (should be faster)!
     // LU();
     // calculate k for the other stages
-    std::array<LD, N_eqs> yn;
+    std::vector<LD> yn(N_eqs,0);
     // rhs is the rhs side of the equation to be solved by LU.  
-    std::array<LD, N_eqs> rhs;
+    std::vector<LD> rhs(N_eqs,0);
     // to make it more clear, we are going to separate the rhs in three different parts
-    std::array<LD, N_eqs> rhs1,rhs2;
+    std::vector<LD> rhs1(N_eqs,0),rhs2(N_eqs,0);
 
     for(unsigned int stage = 0; stage < RK_method::s; stage++){
         sum_ak(stage);
@@ -51,7 +51,7 @@ void Solver<N_eqs, RK_method, LD, step_controller>::calc_k(){
         // Solving  L*U*P*lu_sol=rhs is equivalent. Using the inverse, should be a bit faster. 
         // Solve_LU<N_eqs>(L,U,P,rhs, lu_sol);
         
-        dot<N_eqs,LD>(_inv,rhs, lu_sol);
+        dot<LD>(_inv,rhs, lu_sol);
         for(unsigned int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
     }
 }

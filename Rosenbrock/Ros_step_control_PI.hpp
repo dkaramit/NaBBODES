@@ -9,16 +9,16 @@ namespace rosenbrock{
 // delta_rej is the previous Delta (not the accepted one).
 
 /*-----------------------Begin: step_control---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::step_control_PI(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::step_control_PI(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
     // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
-    std::array<LD, N_eqs> regulated_delta;
+    std::vector<LD> regulated_delta(N_eqs);
     //PI step size cotrol from "Solving Ordinary Differential Equations II"
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
-    dot<N_eqs,LD>( _inv, abs_delta , regulated_delta);
+    dot<LD>( _inv, abs_delta , regulated_delta);
 
     for (unsigned int eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));

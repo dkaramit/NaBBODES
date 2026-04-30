@@ -10,8 +10,8 @@
 
 namespace rosenbrock{
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::set_parameters(const parameters<LD>& opt){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::set_parameters(const parameters<LD>& opt){
 
     // if some parameter in opt does not have a value, use the corresponding parameter from default.default_parameters 
     parameter_check(initial_step_size)
@@ -39,9 +39,17 @@ void Solver<N_eqs, RK_method, LD, step_controller>::set_parameters(const paramet
     h_acc=h_trial;
 }
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_cond, LD tmax, const parameters<LD>& opt){
     
+
+    if(N_eqs!=init_cond.size()){
+        throw std::logic_error(
+                "Size mismatch: number of equation used = " + std::to_string(N_eqs) +
+                ", the new initial conditions have size = " + std::to_string(init_cond.size())
+            );
+    }
+
     this->tmax=tmax;
     set_parameters(opt);
     

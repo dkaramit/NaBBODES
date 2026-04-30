@@ -21,13 +21,7 @@ using std::endl;
 #define METHOD ROS34PW2
 #endif
 
-// this is how the diffeq should look like
-#define n_eqs 3 //number of equations
-using Array =  std::array<LD, n_eqs>;//define an array type of length n_eqs
-//-------------------------------------------------------------------------//
-
 using std::pow;
-
 
 // you can use a function, but with a class you can also hold data that can be useful.
 class diffeq{
@@ -35,7 +29,7 @@ class diffeq{
     diffeq(){};
     ~diffeq(){};
 
-    void operator()(Array &lhs, const Array &y  , const LD& t){
+    void operator()(std::vector<LD> &lhs, const std::vector<LD> &y  , const LD& t){
         lhs[0]=-2*y[0]*pow(t,2) ;
         lhs[1]=2*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
         lhs[2]=4*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
@@ -46,14 +40,16 @@ class diffeq{
 
 
 // choose step controller (if you don't choose, it will use PI by default)
-using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::PI>;
-// using SOLVER = rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::simple>;
+using SOLVER = rosenbrock::Solver<LD, rosenbrock::METHOD<LD>, rosenbrock::step_controllers::PI>;
+// using SOLVER = rosenbrock::Solver<LD, rosenbrock::METHOD<LD>, rosenbrock::step_controllers::simple>;
 
 int main(int argc, const char** argv) {
     
-    Array y0 = {8,12,4};
+    std::vector<LD> y0 = {8,12,4};
     diffeq dydt;
     
+    unsigned int n_eqs=y0.size();
+
     // we use the default Jacobian. The final parameter in the constructor is the Jacobian's value for h
     SOLVER System(dydt,y0, 1e4,
         {

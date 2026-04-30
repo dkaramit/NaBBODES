@@ -5,11 +5,10 @@
 namespace rosenbrock{
 
 /*--------Calculate the LU decomposition of (1-h*gamma*J) for this step--------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::LU(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::LU(){
     //initialize coefficient to 0
-    std::array<std::array<LD, N_eqs>, N_eqs> coeff;
-    coeff.fill({});
+    std::vector<std::vector<LD>> coeff(N_eqs,std::vector<LD>(N_eqs,0));
    
     // Jac(J,dfdt,yprev,tn);
 
@@ -20,8 +19,8 @@ void Solver<N_eqs, RK_method, LD, step_controller>::LU(){
             coeff[i][j]+=-h_trial*RK_method::gamma*J[i][j];
         }
     }
-    LUP<N_eqs,LD>(coeff,L,U,P,_tiny<LD>); //LU decomposition of (1-h*gamma*J)
-    Inverse_LU<N_eqs,LD>(L,U,P,_inv); // the inverse of (1-h*gamma*J)
+    LUP<LD>(coeff,L,U,P,_tiny<LD>); //LU decomposition of (1-h*gamma*J)
+    Inverse_LU<LD>(L,U,P,_inv); // the inverse of (1-h*gamma*J)
 }
 /*---------------------------------------------------------------------------------------------*/
 

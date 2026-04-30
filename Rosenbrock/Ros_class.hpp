@@ -52,13 +52,13 @@ is the method
 
 //This is a general implementation of explicit embedded RK solver of
 // a system of differential equations in the interval [0,tmax].
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller=step_controllers::PI> 
+template<class LD, class RK_method=RODAS5<LD>, step_controllers step_controller=step_controllers::PI> 
 //Note that you can use template to pass the method
 class Solver{
     public:
         // maybe it is useful to know the type of the equations
-        using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
-        using Jacobian_type=std::function<void(std::array<std::array<LD, N_eqs>, N_eqs> &J, std::array<LD, N_eqs> &dfdt, const std::array<LD, N_eqs> &y, const LD& t)>;
+        using diffeq=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
+        using Jacobian_type=std::function<void(std::vector<std::vector<LD>> &J, std::vector<LD> &dfdt, const std::vector<LD> &y, const LD& t)>;
 
     private:
         diffeq dydt;
@@ -69,48 +69,48 @@ class Solver{
 
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
         unsigned int max_N;
+        unsigned int N_eqs;
         LD h_old,h_trial,h_acc,delta_acc,delta_rej;//these will be initialized at the beginning of next_step
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
         LD tmax, tn;
-        std::array<LD, N_eqs> yprev;// previously accepted step. maybe the name is not good.
-    
-    
-        std::vector<LD> time;
-        std::array<std::vector<LD>, N_eqs> solution;
-        std::array<std::vector<LD>, N_eqs> error;
         
         
         //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
-        std::array<std::array<LD,RK_method::s>,N_eqs> k;
-        std::array<LD,N_eqs> ak,gk,Jk, bk,bstark;
-        // need this to store the sum over \gammas (see the contructor)
-        std::array<LD,RK_method::s> sum_gamma;
+        std::vector<std::vector<LD>> k;
+        std::vector<LD> ak,gk,Jk, bk,bstark;
         // abs_delta=abs(ynext-ynext_star)
-        std::array<LD, N_eqs> abs_delta;
-        
-        std::array<LD, N_eqs> ynext;//this is here to hold the prediction
-        std::array<LD, N_eqs> ynext_star;//this is here to hold the second prediction
-    
+        std::vector<LD> abs_delta;
         
         /*--These are specific to Rosenbrock methods*/
-        std::array<LD, N_eqs> dfdt; 
+        // need this to store the sum over \gammas (see the contructor)
+        std::vector<LD> sum_gamma;
+        // the t component of the jacobian
+        std::vector<LD> dfdt; 
         //define the coefficient. This will become (I-\gamma*h*J). _inv is its inverse
-        std::array<std::array<LD, N_eqs>, N_eqs> _inv;
+        std::vector<std::vector<LD>> _inv;
         // There are for the LUP-decomposition of (I-\gamma*h*J) 
-        std::array<std::array<LD, N_eqs>, N_eqs> L;
-        std::array<std::array<LD, N_eqs>, N_eqs> U;
-        std::array<int,N_eqs> P;
+        std::vector<std::vector<LD>> L;
+        std::vector<std::vector<LD>> U;
+        std::vector<int> P;
         //lu_sol will capture the sulution of (I-\gamma*h*J)* k = rhs (i.e. k = (I-\gamma*h*J)^{-1} rhs)
-        std::array<LD, N_eqs> lu_sol;
-        std::array<std::array<LD, N_eqs>, N_eqs> J;//this is here to hold values of the Jacobian
-
+        std::vector<LD> lu_sol;
+        std::vector<std::vector<LD>> J;//this is here to hold values of the Jacobian
+        
+        std::vector<LD> yprev;// previously accepted step. maybe the name is not good.
+        std::vector<LD> ynext;//this is here to hold the prediction
+        std::vector<LD> ynext_star;//this is here to hold the second prediction
+        
+        std::vector<LD> time;
+        std::vector<std::vector<LD>> solution;
+        std::vector<std::vector<LD>> error;
+        
         void LU();
         void calc_k();
         void calc_Jk();
         
         void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
-        void sum_gk(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and passit to this->ak
+        void sum_gk(const unsigned int& stage); // calculate sum_j g_{ij}*k_j and passit to this->gk
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         
         void step_control_PI();//adjust stepsize until error is acceptable
@@ -127,12 +127,54 @@ class Solver{
     public:
 
         // Notice that if you use the default Jacobian, you have the option to change its default value for h.
-        Solver(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
-            :dydt(dydt),Jac(Jacobian<N_eqs,LD>(dydt,Jacobian_h)), params(opt) {reset(init_cond,tmax,opt);}
+        Solver(const diffeq& dydt, const std::vector<LD> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
+            :dydt(dydt),Jac(Jacobian<LD>(dydt,Jacobian_h)), params(opt), N_eqs(init_cond.size()),
+            k(N_eqs,std::vector<LD>(RK_method::s)),
+            ak(N_eqs),
+            gk(N_eqs),
+            Jk(N_eqs),
+            bk(N_eqs),
+            bstark(N_eqs),
+            abs_delta(N_eqs),
+            sum_gamma(RK_method::s),
+            dfdt(N_eqs),
+            _inv(N_eqs,std::vector<LD>(N_eqs)),
+            L(N_eqs,std::vector<LD>(N_eqs)),
+            U(N_eqs,std::vector<LD>(N_eqs)),
+            P(0),
+            lu_sol(N_eqs),
+            J(N_eqs,std::vector<LD>(N_eqs)),
+            yprev(N_eqs),
+            ynext(N_eqs),
+            ynext_star(N_eqs),
+            solution(N_eqs,std::vector<LD>(0)),
+            error(N_eqs,std::vector<LD>(0))
+            {reset(init_cond,tmax,opt);}
             
             
-        Solver(const diffeq& dydt, const std::array<LD, N_eqs> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
-            : dydt(dydt),Jac(Jac), params(opt) {reset(init_cond,tmax,opt);}
+        Solver(const diffeq& dydt, const std::vector<LD> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
+            :dydt(dydt),Jac(Jacobian<LD>(dydt)), params(opt), N_eqs(init_cond.size()),
+            k(N_eqs,std::vector<LD>(RK_method::s)),
+            ak(N_eqs),
+            gk(N_eqs),
+            Jk(N_eqs),
+            bk(N_eqs),
+            bstark(N_eqs),
+            abs_delta(N_eqs),
+            sum_gamma(RK_method::s),
+            dfdt(N_eqs),
+            _inv(N_eqs,std::vector<LD>(N_eqs)),
+            L(N_eqs,std::vector<LD>(N_eqs)),
+            U(N_eqs,std::vector<LD>(N_eqs)),
+            P(0),
+            lu_sol(N_eqs),
+            J(N_eqs,std::vector<LD>(N_eqs)),
+            yprev(N_eqs),
+            ynext(N_eqs),
+            ynext_star(N_eqs),
+            solution(N_eqs,std::vector<LD>(0)),
+            error(N_eqs,std::vector<LD>(0))
+            {reset(init_cond,tmax,opt);}
 
         
         ~Solver()=default;
@@ -154,7 +196,7 @@ class Solver{
         void solve();
 
         void set_parameters(const parameters<LD>& opt=default_parameters<LD>);
-        void reset(const std::array<LD,N_eqs>& init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>);
+        void reset(const std::vector<LD>& init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>);
 
         //generally helpful, but not very important
         auto get_current_step() const {return time.size();}

@@ -3,7 +3,7 @@
 #include<fstream>
 #include<cmath>
 #include<complex>
-#include<array>
+#include<vector>
 
 
 #include"../Rosenbrock/Rosenbrock.hpp"
@@ -24,11 +24,6 @@
 #define LD LONG double
 
 
-// this is how the diffeq should look like
-#define n_eqs 4 //number of equations
-typedef std::array<LD,n_eqs> Array;//define an array type of length n_eqs
-//-------------------------------------------------------------------------//
-
 
 class TwoStateSystem{
     public:
@@ -41,7 +36,7 @@ class TwoStateSystem{
 
         TwoStateSystem(std::complex<LD> H[2][2], LD tmax);
         ~TwoStateSystem(){};
-        void operator()( Array &lhs, const Array &c  , const LD& t );
+        void operator()( std::vector<LD> &lhs, const std::vector<LD> &c  , const LD& t );
         std::complex<LD> Hamiltonian(int i, int j, LD t );//this is to allow the hamiltoninan to be time-dependent
 
 };
@@ -75,7 +70,7 @@ std::complex<LD> TwoStateSystem::Hamiltonian(int i, int j, LD t ){
 
 }
 
-void TwoStateSystem::operator()( Array &lhs, const Array &c  , const LD &t )
+void TwoStateSystem::operator()( std::vector<LD> &lhs, const std::vector<LD> &c  , const LD &t )
         {
             C[0].real(c[0]);
             C[0].imag(c[1]);
@@ -112,8 +107,10 @@ int main(int argc, const char** argv) {
     
     LD tmax = (LD)atof(argv[1]);
     
-    Array lhs;
-    Array c0;
+    unsigned int n_eqs=4;
+
+    std::vector<LD> lhs(n_eqs);
+    std::vector<LD> c0(n_eqs);
     c0[0]=1/sqrt(2.);
     c0[1]=0;
     c0[2]=0;
@@ -123,9 +120,9 @@ int main(int argc, const char** argv) {
 
     TwoStateSystem schrodinger(H,tmax);
     
-    rosenbrock::Jacobian<n_eqs,LD> Jac(schrodinger,1e-8);
+    rosenbrock::Jacobian<LD> Jac(schrodinger,1e-8);
     
-    rosenbrock::Solver<n_eqs, rosenbrock::METHOD<LD>, LD, rosenbrock::step_controllers::simple> System(schrodinger,c0,tmax, Jac,
+    rosenbrock::Solver<LD, rosenbrock::METHOD<LD>, rosenbrock::step_controllers::simple> System(schrodinger,c0,tmax, Jac,
         {
             .initial_step_size = 1e-4,
             .minimum_step_size = 1e-8,

@@ -5,8 +5,8 @@
 namespace rosenbrock{
 
 /*---------------------------------------------------Begin: Get next step-------------------------------------------------------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::next_step(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::next_step(){
     if (tn + h_trial > tmax){h_trial = tmax - tn;} //make sure that h_trial does not push tn>tmax. 
     //set h_stop=false, to start looking for stepsize
     h_stop=false;
@@ -56,9 +56,8 @@ void Solver<N_eqs, RK_method, LD, step_controller>::next_step(){
 
 
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
-
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller> 
-void Solver<N_eqs, RK_method, LD, step_controller>::solve(){
+template<class LD, class RK_method, step_controllers step_controller> 
+void Solver<LD, RK_method, step_controller>::solve(){
     unsigned int current_step=0;
     while (true){
         //increase current_step
