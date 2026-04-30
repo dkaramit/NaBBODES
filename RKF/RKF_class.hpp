@@ -6,6 +6,7 @@
 #include<functional>
 #include<optional>
 
+#include"METHOD.hpp"
 
 namespace rkf{
     
@@ -53,11 +54,11 @@ N_eqs is ten number of equations to be solved
 RKF_method is the method (the DormandPrince seems to be the standard here)
 */
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller=step_controllers::PI>
+template<class LD, class RK_method=DormandPrince<LD>, step_controllers step_controller=step_controllers::PI>
 class Solver{
     public:
     // maybe it is useful to know the type of the equation
-    using diffeq=std::function<void(std::array<LD, N_eqs> &lhs, const  std::array<LD, N_eqs> &y, const LD &t)>;
+    using diffeq=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
 
     private:
         parameters<LD> params; //use this to get and change parameters if needed
@@ -76,20 +77,22 @@ class Solver{
         
         LD tn;
 
-        std::array<std::array<LD,RK_method::s>,N_eqs> k;
+        unsigned int N_eqs;
+
+        std::vector<std::vector<LD>> k;
         
         //these are here to hold the k's, sum_i b_i*k_i, sum_i b_i^{\star}*k_i, and sum_j a_{ij}*k_j 
-        std::array<LD,N_eqs> ak, bk, bstark;
+        std::vector<LD> ak, bk, bstark;
         // abs_delta=abs(ynext-ynext_star)
-        std::array<LD,N_eqs> abs_delta;
+        std::vector<LD> abs_delta;
         
-        std::array<LD, N_eqs> yprev;
-        std::array<LD,N_eqs> ynext;//this is here to hold the prediction
-        std::array<LD,N_eqs> ynext_star;//this is here to hold the second prediction
+        std::vector<LD> yprev;
+        std::vector<LD> ynext;//this is here to hold the prediction
+        std::vector<LD> ynext_star;//this is here to hold the second prediction
         
         std::vector<LD> time;
-        std::array<std::vector<LD>, N_eqs> solution;
-        std::array<std::vector<LD>, N_eqs> error;
+        std::vector<std::vector<LD>> solution;
+        std::vector<std::vector<LD>> error;
 
         void calc_k(); //calculate the values of k
         void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and pass it to this->ak
@@ -107,8 +110,21 @@ class Solver{
         
         public:
         
-        Solver(const diffeq&  dydt, const std::array<LD,N_eqs>& init_cond, const LD& tmax, 
-            const parameters<LD>& opt=default_parameters<LD>): dydt(dydt),params(opt) {reset(init_cond,tmax,opt); };
+        Solver(const diffeq&  dydt, const std::vector<LD>& init_cond, const LD& tmax, 
+            const parameters<LD>& opt=default_parameters<LD>): 
+            N_eqs(init_cond.size()),
+            dydt(dydt),params(opt), 
+            k(N_eqs,std::vector<LD>(RK_method::s)),
+            ak(N_eqs),
+            bk(N_eqs),
+            bstark(N_eqs),
+            abs_delta(N_eqs),
+            yprev(N_eqs),
+            ynext(N_eqs),
+            ynext_star(N_eqs),
+            solution(N_eqs,std::vector<LD>(0)),
+            error(N_eqs,std::vector<LD>(0))
+            {reset(init_cond,tmax,opt); };
         
         ~Solver()=default;
 
@@ -130,7 +146,7 @@ class Solver{
         
         
         void set_parameters(const parameters<LD>& opt=default_parameters<LD>);
-        void reset(const std::array<LD,N_eqs>& init_cond, const LD& tmax, const parameters<LD>& opt=default_parameters<LD>);
+        void reset(const std::vector<LD>& init_cond, const LD& tmax, const parameters<LD>& opt=default_parameters<LD>);
         
         //generally helpful, but not very important
         auto get_current_step() const {return time.size();}

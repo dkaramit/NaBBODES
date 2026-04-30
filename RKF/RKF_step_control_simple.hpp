@@ -7,8 +7,8 @@ namespace rkf{
     
 /*-----------------------Begin: step_control---------------------------------*/
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
-void Solver<N_eqs, RK_method, LD, step_controller>::step_control_simple(){
+template<class LD, class RK_method, step_controllers step_controller>
+void Solver<LD, RK_method, step_controller>::step_control_simple(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;

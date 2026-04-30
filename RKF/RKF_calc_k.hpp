@@ -5,10 +5,10 @@
 namespace rkf{
 
 /*-----------------------Begin: calc_k---------------------------------*/
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
-void Solver<N_eqs, RK_method, LD, step_controller>::calc_k(){
-    std::array<LD,N_eqs> yn;//thi i here to hold ynext + sum a*k
-    std::array<LD,N_eqs> fyn;//this is here to get dydt in each step
+template<class LD, class RK_method, step_controllers step_controller>
+void Solver<LD, RK_method, step_controller>::calc_k(){
+    std::vector<LD> yn(N_eqs);//thi i here to hold ynext + sum a*k
+    std::vector<LD> fyn(N_eqs);//this is here to get dydt in each step
 
 
     // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).

@@ -17,10 +17,6 @@
 #endif
 
 
-// this is how the diffeq should look like
-#define n_eqs 1 //number of equations
-using Array =  std::array<LD,n_eqs>;//define an array type of length n_eqs
-//-------------------------------------------------------------------------//
 
 /*std::function supports any callable object, so we cna simply use this without overloading 
 operator=, or defining copy constructor.*/
@@ -29,17 +25,20 @@ class diffeq{
     LD c;
     diffeq(double c):c(c){}; 
 
-    void operator()(Array &lhs, const Array &y, const LD& t){
+    void operator()(std::vector<LD> &lhs, const std::vector<LD> &y, const LD& t){
         lhs[0]=t*c;
     }
 
 };
 
-// using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::PI>;
-using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::simple>;
+using SOLVER = rkf::Solver<LD,rkf::METHOD<LD>, rkf::step_controllers::PI>;
+// using SOLVER = rkf::Solver<LD, rkf::METHOD<LD>, rkf::step_controllers::simple>;
+
+// this also works with DormandPrince as default method and PI as step_controller.
+// using SOLVER = rkf::Solver<LD>;
 
 int main(int argc, const char** argv) {
-    Array y0={0};
+    std::vector<LD> y0={0};
 
     diffeq dydt(2);
 
@@ -47,6 +46,7 @@ int main(int argc, const char** argv) {
     
     System.solve();
 
+    unsigned int n_eqs=y0.size();
     int step=0;
     for (auto _t: System.get_t()){
         printf("%e ",(double)_t);
@@ -56,6 +56,7 @@ int main(int argc, const char** argv) {
         step++;
     }
 
+    y0={0};
     System.reset(y0,1e1,{.initial_step_size=20,.absolute_tolerance=1e-2,.relative_tolerance=1e-2});
     System.solve();
     

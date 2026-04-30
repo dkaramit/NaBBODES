@@ -18,10 +18,6 @@
 #endif
 
 
-// this is how the diffeq should look like
-#define n_eqs 3 //number of equations
-using Array =  std::array<LD,n_eqs>;//define an array type of length n_eqs
-//-------------------------------------------------------------------------//
 
 using std::pow;
 
@@ -31,7 +27,7 @@ class diffeq{
     diffeq()=default;
     ~diffeq()=default;
 
-    void operator()(Array &lhs, const Array &y, const LD& t){
+    void operator()(std::vector<LD> &lhs, const std::vector<LD> &y, const LD& t){
         lhs[0]=-20*y[0]*pow(t,2) ;
         lhs[1]=5*y[0]*pow(t,2)+2*(-pow( y[1],2  )+pow( y[2],2 ) )*pow(t,1);
         lhs[2]=15*y[0]*pow(t,2)+2*(pow( y[1],2  )-pow( y[2],2 ) )*pow(t,1);
@@ -39,30 +35,33 @@ class diffeq{
 
 };
 
-// choose step controller (if you don't choose, it will use PI by default)
-// using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::PI>;
-using SOLVER = rkf::Solver<n_eqs,rkf::METHOD<LD>,LD, rkf::step_controllers::simple>;
+// using SOLVER = rkf::Solver<LD,rkf::METHOD<LD>, rkf::step_controllers::PI>;
+using SOLVER = rkf::Solver<LD, rkf::METHOD<LD>, rkf::step_controllers::simple>;
+
+// this also works with DormandPrince as default method and PI as step_controller.
+// using SOLVER = rkf::Solver<LD>;
 
 int main(int argc, const char** argv) {
-    Array y0 = {8,12,4};
+    std::vector<LD> y0 = {8,12,4};
 
     diffeq dydt;
 
     SOLVER System(dydt,y0,1e1,
         {.initial_step_size=1e-2,
         .minimum_step_size=1e-5,
-        .maximum_step_size=1e1,
+        .maximum_step_size=1e2,
         .maximum_No_steps=1000000,
-        .absolute_tolerance=1e-15,
-        .relative_tolerance=1e-15,
+        .absolute_tolerance=1e-8,
+        .relative_tolerance=1e-8,
         .beta=0.95,
-        .fac_max=1.1,
-        .fac_min=0.8
+        .fac_max=1.5,
+        .fac_min=0.5
         }
     );
     
     System.solve();
 
+    unsigned int n_eqs=y0.size();
     int step=0;
     for (auto _t: System.get_t()){
         printf("%e ",(double)_t);

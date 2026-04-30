@@ -5,8 +5,8 @@
 /*-----------------------Begin: step_control---------------------------------*/
 namespace rkf{
 
-template<unsigned int N_eqs, class RK_method, class LD, step_controllers step_controller>
-void Solver<N_eqs, RK_method, LD, step_controller>::step_control_PI(){
+template<class LD, class RK_method, step_controllers step_controller>
+void Solver<LD, RK_method, step_controller>::step_control_PI(){
     LD Delta=0.;
     LD _sc=0;
     LD fac=beta;
