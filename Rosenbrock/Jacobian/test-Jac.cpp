@@ -1,25 +1,19 @@
 #include<iostream>
-#include<array>
+#include<vector>
 #include"Jacobian.hpp"
-// #define _class //run it with class with overloaded operator()
-#define _function //run it with function pointer
+#define _class //run it with class with overloaded operator()
+// #define _function //run it with function pointer
 
 #define LD double
 
 using namespace rosenbrock; 
 
 
-// this is how the diffeq should look like
-#define n_eqs 2 //number of equations
-typedef std::array<LD, n_eqs> Array;//define an array type of length n_eqs
-typedef std::array<Array, n_eqs> Array2;
-//-------------------------------------------------------------------------//
-
 
 
 #ifdef _function
-typedef void (*diffeq)(Array &lhs, const Array &y  , const LD& t); // define function pointer
-void sys(Array &lhs, const Array &y  , const LD& t)
+typedef void (*diffeq)(std::vector<LD> &lhs, const std::vector<LD> &y  , const LD& t); // define function pointer
+void sys(std::vector<LD> &lhs, const std::vector<LD> &y  , const LD& t)
 {
 
     lhs[0]=y[1]*y[0]*t;
@@ -34,7 +28,7 @@ class Cdiffeq{
     public:
     Cdiffeq(){};
     ~Cdiffeq(){};
-    void operator()(Array &lhs, const Array &y  , const LD& t)
+    void operator()(std::vector<LD> &lhs, const std::vector<LD> &y  , const LD& t)
     {
         lhs[0]=y[1]*y[0]*t;
         lhs[1]=y[0]*y[1]+t;
@@ -48,22 +42,23 @@ class Cdiffeq{
 using std::cout;
 using std::endl;
 
+unsigned int n_eqs = 2;
 
 int main(){
     #ifdef _class
         Cdiffeq dydt;
-        Jacobian<n_eqs,LD> jac(dydt);
+        Jacobian<LD> jac(dydt);
     #endif
 
     #ifdef _function
-        Jacobian<n_eqs,LD> jac(sys);
+        Jacobian<LD> jac(sys);
     #endif
 
-    Array dfdt;
+    std::vector<LD> dfdt(n_eqs,0);
     // Matrix J={{0,0},{0,0}};
-    Array2 J;
+    std::vector<std::vector<LD>> J(n_eqs,std::vector<LD>(n_eqs,0));
 
-    Array y={1,4.2};
+    std::vector<LD> y={1,4.2};
     LD t=0.3;
 
     jac(J,dfdt,y,t);

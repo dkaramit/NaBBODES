@@ -46,22 +46,23 @@ enum class  step_controllers{
 };
 
 /*
-N_eqs is ten number of equations to be solved RK_method 
-is the method
+LD it the numeric type to use.
+RK_method is the method (the RODAS5 is the default)
+step_controller chooses the step controller from the enum step_controllers (PI is the default)
 */
 
-//This is a general implementation of explicit embedded RK solver of
+//This is a general implementation of embedded Rosenbrock solver of
 // a system of differential equations in the interval [0,tmax].
 template<class LD, class RK_method=RODAS5<LD>, step_controllers step_controller=step_controllers::PI> 
 //Note that you can use template to pass the method
 class Solver{
     public:
         // maybe it is useful to know the type of the equations
-        using diffeq=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
+        using system_type=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
         using Jacobian_type=std::function<void(std::vector<std::vector<LD>> &J, std::vector<LD> &dfdt, const std::vector<LD> &y, const LD& t)>;
 
     private:
-        diffeq dydt;
+        system_type dydt;
         Jacobian_type Jac;
         
         parameters<LD> params; //use this to get and change parameters if needed
@@ -127,54 +128,12 @@ class Solver{
     public:
 
         // Notice that if you use the default Jacobian, you have the option to change its default value for h.
-        Solver(const diffeq& dydt, const std::vector<LD> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
-            :dydt(dydt),Jac(Jacobian<LD>(dydt,Jacobian_h)), params(opt), N_eqs(init_cond.size()),
-            k(N_eqs,std::vector<LD>(RK_method::s)),
-            ak(N_eqs),
-            gk(N_eqs),
-            Jk(N_eqs),
-            bk(N_eqs),
-            bstark(N_eqs),
-            abs_delta(N_eqs),
-            sum_gamma(RK_method::s),
-            dfdt(N_eqs),
-            _inv(N_eqs,std::vector<LD>(N_eqs)),
-            L(N_eqs,std::vector<LD>(N_eqs)),
-            U(N_eqs,std::vector<LD>(N_eqs)),
-            P(0),
-            lu_sol(N_eqs),
-            J(N_eqs,std::vector<LD>(N_eqs)),
-            yprev(N_eqs),
-            ynext(N_eqs),
-            ynext_star(N_eqs),
-            solution(N_eqs,std::vector<LD>(0)),
-            error(N_eqs,std::vector<LD>(0))
-            {reset(init_cond,tmax,opt);}
+        Solver(const system_type& dydt, const std::vector<LD> &init_cond, LD tmax, const parameters<LD>& opt=default_parameters<LD>, const LD& Jacobian_h=1e-8)
+            :dydt(dydt),Jac(Jacobian<LD>(dydt,Jacobian_h)), params(opt), N_eqs(init_cond.size()){reset(init_cond,tmax,opt);}
             
             
-        Solver(const diffeq& dydt, const std::vector<LD> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
-            :dydt(dydt),Jac(Jacobian<LD>(dydt)), params(opt), N_eqs(init_cond.size()),
-            k(N_eqs,std::vector<LD>(RK_method::s)),
-            ak(N_eqs),
-            gk(N_eqs),
-            Jk(N_eqs),
-            bk(N_eqs),
-            bstark(N_eqs),
-            abs_delta(N_eqs),
-            sum_gamma(RK_method::s),
-            dfdt(N_eqs),
-            _inv(N_eqs,std::vector<LD>(N_eqs)),
-            L(N_eqs,std::vector<LD>(N_eqs)),
-            U(N_eqs,std::vector<LD>(N_eqs)),
-            P(0),
-            lu_sol(N_eqs),
-            J(N_eqs,std::vector<LD>(N_eqs)),
-            yprev(N_eqs),
-            ynext(N_eqs),
-            ynext_star(N_eqs),
-            solution(N_eqs,std::vector<LD>(0)),
-            error(N_eqs,std::vector<LD>(0))
-            {reset(init_cond,tmax,opt);}
+        Solver(const system_type& dydt, const std::vector<LD> &init_cond, LD tmax, Jacobian_type Jac, const parameters<LD>& opt=default_parameters<LD>)
+            :dydt(dydt),Jac(Jac), params(opt), N_eqs(init_cond.size()){reset(init_cond,tmax,opt);}
 
         
         ~Solver()=default;

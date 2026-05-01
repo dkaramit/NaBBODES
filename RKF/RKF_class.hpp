@@ -49,16 +49,19 @@ enum class  step_controllers{
 // a system of differential equations in the interval [0,tmax].
 
 /*
-diffeq is a class of the system of  equations to be solved 
-N_eqs is ten number of equations to be solved
-RKF_method is the method (the DormandPrince seems to be the standard here)
+LD it the numeric type to use.
+RK_method is the method (the DormandPrince is the default)
+step_controller chooses the step controller from the enum step_controllers (PI is the default)
 */
 
+//This is a general implementation of explicit embedded RK solver of
+// a system of differential equations in the interval [0,tmax].
 template<class LD, class RK_method=DormandPrince<LD>, step_controllers step_controller=step_controllers::PI>
 class Solver{
     public:
     // maybe it is useful to know the type of the equation
-    using diffeq=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
+    // system_type is a collable of the system of  equations to be solved 
+    using system_type=std::function<void(std::vector<LD> &lhs, const  std::vector<LD> &y, const LD &t)>;
 
     private:
         parameters<LD> params; //use this to get and change parameters if needed
@@ -71,7 +74,7 @@ class Solver{
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
-        const diffeq dydt;
+        const system_type dydt;
         // integrate up to t=tmax
         LD tmax;
         
@@ -110,21 +113,8 @@ class Solver{
         
         public:
         
-        Solver(const diffeq&  dydt, const std::vector<LD>& init_cond, const LD& tmax, 
-            const parameters<LD>& opt=default_parameters<LD>): 
-            N_eqs(init_cond.size()),
-            dydt(dydt),params(opt), 
-            k(N_eqs,std::vector<LD>(RK_method::s)),
-            ak(N_eqs),
-            bk(N_eqs),
-            bstark(N_eqs),
-            abs_delta(N_eqs),
-            yprev(N_eqs),
-            ynext(N_eqs),
-            ynext_star(N_eqs),
-            solution(N_eqs,std::vector<LD>(0)),
-            error(N_eqs,std::vector<LD>(0))
-            {reset(init_cond,tmax,opt); };
+        Solver(const system_type&  dydt, const std::vector<LD>& init_cond, const LD& tmax, const parameters<LD>& opt=default_parameters<LD>): 
+            dydt(dydt),params(opt),N_eqs(init_cond.size()){reset(init_cond,tmax,opt); };
         
         ~Solver()=default;
 

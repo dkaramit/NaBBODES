@@ -43,6 +43,17 @@ void Solver<LD, RK_method, step_controller>::set_parameters(const parameters<LD>
 // reset the solver (set clear arrays, set t=0, set y to its initial condition, etc.)
 template<class LD, class RK_method, step_controllers step_controller>
 void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_cond, const LD& tmax, const parameters<LD>& opt){
+    k.assign(N_eqs,std::vector<LD>(RK_method::s,0));
+    ak.assign(N_eqs,0);
+    bk.assign(N_eqs,0);
+    bstark.assign(N_eqs,0);
+    abs_delta.assign(N_eqs,0);
+    yprev.assign(N_eqs,0);
+    ynext.assign(N_eqs,0);
+    ynext_star.assign(N_eqs,0);
+    solution.assign(N_eqs,std::vector<LD>(0,0));
+    error.assign(N_eqs,std::vector<LD>(0,0));
+
 
     if(N_eqs!=init_cond.size()){
         throw std::logic_error(

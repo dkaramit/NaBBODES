@@ -41,7 +41,26 @@ void Solver<LD, RK_method, step_controller>::set_parameters(const parameters<LD>
 
 template<class LD, class RK_method, step_controllers step_controller> 
 void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_cond, LD tmax, const parameters<LD>& opt){
-    
+    k.assign(N_eqs,std::vector<LD>(RK_method::s,0));
+    ak.assign(N_eqs,0);
+    gk.assign(N_eqs,0);
+    Jk.assign(N_eqs,0);
+    bk.assign(N_eqs,0);
+    bstark.assign(N_eqs,0);
+    abs_delta.assign(N_eqs,0);
+    sum_gamma.assign(RK_method::s,0);
+    dfdt.assign(N_eqs,0);
+    _inv.assign(N_eqs,std::vector<LD>(N_eqs,0));
+    L.assign(N_eqs,std::vector<LD>(N_eqs,0));
+    U.assign(N_eqs,std::vector<LD>(N_eqs,0));
+    P.assign(N_eqs,0);
+    lu_sol.assign(N_eqs,0);
+    J.assign(N_eqs,std::vector<LD>(N_eqs,0));
+    yprev.assign(N_eqs,0);
+    ynext.assign(N_eqs,0);
+    ynext_star.assign(N_eqs,0);
+    solution.assign(N_eqs,std::vector<LD>(0,0));
+    error.assign(N_eqs,std::vector<LD>(0,0));
 
     if(N_eqs!=init_cond.size()){
         throw std::logic_error(

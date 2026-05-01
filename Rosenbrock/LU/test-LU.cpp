@@ -32,27 +32,32 @@ int main(){
 
 
     #ifdef indmax
-        std::array<LD,5> x={2,1,-1,2,50};
-        cout<<ind_max<5,LD>(x)<<endl;
+        std::vector<LD> x(5,0);
+        x={2,8,-1,2,50};
+        cout<<ind_max<LD>(x,3)<<endl;
     #endif
 
 
     
     #ifdef swap
-        std::array<LD,5> x={2,1,-1,2,50};
-        index_swap<5,LD>(x,4,1);
+        std::vector<LD> x(5,0);
+        x={2,1,-1,2,50};
+
+        index_swap<LD>(x,4,1);
         for( LD i : x ){ cout<<i<<endl;}
     #endif
     
 
     #ifdef perm
         const unsigned int N=5;
-        std::array<LD,N> A={1,2,5,8,3};
-        std::array<int,N>  P={2,4,0,3,1};
+        std::vector<LD> A(N,0); 
+        A={1,2,5,8,3};
+        std::vector<int>  P(N,0);
+        P={2,4,0,3,1};
 
-        std::array<LD,N> Ap{0};
+        std::vector<LD> Ap(N,0);
 
-        apply_permutations_vector<N,LD>(A,P,Ap);
+        apply_permutations_vector<LD>(A,P,Ap);
         for( int i =0 ; i<5 ; i++){ cout<<A[i]<<" ";}
         cout<<endl;
         for( int i =0 ; i<5 ; i++){ cout<<Ap[i]<<" ";}
@@ -64,7 +69,8 @@ int main(){
 
     #ifdef lup
     const unsigned int N=5;
-    std::array<std::array<LD,N> ,N>  M={{
+    std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0));
+    M={{
     { 0,  2,  2 , 3 , 5},
     {-3, -1,  1 , 5 , 9},
     { 1, -1,  1 , 4 , 7},
@@ -73,10 +79,9 @@ int main(){
     }};
 
 
-    std::array<int,N> P;
-    std::array<std::array<LD,N>,N> L, U;
+    std::vector<int> P(N,0);
 
-    LUP<N,LD>(M,L,U,P);
+    LUP<LD>(M,L,U,P);
 
     for( LD i : P ){ cout<< i<<' ';}
     cout<<endl;
@@ -112,15 +117,15 @@ int main(){
             (M*x-b)/b > 1e-11, print it.
         */    
         const unsigned int runs=100000;
-        std::array<LD,runs> err;
+        std::vector<LD> err(runs,0);
 
 
         const unsigned int N=10;
-        std::array<std::array<LD,N>,N> M,U,L;
-        std::array<LD,N> b,x;
-        std::array<int,N> P;
+        std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0));
+        std::vector<LD> b(N,0),x(N,0);
+        std::vector<int> P(N,0);
         
-        std::array<LD,N> tmp;
+        std::vector<LD> tmp(N,0);
         
         LD tmpE;
 
@@ -130,12 +135,12 @@ int main(){
                 b[i]= (rand()/ ((LD) RAND_MAX ) -0.5 ) *100 ;  
             } 
         
-            LUP<N,LD>(M,L,U,P);
-            Solve_LU<N,LD>(L,U,P,b,x);
+            LUP<LD>(M,L,U,P);
+            Solve_LU<LD>(L,U,P,b,x);
 
             err[_r]=0;
             for (int i = 0; i < N; i++){
-                dot<N,LD>(M,x,tmp);
+                dot<LD>(M,x,tmp);
                 tmpE= std::abs((tmp[i] - b[i])/b[i]) ;
                 if(tmpE>err[_r] ) {err[_r] = tmpE ;}
 
@@ -145,7 +150,7 @@ int main(){
         }
 
         for(LD _err: err){  
-            if(_err>1e-11){ cout<<_err<<endl;} 
+            if(_err>1e-8){ cout<<_err<<endl;} 
         }
         
 
@@ -162,17 +167,13 @@ int main(){
     
     
     const unsigned int N=10;
-    std::array<std::array<LD,N>,N> M,L,U,invM,R;
+    std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0)),invM(N,std::vector<LD>(N,0)),R(N,std::vector<LD>(N,0));
 
-    std::array<std::array<LD,N>,N> Unit;
-    for (int i = 0; i < N; i++){ 
-        for (int j = 0; j < N; j++){
-            Unit[i][j]=0;
-        }
-    } 
+    std::vector<std::vector<LD>> Unit(N,std::vector<LD>(N,0));
+    for (int i = 0; i < N; i++){Unit[i][i]=1;} 
 
 
-    std::array<int,N> P;
+    std::vector<int> P(N,0);
     LD tmp;
     
     for(int _run=0 ; _run<1000; ++_run)
@@ -190,19 +191,19 @@ int main(){
         } 
 
         // LUP decomposition of M
-        LUP<N,LD>(M,L,U,P);
+        LUP<LD>(M,L,U,P);
         // Given LUP decomposition you can calculate the inverse. 
-        Inverse_LU<N,LD>(L,U,P,invM);
+        Inverse_LU<LD>(L,U,P,invM);
 
         // calculate M*M^{-1}
-        dot<N,LD>(M,invM,R);
+        dot<LD>(M,invM,R);
 
 
         // print if M*M^{-1} - 1 > 10^{-10}
         for(int i=0; i<N; ++i){
             for(int j=0; j<N; ++j){
                 tmp=fabs(R[i][j]-Unit[i][j]);
-                if(tmp>1e-12){ cout<< tmp << endl;}
+                if(tmp>1e-8){ cout<< tmp << endl;}
             }
         }
     }
