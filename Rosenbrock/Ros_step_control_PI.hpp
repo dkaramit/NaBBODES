@@ -1,6 +1,7 @@
 #ifndef Ros_step_control_PI
 #define Ros_step_control_PI
 #include "Ros_class.hpp"
+#include<vector>
 
 
 namespace rosenbrock{

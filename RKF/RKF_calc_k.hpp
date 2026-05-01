@@ -1,6 +1,7 @@
 #ifndef RKF_calc_k
 #define RKF_calc_k
 #include "RKF_class.hpp"
+#include<vector>
 
 namespace rkf{
 

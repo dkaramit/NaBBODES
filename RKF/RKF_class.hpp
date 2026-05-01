@@ -1,7 +1,6 @@
 #ifndef RKF_class
 #define RKF_class
 
-#include<array>
 #include<vector>
 #include<functional>
 #include<optional>

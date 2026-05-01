@@ -1,7 +1,6 @@
 #ifndef Ros_class
 #define Ros_class
 
-#include<array>
 #include<vector>
 #include<functional>
 #include<optional>

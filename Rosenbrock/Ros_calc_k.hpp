@@ -1,6 +1,7 @@
 #ifndef Ros_calc_k
 #define Ros_calc_k
 #include "Ros_class.hpp"
+#include<vector>
 
 
 namespace rosenbrock{

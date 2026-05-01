@@ -1,7 +1,8 @@
 #ifndef Jac_head
 #define Jac_head
 #include<functional>
-#include<array>
+#include<vector>
+#include<cmath>
 
 namespace rosenbrock{
 

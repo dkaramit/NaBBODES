@@ -1,6 +1,7 @@
 #ifndef RKF_constructor
 #define RKF_constructor
 #include "RKF_class.hpp"
+#include<vector>
 
 #define parameter_check(opt_name)  \
     if(!params.opt_name.has_value()){params.opt_name=default_parameters<LD>.opt_name.value();}

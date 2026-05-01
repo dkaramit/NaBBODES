@@ -1,6 +1,8 @@
 #ifndef Ros_LU
 #define Ros_LU
 #include "Ros_class.hpp"
+#include "LU/LU.hpp"
+#include<vector>
 
 namespace rosenbrock{
 

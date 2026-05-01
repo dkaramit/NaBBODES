@@ -1,6 +1,7 @@
 #ifndef Ros_steps
 #define Ros_steps
 #include "Ros_class.hpp"
+#include "LU/LU.hpp"
 
 namespace rosenbrock{
 
