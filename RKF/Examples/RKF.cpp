@@ -61,12 +61,12 @@ int main(int argc, const char** argv) {
     
     System.solve();
 
-    unsigned int n_eqs=y0.size();
+    size_t n_eqs=y0.size();
     int step=0;
     for (auto _t: System.get_t()){
         printf("%e ",(double)_t);
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
         printf("\n");
         step++;
     }

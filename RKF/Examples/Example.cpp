@@ -46,12 +46,12 @@ int main(int argc, const char** argv) {
     
     System.solve();
 
-    unsigned int n_eqs=y0.size();
+    size_t n_eqs=y0.size();
     int step=0;
     for (auto _t: System.get_t()){
         printf("%e ",(double)_t);
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
         printf("\n");
         step++;
     }
@@ -63,8 +63,8 @@ int main(int argc, const char** argv) {
     step=0;
     step=System.get_current_step()-1;
     printf("%e ",(double)System.get_t().at(step));
-    for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
-    for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
+    for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+    for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
     printf("\n");
     std::cout<<System.get_current_step();
     printf("\n");

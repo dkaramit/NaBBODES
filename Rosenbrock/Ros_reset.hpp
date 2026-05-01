@@ -77,7 +77,7 @@ void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_c
     //define yprev[N_eqs]. It is also good to initialize ynext.
     (this->time).clear();
     (this->time).push_back(0);
-    for(unsigned int i = 0; i < N_eqs ;++i) {
+    for(size_t i = 0; i < N_eqs ;++i) {
         this->yprev[i]=init_cond[i];
         this->ynext[i]=init_cond[i];
         
@@ -91,13 +91,13 @@ void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_c
     // ---------------------------------------------------------------------------------- //
 
     //Initialize also k=0.
-    for(unsigned int i = 0; i < N_eqs ;++i){for(unsigned int j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;}} 
+    for(size_t i = 0; i < N_eqs ;++i){for(size_t j =0 ; j<RK_method::s; j++ ){this->k[i][j] =0;}} 
 
 
     // calculate sums over gamma for all stages 
-    for(unsigned int stage = 0; stage < RK_method::s; stage++){
+    for(size_t stage = 0; stage < RK_method::s; stage++){
         this->sum_gamma[stage]=0;
-        for(unsigned int j =0 ; j<RK_method::s; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
+        for(size_t j =0 ; j<RK_method::s; j++ ){ this->sum_gamma[stage]+=RK_method::g[stage][j];}
     }
 
     //initialize tn

@@ -6,8 +6,8 @@ namespace rkf{
 
 template<class LD>
 struct DormandPrince{
-    static constexpr unsigned int s=7;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=7;
+    static constexpr size_t p=4;
     
     using arr=std::array<LD,s>;
     using arr2=std::array<arr,s>;
@@ -29,8 +29,8 @@ struct DormandPrince{
 
 template<class LD>
 struct CashKarp{
-    static constexpr unsigned int s=6;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=6;
+    static constexpr size_t p=4;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<arr,s>;
@@ -52,8 +52,8 @@ struct CashKarp{
 
 template<class LD>
 struct RKF45{
-    static constexpr unsigned int s=6;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=6;
+    static constexpr size_t p=4;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<arr,s>;

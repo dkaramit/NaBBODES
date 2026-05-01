@@ -14,15 +14,15 @@ void Solver<LD, RK_method, step_controller>::calc_k(){
 
     // Or for the shake of simplicity, calculae all of them in one loop (shouldn't be slower since the sum_ak for stage=0 should'n realy do anything).
     // claculate the \vec{k}_i
-    for (unsigned int stage = 0; stage < RK_method::s; stage++){
+    for (size_t stage = 0; stage < RK_method::s; stage++){
         // first we need the sum_{j}^{stage-1}a_{stage,j}\vec{k}_j
         sum_ak(stage);
         // then we need \vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{k}_j (so fill yn with this)
-        for (unsigned int eq = 0; eq < N_eqs; eq++){yn[eq]=yprev[eq]+ak[eq]*h_trial;}
+        for (size_t eq = 0; eq < N_eqs; eq++){yn[eq]=yprev[eq]+ak[eq]*h_trial;}
         // then calculate f(\vec{y}+sum_{j}^{stage-1}a_{stage,j}\vec{j}, tn + c[stage]*h )
         dydt(fyn, yn,tn+h_trial*RK_method::c[stage] );
         // now we can fill \vec{k}[stage]
-        for(unsigned int eq = 0; eq < N_eqs; eq++){ k[eq][stage]=fyn[eq]; }
+        for(size_t eq = 0; eq < N_eqs; eq++){ k[eq][stage]=fyn[eq]; }
     }
 }
 /*-----------------------End: calc_k---------------------------------*/

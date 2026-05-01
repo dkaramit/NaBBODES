@@ -49,7 +49,7 @@ int main(){
     
 
     #ifdef perm
-        const unsigned int N=5;
+        const size_t N=5;
         std::vector<LD> A(N,0); 
         A={1,2,5,8,3};
         std::vector<int>  P(N,0);
@@ -68,7 +68,7 @@ int main(){
 
 
     #ifdef lup
-    const unsigned int N=5;
+    const size_t N=5;
     std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0));
     M={{
     { 0,  2,  2 , 3 , 5},
@@ -116,22 +116,22 @@ int main(){
             of equations (with random coefficients of magnitude up to 100), and if 
             (M*x-b)/b > 1e-11, print it.
         */    
-        const unsigned int runs=100000;
+        const size_t runs=5;
         std::vector<LD> err(runs,0);
 
 
-        const unsigned int N=10;
+        const size_t N=1000;
         std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0));
         std::vector<LD> b(N,0),x(N,0);
-        std::vector<int> P(N,0);
+        std::vector<size_t> P(N,0);
         
         std::vector<LD> tmp(N,0);
         
         LD tmpE;
 
-        for(unsigned int _r=0; _r<runs ; _r++){
-            for (unsigned int i = 0; i < N; i++) { for (int j = 0; j < N; j++)  {
-                M[i][j]= ( rand()/ ((LD) RAND_MAX ) -0.5 ) *100 ;  } 
+        for(size_t _r=0; _r<runs ; _r++){
+            for (size_t i = 0; i < N; i++) { for (size_t j = 0; j < N; j++)  {
+                M[i][j]= ( rand()/ ((LD) RAND_MAX ) -0.5 ) *560 ;  } 
                 b[i]= (rand()/ ((LD) RAND_MAX ) -0.5 ) *100 ;  
             } 
         
@@ -166,7 +166,7 @@ int main(){
     */
     
     
-    const unsigned int N=10;
+    const size_t N=10;
     std::vector<std::vector<LD>> M(N,std::vector<LD>(N,0)),L(N,std::vector<LD>(N,0)),U(N,std::vector<LD>(N,0)),invM(N,std::vector<LD>(N,0)),R(N,std::vector<LD>(N,0));
 
     std::vector<std::vector<LD>> Unit(N,std::vector<LD>(N,0));

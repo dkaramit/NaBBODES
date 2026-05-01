@@ -25,7 +25,7 @@ void Solver<LD, RK_method, step_controller>::next_step(){
         sum_bk();
         
         // having bk, we now have \vec{y}_{n+1} \vec{y}^{\star}_{n+1}. 
-        for (unsigned int eq = 0; eq < N_eqs; eq++){   
+        for (size_t eq = 0; eq < N_eqs; eq++){   
             ynext[eq] =  yprev[eq] + bk[eq]*h_trial;
             ynext_star[eq] =  yprev[eq] + bstark[eq]*h_trial;       
             // calculate the error
@@ -45,7 +45,7 @@ void Solver<LD, RK_method, step_controller>::next_step(){
 /*---------------------------------------------------Begin: solve-------------------------------------------------------------------------------*/
 template<class LD, class RK_method, step_controllers step_controller>
 void Solver<LD, RK_method, step_controller>::solve(){
-    unsigned int current_step=0;
+    size_t current_step=0;
     while (true){
         //increase current_step
         current_step++;
@@ -55,13 +55,13 @@ void Solver<LD, RK_method, step_controller>::solve(){
         next_step();
 
         // set previous y to last one
-        for (unsigned int eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
+        for (size_t eq = 0; eq < N_eqs; eq++){yprev[eq]=ynext[eq];}
         // increase time
         tn+=h_acc;
 
         // store everything
         time.push_back(tn);
-        for (unsigned int eq = 0; eq < N_eqs; eq++){ 
+        for (size_t eq = 0; eq < N_eqs; eq++){ 
             solution[eq].push_back( ynext[eq] ); 
             error[eq].push_back(ynext[eq] - ynext_star[eq]);
         }

@@ -16,7 +16,7 @@ struct parameters{
     std::optional<LD> initial_step_size{}; 
     std::optional<LD> minimum_step_size{}; 
     std::optional<LD> maximum_step_size{};
-    std::optional<unsigned int> maximum_No_steps{}; 
+    std::optional<size_t> maximum_No_steps{}; 
     std::optional<LD> absolute_tolerance{};
     std::optional<LD> relative_tolerance{};
     std::optional<LD> beta{};
@@ -69,7 +69,7 @@ class Solver{
         LD hmin, hmax, abs_tol, rel_tol, beta, fac_max, fac_min;
 
         LD h_old,h_trial,h_acc,delta_acc, delta_rej;//these will be initialized at the beginning of next_step
-        unsigned int max_N;
+        size_t max_N;
         bool h_stop;//h_stop becomes true when suitable stepsize is found.    
         
         //Inputs. The initial condition is given as a Array (the type is users choice as long as it can be called with [])
@@ -79,7 +79,7 @@ class Solver{
         
         LD tn;
 
-        unsigned int N_eqs;
+        size_t N_eqs;
 
         std::vector<std::vector<LD>> k;
         
@@ -97,7 +97,7 @@ class Solver{
         std::vector<std::vector<LD>> error;
 
         void calc_k(); //calculate the values of k
-        void sum_ak(const unsigned int& stage); // calculate sum_j a_{ij}*k_j and pass it to this->ak
+        void sum_ak(const size_t& stage); // calculate sum_j a_{ij}*k_j and pass it to this->ak
         void sum_bk();// calculate sum_i b_i*k_i and passit to this->bk 
         void step_control_PI();//adjust stepsize until error is acceptable
         void step_control_simple();//adjust stepsize until error is acceptable
@@ -122,16 +122,16 @@ class Solver{
 
         
         const std::vector<LD>& get_t() const { return time; }
-        auto get_t(const unsigned int& step) const { return time.at(step); }
+        auto get_t(const size_t& step) const { return time.at(step); }
         //access the array of solution[eq]
-        const std::vector<LD>& get_solution(const unsigned int& eq) const { return solution.at(eq); }
+        const std::vector<LD>& get_solution(const size_t& eq) const { return solution.at(eq); }
         //access the element solution[eq][step]
-        auto get_solution(const unsigned int& eq, const unsigned int& step) const { return solution.at(eq).at(step); }
+        auto get_solution(const size_t& eq, const size_t& step) const { return solution.at(eq).at(step); }
         
         //access the array of error[eq]
-        const std::vector<LD>& get_error(const unsigned int& eq) const { return error.at(eq); }
+        const std::vector<LD>& get_error(const size_t& eq) const { return error.at(eq); }
         //access the element error[eq][step]
-        auto get_error(const unsigned int& eq, const unsigned int& step) const { return error.at(eq).at(step); }
+        auto get_error(const size_t& eq, const size_t& step) const { return error.at(eq).at(step); }
         
         
         void set_parameters(const parameters<LD>& opt=default_parameters<LD>);

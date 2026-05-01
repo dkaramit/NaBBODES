@@ -13,9 +13,9 @@ void Solver<LD, RK_method, step_controller>::calc_Jk(){
     Calculate product of matrix with vector. 
     We use it to get J*gk.
     */
-    for(unsigned int i=0; i<N_eqs ; i++){
+    for(size_t i=0; i<N_eqs ; i++){
         Jk[i]=0;
-        for(unsigned int j=0; j<N_eqs ; j++){ Jk[i]+=J[i][j]*gk[j]; }
+        for(size_t j=0; j<N_eqs ; j++){ Jk[i]+=J[i][j]*gk[j]; }
     }         
 }
 /*-----------------------End: calc_Jk---------------------------------*/
@@ -32,20 +32,20 @@ void Solver<LD, RK_method, step_controller>::calc_k(){
     // to make it more clear, we are going to separate the rhs in three different parts
     std::vector<LD> rhs1(N_eqs,0),rhs2(N_eqs,0);
 
-    for(unsigned int stage = 0; stage < RK_method::s; stage++){
+    for(size_t stage = 0; stage < RK_method::s; stage++){
         sum_ak(stage);
         sum_gk(stage);
         // setup the argument for dydt (it is evaluated at y_n+\sum a*k )
-        for(unsigned int eq=0; eq<N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
+        for(size_t eq=0; eq<N_eqs ; eq++){yn[eq]=yprev[eq]+ak[eq];}
         /*--- Get the rhs terms ---*/
         // first term
         dydt(rhs1, yn, tn+RK_method::c[stage]*h_trial);
         // second term
-        for(unsigned int eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (RK_method::gamma+sum_gamma[stage])*dfdt[eq];}
+        for(size_t eq=0; eq<N_eqs ; eq++) { rhs2[eq] =  (RK_method::gamma+sum_gamma[stage])*dfdt[eq];}
         // third term
         calc_Jk();
         // then the rhs becomes
-        for(unsigned int eq=0; eq<N_eqs ; eq++) { rhs[eq] = h_trial*rhs1[eq] + h_trial*h_trial*rhs2[eq] + h_trial*Jk[eq];}
+        for(size_t eq=0; eq<N_eqs ; eq++) { rhs[eq] = h_trial*rhs1[eq] + h_trial*h_trial*rhs2[eq] + h_trial*Jk[eq];}
         /*------------------------*/
 
 
@@ -53,7 +53,7 @@ void Solver<LD, RK_method, step_controller>::calc_k(){
         // Solve_LU<N_eqs>(L,U,P,rhs, lu_sol);
         
         dot<LD>(_inv,rhs, lu_sol);
-        for(unsigned int eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
+        for(size_t eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
     }
 }
 /*-----------------------End: calc_k---------------------------------*/

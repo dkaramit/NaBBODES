@@ -48,7 +48,7 @@ int main(int argc, const char** argv) {
     std::vector<LD> y0 = {8,12,4};
     diffeq dydt;
     
-    unsigned int n_eqs=y0.size();
+    size_t n_eqs=y0.size();
 
     // we use the default Jacobian. The final parameter in the constructor is the Jacobian's value for h
     SOLVER System(dydt,y0, 1e4,
@@ -71,8 +71,8 @@ int main(int argc, const char** argv) {
     int step=0;
     for (auto _t: System.get_t()){
         printf("%e ",(double)_t);
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
-        for( unsigned int eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e ", (double)System.get_solution(eq,step));}
+        for( size_t eq = 0; eq < n_eqs; eq++){ printf("%e " ,(double)System.get_error(eq,step));}
         printf("\n");
         step++;
     }

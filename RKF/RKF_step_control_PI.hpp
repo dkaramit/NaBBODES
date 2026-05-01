@@ -11,7 +11,7 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
     LD _sc=0;
     LD fac=beta;
     
-    for (unsigned int eq = 0; eq < N_eqs; eq++){
+    for (size_t eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);

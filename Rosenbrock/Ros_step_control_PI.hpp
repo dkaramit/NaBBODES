@@ -21,7 +21,7 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
     dot<LD>( _inv, abs_delta , regulated_delta);
 
-    for (unsigned int eq = 0; eq < N_eqs; eq++){
+    for (size_t eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
         Delta+= (regulated_delta[eq]/_sc)*(regulated_delta[eq]/_sc);

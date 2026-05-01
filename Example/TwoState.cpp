@@ -107,7 +107,7 @@ int main(int argc, const char** argv) {
     
     LD tmax = (LD)atof(argv[1]);
     
-    unsigned int n_eqs=4;
+    size_t n_eqs=4;
 
     std::vector<LD> lhs(n_eqs);
     std::vector<LD> c0(n_eqs);

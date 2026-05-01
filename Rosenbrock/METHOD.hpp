@@ -6,8 +6,8 @@ namespace rosenbrock{
 
 template<class LD>
 struct ROS3w{
-    static constexpr unsigned int s=3;
-    static constexpr unsigned int p=2;
+    static constexpr size_t s=3;
+    static constexpr size_t p=2;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -34,8 +34,8 @@ struct ROS3w{
 /*--------------------------------------------------------------------------------------------------------*/
 template<class LD>
 struct ROS34PW2{
-    static constexpr unsigned int s=4;
-    static constexpr unsigned int p=3;
+    static constexpr size_t s=4;
+    static constexpr size_t p=3;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -84,8 +84,8 @@ struct ROS34PW2{
 */
 template<class LD>
 struct RODASPR2{
-    static constexpr unsigned int s=6;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=6;
+    static constexpr size_t p=4;
     
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -128,8 +128,8 @@ year = {1979},
 */
 template<class LD>
 struct GRK4A{
-    static constexpr unsigned int s=4;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=4;
+    static constexpr size_t p=4;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -155,8 +155,8 @@ struct GRK4A{
 };
 template<class LD>
 struct GRK4T{
-    static constexpr unsigned int s=4;
-    static constexpr unsigned int p=4;
+    static constexpr size_t s=4;
+    static constexpr size_t p=4;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -185,8 +185,8 @@ struct GRK4T{
 // I stole this from DifferentialEquations.jl
 template<class LD>
 struct RODAS5{
-    static constexpr unsigned int s=8;
-    static constexpr unsigned int p=5;
+    static constexpr size_t s=8;
+    static constexpr size_t p=5;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;

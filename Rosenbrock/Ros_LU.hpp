@@ -15,9 +15,9 @@ void Solver<LD, RK_method, step_controller>::LU(){
     // Jac(J,dfdt,yprev,tn);
 
     // Find the LUP decomposition of   (I-\gamma*h*J)     
-    for(unsigned int i=0; i<N_eqs ; i++){
+    for(size_t i=0; i<N_eqs ; i++){
         coeff[i][i]=1;
-        for(unsigned int j=0; j<N_eqs ; j++){
+        for(size_t j=0; j<N_eqs ; j++){
             coeff[i][j]+=-h_trial*RK_method::gamma*J[i][j];
         }
     }
