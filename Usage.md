@@ -23,8 +23,6 @@ NaBBODES currently provides two solver namespaces:
 
 ```cpp
 using LD = long double;
-constexpr unsigned int n_eqs = 3;
-using Array = std::array<LD, n_eqs>;
 ```
 
 ### 1.3 Provide RHS callback
@@ -32,7 +30,7 @@ using Array = std::array<LD, n_eqs>;
 Both solvers use the same RHS signature:
 
 ```cpp
-void rhs(Array& lhs, const Array& y, const LD& t);
+void rhs(std::vector<LD>& lhs, const std::vector<LD>& y, const LD& t);
 ```
 
 - `lhs` is output (`dy/dt`).
@@ -76,30 +74,30 @@ Below are all public member functions with signatures and descriptions.
 Class template:
 
 ```cpp
-template<unsigned int N_eqs, class RK_method, class LD,
-         step_controllers step_controller = step_controllers::PI>
+template<class LD,, class RK_method = DormandPrince<LD>, 
+          step_controllers step_controller = step_controllers::PI>
 class Solver
 ```
 
 ### Public type aliases
 
 ```cpp
-using diffeq =
-  std::function<void(std::array<LD, N_eqs>& lhs,
-                     const std::array<LD, N_eqs>& y,
+using system_type =
+  std::function<void(std::vector<LD>& lhs,
+                     const std::vector<LD>& y,
                      const LD& t)>;
 ```
 
 ### Constructors / destructor
 
 ```cpp
-Solver(const diffeq& dydt,
-       const std::array<LD, N_eqs>& init_cond,
+Solver(const system_type& dydt,
+       const std::vector<LD>& init_cond,
        const LD& tmax,
        const parameters<LD>& opt = default_parameters<LD>);
 ```
 
-Creates and initializes solver state with given RHS, initial condition, end time, and options.
+Creates and initializes solver state with given RHS, initial condition, end time, and options. Note that the number of equations is determined from the size of init_cond.
 
 ```cpp
 ~Solver() = default;
@@ -157,7 +155,7 @@ void set_parameters(const parameters<LD>& opt = default_parameters<LD>);
 Update runtime parameters (supports optional-field style updates).
 
 ```cpp
-void reset(const std::array<LD, N_eqs>& init_cond,
+void reset(const std::vector<LD>& init_cond,
            const LD& tmax,
            const parameters<LD>& opt = default_parameters<LD>);
 ```
@@ -185,23 +183,23 @@ Return active parameter set.
 Class template:
 
 ```cpp
-template<unsigned int N_eqs, class RK_method, class LD,
-         step_controllers step_controller = step_controllers::PI>
+template<class LD, class RK_method = RODAS5<LD>, 
+          step_controllers step_controller = step_controllers::PI>
 class Solver
 ```
 
 ### Public type aliases
 
 ```cpp
-using diffeq =
-  std::function<void(std::array<LD, N_eqs>& lhs,
-                     const std::array<LD, N_eqs>& y,
+using system_type =
+  std::function<void(std::vector<LD>& lhs,
+                     const std::vector<LD>& y,
                      const LD& t)>;
 
 using Jacobian_type =
-  std::function<void(std::array<std::array<LD, N_eqs>, N_eqs>& J,
-                     std::array<LD, N_eqs>& dfdt,
-                     const std::array<LD, N_eqs>& y,
+  std::function<void(std::vector<std::vector<LD>>& J,
+                     std::vector<LD>& dfdt,
+                     const std::vector<LD>& y,
                      const LD& t)>;
 ```
 
@@ -210,8 +208,8 @@ using Jacobian_type =
 Default finite-difference Jacobian:
 
 ```cpp
-Solver(const diffeq& dydt,
-       const std::array<LD, N_eqs>& init_cond,
+Solver(const system_type& dydt,
+       const std::vector<LD>& init_cond,
        LD tmax,
        const parameters<LD>& opt = default_parameters<LD>,
        const LD& Jacobian_h = 1e-8);
@@ -220,8 +218,8 @@ Solver(const diffeq& dydt,
 Custom Jacobian callback:
 
 ```cpp
-Solver(const diffeq& dydt,
-       const std::array<LD, N_eqs>& init_cond,
+Solver(const system_type& dydt,
+       const std::vector<LD>& init_cond,
        LD tmax,
        Jacobian_type Jac,
        const parameters<LD>& opt = default_parameters<LD>);
@@ -253,7 +251,7 @@ auto get_error(const unsigned int& eq, const unsigned int& step) const;
 
 ```cpp
 void set_parameters(const parameters<LD>& opt = default_parameters<LD>);
-void reset(const std::array<LD, N_eqs>& init_cond,
+void reset(const vector<LD>& init_cond,
            LD tmax,
            const parameters<LD>& opt = default_parameters<LD>);
 auto get_current_step() const;
@@ -293,25 +291,22 @@ rkf::parameters<long double> opt{
 ## 4.1 Minimal RKF example
 
 ```cpp
-#include <array>
+#include <vector>
 #include "RKF/RKF.hpp"
-#include "RKF/METHOD.hpp"
 
 using LD = long double;
-constexpr unsigned int n_eqs = 1;
-using Array = std::array<LD, n_eqs>;
 
 struct Eq {
-    void operator()(Array& lhs, const Array& y, const LD& t) {
+    void operator()(std::vector<LD>& lhs, const std::vector<LD>& y, const LD& t) {
         lhs[0] = -y[0] + t;
     }
 };
 
 int main() {
     Eq f;
-    Array y0{1.0L};
-    using S = rkf::Solver<n_eqs, DormandPrince<LD>, LD, rkf::step_controllers::PI>;
-    S solver(f, y0, 1.0L);
+    Array y0{1.0};
+    using S = rkf::Solver<LD, DormandPrince<LD>, rkf::step_controllers::PI>;
+    S solver(f, y0, 1.0);
     solver.solve();
 }
 ```
@@ -319,24 +314,22 @@ int main() {
 ## 4.2 Minimal Rosenbrock example (default Jacobian)
 
 ```cpp
-#include <array>
+#include <vector>
 #include "Rosenbrock/Rosenbrock.hpp"
-#include "Rosenbrock/METHOD.hpp"
 
 using LD = long double;
-constexpr unsigned int n_eqs = 1;
-using Array = std::array<LD, n_eqs>;
 
 struct Eq {
-    void operator()(Array& lhs, const Array& y, const LD& t) {
+    void operator()(std::vector<LD>& lhs, const std::vector<LD>& y, const LD& t) {
         lhs[0] = -10.0L * y[0] + t;
     }
 };
 
 int main() {
     Eq f;
-    Array y0{1.0};
-    using S = rosenbrock::Solver<n_eqs, ROS34PW2<LD>, LD, rosenbrock::step_controllers::PI>;
+    std::vector y0(1,1.0);
+    unsigned int N_eqs=y0.size();
+    using S = rosenbrock::Solver<LD, ROS34PW2<LD>, rosenbrock::step_controllers::PI>;
     S solver(f, y0, 1.0); // default finite-difference Jacobian
     solver.solve();
 }
@@ -345,12 +338,11 @@ int main() {
 ## 4.3 Rosenbrock with custom Jacobian callback
 
 ```cpp
-using S = rosenbrock::Solver<n_eqs, ROS34PW2<LD>, LD, rosenbrock::step_controllers::PI>;
-using Mat = std::array<std::array<LD, n_eqs>, n_eqs>;
+using S = rosenbrock::Solver<LD, ROS34PW2<LD>, rosenbrock::step_controllers::PI>;
 
-auto jac = [](Mat& J, Array& dfdt, const Array& y, const LD& t) {
-    J[0][0] = -10.0;
-    dfdt[0] = 1.0; // d/dt f(y,t)
+auto jac = [](std::vector<vector<LD>>& J, std::vector<LD>& dfdt, const vector<LD>& y, const LD& t) {
+    J.assign(N_eqs,std::vector<LD>(N_eqs,-10));
+    dfdt[0].assign(N_eqs,std::vector<LD>(N_eqs,-1)); // d/dt f(y,t)
 };
 
 S solver(f, y0, 1.0, jac);
