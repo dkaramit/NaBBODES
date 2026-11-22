@@ -29,14 +29,18 @@ class Jacobian{
 
 
             std::vector<LD> y0(N_eqs),y1(N_eqs),dydt0(N_eqs),dydt1(N_eqs);
-
             // you can use something like this to scale the stepsize according to the scale of t
             LD a=h+h*t;
             // take the time derivative
-            dydt(dydt0,y,t-a);
             dydt(dydt1,y,t+a);
+            
+            LD d=2.*a;
+            // avoid computing rhs for t<0.
+            if(t-a<0){dydt(dydt0,y,t); d=a;}
+            else{dydt(dydt0,y,t-a);}
+
             for (size_t i = 0; i < N_eqs; i++){ 
-                dfdt[i]=(dydt1[i]-dydt0[i])/(2*a); 
+                dfdt[i]=(dydt1[i]-dydt0[i])/d; 
                 // since you run this loop, initialize y0 and y1
                 y0[i]=y[i]; y1[i]=y[i];
             }
