@@ -28,11 +28,11 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
         Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);
     }
     Delta=std::sqrt(1./N_eqs*Delta);
-    if(Delta==0){Delta=abs_tol+rel_tol;}
 
-    // I use the step control from 
+    // I use the step control from
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X
-    if(Delta<=1) { 
+    if(Delta==0){ fac=fac_max; h_stop=true; }
+    else if(Delta<=1) {
         if(delta_rej<=1){fac*=h_trial/h_old; }
         fac*=std::pow(Delta, -0.65/( static_cast<LD>(RK_method::p + 1)) );   
         fac*=std::pow( delta_acc/Delta, 0.3/ ( static_cast<LD>(RK_method::p + 1) ) );   
