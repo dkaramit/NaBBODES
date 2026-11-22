@@ -42,8 +42,8 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
     h_trial=h_trial*fac ;
 
 
-    if (h_trial>hmax ){ h_trial=hmax; h_stop=true;}
-    if (h_trial<hmin ){ h_trial=hmin; h_stop=true;}
+    if (h_trial>hmax ){ h_trial=hmax;} 
+    if (h_trial<hmin ){ h_trial=hmin; if(h_acc<=hmin){h_stop=true;} }
 }
 /*-----------------------End: step_control---------------------------------*/
 
