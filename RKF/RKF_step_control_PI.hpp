@@ -18,7 +18,7 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
         
     ;}
     Delta=std::sqrt(1./N_eqs*Delta);
-    if(Delta==0){Delta=abs_tol*rel_tol;}
+    if(Delta==0){Delta=abs_tol+rel_tol;}
 
     // I use the step control from 
     // https://www.sciencedirect.com/science/article/pii/S147466701751767X

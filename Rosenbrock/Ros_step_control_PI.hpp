@@ -15,16 +15,17 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
     LD Delta=0.;
     LD _sc;
     LD fac=beta;
+    /*---------------------------this is not correct-------------------------------*/
     // regulated_delta = (1-gam*h*J)^{-1}*abs_delta
-    std::vector<LD> regulated_delta(N_eqs);
+    // std::vector<LD> regulated_delta(N_eqs);
     //PI step size cotrol from "Solving Ordinary Differential Equations II"
     //We rescale the error by multiplying it with (1 + h \gamma J)^-1
-    dot<LD>( _inv, abs_delta , regulated_delta);
+    // Solve_LU<LD>(L,U,P,abs_delta,regulated_delta);
 
     for (size_t eq = 0; eq < N_eqs; eq++){
         _sc=std::max(std::abs( ynext[eq] ), std::abs( yprev[eq] ));
         _sc=abs_tol+rel_tol*_sc;
-        Delta+= (regulated_delta[eq]/_sc)*(regulated_delta[eq]/_sc);
+        Delta+= (abs_delta[eq]/_sc)*(abs_delta[eq]/_sc);
     }
     Delta=std::sqrt(1./N_eqs*Delta);
     if(Delta==0){Delta=abs_tol+rel_tol;}

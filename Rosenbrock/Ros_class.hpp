@@ -87,8 +87,6 @@ class Solver{
         std::vector<LD> sum_gamma;
         // the t component of the jacobian
         std::vector<LD> dfdt; 
-        //define the coefficient. This will become (I-\gamma*h*J). _inv is its inverse
-        std::vector<std::vector<LD>> _inv;
         // There are for the LUP-decomposition of (I-\gamma*h*J) 
         std::vector<std::vector<LD>> L;
         std::vector<std::vector<LD>> U;

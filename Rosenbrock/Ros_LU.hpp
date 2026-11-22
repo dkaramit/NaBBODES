@@ -22,7 +22,6 @@ void Solver<LD, RK_method, step_controller>::LU(){
         }
     }
     LUP<LD>(coeff,L,U,P,_tiny<LD>); //LU decomposition of (1-h*gamma*J)
-    Inverse_LU<LD>(L,U,P,_inv); // the inverse of (1-h*gamma*J)
 }
 /*---------------------------------------------------------------------------------------------*/
 

@@ -51,7 +51,6 @@ void Solver<LD, RK_method, step_controller>::reset(const std::vector<LD>& init_c
     abs_delta.assign(N_eqs,0);
     sum_gamma.assign(RK_method::s,0);
     dfdt.assign(N_eqs,0);
-    _inv.assign(N_eqs,std::vector<LD>(N_eqs,0));
     L.assign(N_eqs,std::vector<LD>(N_eqs,0));
     U.assign(N_eqs,std::vector<LD>(N_eqs,0));
     P.assign(N_eqs,0);

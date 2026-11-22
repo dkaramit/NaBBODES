@@ -49,10 +49,8 @@ void Solver<LD, RK_method, step_controller>::calc_k(){
         /*------------------------*/
 
 
-        // Solving  L*U*P*lu_sol=rhs is equivalent. Using the inverse, should be a bit faster. 
-        // Solve_LU<N_eqs>(L,U,P,rhs, lu_sol);
-        
-        dot<LD>(_inv,rhs, lu_sol);
+        // Solve  L*U*P*lu_sol=rhs.
+        Solve_LU<LD>(L,U,P,rhs, lu_sol);
         for(size_t eq = 0; eq < N_eqs; eq++ ){ k[eq][stage]=lu_sol[eq]; }
     }
 }
