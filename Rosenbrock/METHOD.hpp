@@ -12,7 +12,7 @@ struct ROS3w{
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
 
-    static constexpr arr c={0,2/3.,4/3.};
+    static constexpr arr c={0,2/3.,2/3.};
     static constexpr arr b={0.25,0.25,0.5 };
     static constexpr arr bstar={ 0.746704703274 , 0.1144064078371 , 0.1388888888888 };
     static constexpr LD gamma=0.4358665215084;
@@ -20,7 +20,7 @@ struct ROS3w{
     static constexpr arr2 a={
         arr{0,0,0},
         arr{2/3.,0,0},
-        arr{2/3.,2/3.,0}
+        arr{2/3.,0,0}
 
     };
 
@@ -35,7 +35,7 @@ struct ROS3w{
 template<class LD>
 struct ROS34PW2{
     static constexpr size_t s=4;
-    static constexpr size_t p=3;
+    static constexpr size_t p=2;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -85,7 +85,7 @@ struct ROS34PW2{
 template<class LD>
 struct RODASPR2{
     static constexpr size_t s=6;
-    static constexpr size_t p=4;
+    static constexpr size_t p=3;
     
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
@@ -129,12 +129,12 @@ year = {1979},
 template<class LD>
 struct GRK4A{
     static constexpr size_t s=4;
-    static constexpr size_t p=4;
+    static constexpr size_t p=3;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
 
-    static constexpr arr c={0, 0.438, 0.87, 0};// c[i]=sum_{j} a[i][j]
+    static constexpr arr c={0, 0.438, 0.87, 0.87};// c[i]=sum_{j} a[i][j]
     static constexpr arr b={0.199293275701,0.482645235674,0.0680614886256, 0.25};
     static constexpr arr bstar={0.346325833758,0.285693175712,0.367980990530,0};
     static constexpr LD gamma=0.395; 
@@ -143,7 +143,7 @@ struct GRK4A{
         arr{0,0,0,0},
         arr{0.438,0,0,0},
         arr{0.796920457938,0.0730795420615,0,0},
-        arr{0,0,0,0}
+        arr{0.796920457938,0.0730795420615,0,0}
     };
         
     static constexpr arr2 g={
@@ -156,12 +156,12 @@ struct GRK4A{
 template<class LD>
 struct GRK4T{
     static constexpr size_t s=4;
-    static constexpr size_t p=4;
+    static constexpr size_t p=3;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
 
-    static constexpr arr c={0,0.462,0.8802083333333,0};// c[i]=sum_{j} a[i][j]
+    static constexpr arr c={0,0.462,0.8802083333333,0.8802083333333};// c[i]=sum_{j} a[i][j]
     static constexpr arr b={0.217487371653 , 0.486229037990,0, 0.296283590357};
     static constexpr arr bstar={ -0.717088504499,  1.77617912176, -0.590906172617e-1  };
     static constexpr LD gamma=0.231; 
@@ -170,7 +170,7 @@ struct GRK4T{
         arr{0,0,0,0},
         arr{0.462,0,0,0},
         arr{ -0.815668168327e-1,0.961775150166,0,0},
-        arr{0,0,0,0}
+        arr{ -0.815668168327e-1,0.961775150166,0,0}
     };
         
     static constexpr arr2 g={
@@ -186,7 +186,7 @@ struct GRK4T{
 template<class LD>
 struct RODAS5{
     static constexpr size_t s=8;
-    static constexpr size_t p=5;
+    static constexpr size_t p=4;
 
     using arr=std::array<LD,s>;
     using arr2=std::array<std::array<LD,s>,s>;
