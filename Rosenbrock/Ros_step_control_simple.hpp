@@ -25,6 +25,7 @@ void Solver<LD, RK_method, step_controller>::step_control_simple(){
 
     //step size cotrol from "Solving Ordinary Differential Equations I"
     fac*=std::pow( Delta , -1./( static_cast<LD>(RK_method::p + 1)));
+    if(!std::isfinite(Delta)){ fac=fac_min; }
     if(fac> fac_max){fac = fac_max;}
     if(fac< fac_min){fac = fac_min;}
     

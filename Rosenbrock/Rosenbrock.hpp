@@ -4,7 +4,7 @@
 #include "LU/LU.hpp"
 //You need this for LU decomposition. 
 // I have not seen a reason for this to be changed.
-template<class LD> constexpr LD _tiny=1e-25;
+template<class LD> constexpr LD _tiny=0;
 
 #include"Jacobian/Jacobian.hpp"
 

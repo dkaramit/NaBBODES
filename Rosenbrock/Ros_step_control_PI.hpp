@@ -40,7 +40,8 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
         h_stop=true ;
         delta_acc=Delta;
         
-    }else{
+    }else if(!std::isfinite(Delta)){ fac=fac_min; }
+    else{
         fac*=std::pow( Delta , -1./(static_cast<LD>(RK_method::p +1.) ) );
         delta_rej=Delta;
     }

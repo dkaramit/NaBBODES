@@ -86,7 +86,7 @@ void Map( LD (*F)(LD), const std::vector<LD> &L, std::vector<LD> &FL){
 /*-----------------------------LUP decompositioning--------------------------------------------------------*/
 
 template<class LD>
-void LUP(const std::vector<std::vector<LD>> &M, std::vector<std::vector<LD>> &L ,std::vector<std::vector<LD>> &U, std::vector<size_t> &P, LD _tiny=1e-25){
+void LUP(const std::vector<std::vector<LD>> &M, std::vector<std::vector<LD>> &L ,std::vector<std::vector<LD>> &U, std::vector<size_t> &P, LD _tiny=0){
     size_t N=M.size();
     
     L.assign(N, std::vector<LD>(N, 0));
@@ -106,15 +106,15 @@ void LUP(const std::vector<std::vector<LD>> &M, std::vector<std::vector<LD>> &L 
     size_t len_col,pivot;
     
 
-    for (size_t  k = 1; k < N; k++){ for ( size_t  i = k; i < N; i++){   
+    for (size_t  k = 1; k < N; k++){
     for (size_t _r=k-1 ; _r<N ; _r++ ) { _col[_r-(k-1)]=std::abs(U[_r][k-1]); }//we need to convert the index of _col because we start the loop from k-1
-    
-    
+
+
     len_col=N-(k-1);
     pivot=ind_max<LD>( _col,len_col) + k - 1;
     // std::cout<<pivot<<std::endl;
 
-    if (std::abs(U[pivot][k-1]) < _tiny)  {break;}
+    if (U[pivot][k-1] == 0 || std::abs(U[pivot][k-1]) < _tiny)  {continue;}
 
     if (pivot != k-1){ 
             
@@ -133,13 +133,14 @@ void LUP(const std::vector<std::vector<LD>> &M, std::vector<std::vector<LD>> &L 
         for (size_t _r=0 ; _r<k-1 ; _r++ ) {L[pivot][_r]=tmpL[_r] ; }
     }
 
+    for ( size_t  i = k; i < N; i++){
     L[i][k-1]=U[i][k-1]/U[k-1][k-1];
 
     for (size_t j=k-1 ; j<N ; j++ ) {  U[i][j]=U[i][j]-L[i][k-1]*U[k-1][j] ; }
 
+    }
 
-
-    }}
+    }
     
 }
 /*-------------------------------------------------------------------------------------------------------------------*/

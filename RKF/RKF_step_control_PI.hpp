@@ -1,6 +1,7 @@
 #ifndef RKF_step_control_PI
 #define RKF_step_control_PI
 #include "RKF_class.hpp"
+#include<cmath>
 
 /*-----------------------Begin: step_control---------------------------------*/
 namespace rkf{
@@ -29,7 +30,8 @@ void Solver<LD, RK_method, step_controller>::step_control_PI(){
         // fac*=std::pow(Deltas[current_step-1]/Delta/Delta, 1/((LD) RK_method::p+1.) ) ;
         h_stop=true;
         delta_acc=Delta;
-    }else{
+    }else if(!std::isfinite(Delta)){ fac=fac_min; }
+    else{
         fac*=std::pow( Delta , -1./( static_cast<LD>(RK_method::p+1) ));
         delta_rej=Delta;
     }
