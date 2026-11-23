@@ -162,29 +162,26 @@ void Solve_LU(const std::vector<std::vector<LD>> &L, const std::vector<std::vect
     size_t N=L.size();
     x.resize(N);
 
-    std::vector<LD> d(N,0), bp(N,0);
     LD tmps=0;
 
-    apply_permutations_vector<LD>(b,P,bp);
-
-
-    d[0]=bp[0];
+    // b and x must be different vectors. x first holds the permuted b, then d (L*d=b), then the solution.
+    for (size_t i = 0; i < N; i++){ x[i]=b[ P[i] ]; }
 
     for(size_t i=1; i<N  ; i++){
         tmps=0;
-        for (size_t j = 0; j < i; j++){ tmps +=L[i][j]*d[j]; }
-        
-        d[i]=bp[i]-tmps;
-    }
-    
+        for (size_t j = 0; j < i; j++){ tmps +=L[i][j]*x[j]; }
 
-    x[N-1]  = d[N-1]/U[N-1][N-1] ;
+        x[i]=x[i]-tmps;
+    }
+
+
+    x[N-1]  = x[N-1]/U[N-1][N-1] ;
     // if(N>=1){
         for (size_t i = N-1; i >= 1; i--){
             // std::cout<<v<<"\t"<<N<<"\n";
             tmps=0;
             for (size_t j = i; j < N; j++){ tmps += U[i-1][j]*x[j];}
-            x[i-1]=(d[i-1]-tmps )/U[i-1][i-1];
+            x[i-1]=(x[i-1]-tmps )/U[i-1][i-1];
         // }
     }
 
